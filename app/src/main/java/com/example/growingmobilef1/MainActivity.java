@@ -9,7 +9,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView mTextMessage;
+
+    private static final String CALENDAR_FRAGMENT = "tag for launching the calendar fragment";
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -18,13 +19,11 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.tab_bar_calendar:
-                    mTextMessage.setText(R.string.title_home);
+                    launchCalendarFragment();
                     return true;
                 case R.id.tab_bar_pilots_ranking:
-                    mTextMessage.setText(R.string.title_dashboard);
                     return true;
                 case R.id.tab_bar_constructors_ranking:
-                    mTextMessage.setText(R.string.title_notifications);
                     return true;
             }
             return false;
@@ -36,14 +35,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        mTextMessage = findViewById(R.id.message);
+        launchCalendarFragment();
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
     private void launchCalendarFragment() {
         FragmentTransaction vFT = getFragmentManager().beginTransaction();
         CalendarFragment vCalendarFragment = CalendarFragment.newInstance();
-        vFT.replace(R.id.main_act_fragment_container, )
+        vFT.replace(R.id.main_act_fragment_container, vCalendarFragment, CALENDAR_FRAGMENT);
+        vFT.commit();
     }
 
 }

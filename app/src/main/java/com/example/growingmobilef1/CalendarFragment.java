@@ -12,6 +12,7 @@ public class CalendarFragment extends Fragment {
         return new CalendarFragment();
     }
 
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vView = inflater.inflate(R.layout.fragment_calendar, null);
 

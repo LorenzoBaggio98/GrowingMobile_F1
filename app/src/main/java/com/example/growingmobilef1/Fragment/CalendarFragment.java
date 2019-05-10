@@ -10,8 +10,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.example.growingmobilef1.Adapter.CalendarListAdapter;
+import com.example.growingmobilef1.Adapter.ListableObjectsAdapter;
 import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
+import com.example.growingmobilef1.Interface.IListableObject;
 import com.example.growingmobilef1.Model.CalendarRaceItem;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.R;
@@ -25,7 +26,7 @@ public class CalendarFragment extends Fragment {
 
     private static final String RACE_DETAIL_FRAGMENT = "Tag for launching RaceDetailFragment";
 
-    private ArrayList<CalendarRaceItem> mCalendarRaceItemArraylist;
+    private ArrayList<IListableObject> mCalendarRaceItemArraylist;
 
     private ListView mListView;
 
@@ -50,7 +51,7 @@ public class CalendarFragment extends Fragment {
                 // Looks for the clicked item in the ArrayList, then pass it to the detail fragment
                 for (int i = 0; i < mCalendarRaceItemArraylist.size(); i++) {
                     if (mCalendarRaceItemArraylist.get(i).getmId() == id){
-                        vRaceItem = mCalendarRaceItemArraylist.get(position);
+                        vRaceItem = (CalendarRaceItem)mCalendarRaceItemArraylist.get(position);
                     }
                 }
                 launchRaceDetailFragment(vRaceItem);
@@ -73,6 +74,7 @@ public class CalendarFragment extends Fragment {
         private CalendarRaceDataHelper vCalendarRaceDataHelper;
         @Override
         protected String doInBackground(String... params) {
+           // ApiRequestHelper vApiRequestHelper = new ApiRequestHelper("http://ergast.com/api/f1/current.json");
             ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
             vCalendarRaceDataHelper = new CalendarRaceDataHelper();
 
@@ -83,7 +85,7 @@ public class CalendarFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String result) {
-            CalendarListAdapter vCalendarListAdapter = new CalendarListAdapter(mCalendarRaceItemArraylist);
+            ListableObjectsAdapter vCalendarListAdapter = new ListableObjectsAdapter(mCalendarRaceItemArraylist);
             mListView.setAdapter(vCalendarListAdapter);
         }
     }

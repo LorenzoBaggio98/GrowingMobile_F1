@@ -10,18 +10,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 
-public class ApiRequestHelper implements Runnable{
+public class ApiRequestHelper{
 
-    private String mUrl;
-    public ApiRequestHelper(String aUrl){
-        this.mUrl = aUrl;
-    }
-
-    @Override
-    public void run() {
-         getContentFromUrl(mUrl);
+    public ApiRequestHelper(){
+        ;
     }
 
     // Function to do the api request and return a JSON object with the response

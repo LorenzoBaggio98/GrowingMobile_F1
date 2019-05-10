@@ -2,9 +2,11 @@ package com.example.growingmobilef1.Model;
 
 import android.os.Parcelable;
 
+import com.example.growingmobilef1.Interface.IListableObject;
+
 import java.io.Serializable;
 
-public class CalendarRaceItem implements Serializable {
+public class CalendarRaceItem implements Serializable, IListableObject {
 
     private int mId;
     private String mSeason;
@@ -47,8 +49,29 @@ public class CalendarRaceItem implements Serializable {
     }
 
 
+
     public int getmId() {
         return mId;
+    }
+
+    @Override
+    public String getmMainInformation() {
+        return mRaceName;
+    }
+
+    @Override
+    public String getmOptionalInformation() {
+        return mDate;
+    }
+
+    @Override
+    public String getmSecondaryInformation() {
+        return mTime;
+    }
+
+    @Override
+    public Boolean isButtonRequired() {
+        return true;
     }
 
     public void setmId(int mId) {

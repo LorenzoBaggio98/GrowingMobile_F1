@@ -46,6 +46,22 @@ public class MainActivity extends AppCompatActivity {
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
+    private void launchFragment(String tag){
+        FragmentTransaction vFT = getFragmentManager().beginTransaction();
+
+        // fare interfaccia per unirli
+        switch (tag){
+            case CALENDAR_FRAGMENT : CalendarFragment vCalendarFragment = CalendarFragment.newInstance();break;
+            case PILOTS_RANKING_FRAGMENT : PilotsRankingFragment vPilotsFragment = PilotsRankingFragment.newInstance(); break;
+            case CONSTRUCTORS_RANKING_FRAGMENT :  ConstructorsRankingFragment vConstructorsFragment = ConstructorsRankingFragment.newInstance();break;
+
+        }
+
+        CalendarFragment vCalendarFragment = CalendarFragment.newInstance();
+        vFT.replace(R.id.main_act_fragment_container, vCalendarFragment, tag);
+        vFT.commit();
+    }
+
     private void launchCalendarFragment() {
         FragmentTransaction vFT = getFragmentManager().beginTransaction();
         CalendarFragment vCalendarFragment = CalendarFragment.newInstance();

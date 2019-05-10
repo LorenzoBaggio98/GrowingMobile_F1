@@ -1,10 +1,12 @@
-package com.example.growingmobilef1;
+package com.example.growingmobilef1.Fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.growingmobilef1.R;
 
 public class PilotsRankingFragment extends Fragment {
 
@@ -14,7 +16,7 @@ public class PilotsRankingFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View vView = inflater.inflate(R.layout.fragment_pilots_ranking, null);
+        View vView = inflater.inflate(R.layout.fragment_pilots_ranking, container, false);
         return vView;
     }
 }

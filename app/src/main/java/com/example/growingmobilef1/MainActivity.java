@@ -6,7 +6,10 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
 import android.view.MenuItem;
-import android.widget.TextView;
+
+import com.example.growingmobilef1.Fragment.CalendarFragment;
+import com.example.growingmobilef1.Fragment.ConstructorsRankingFragment;
+import com.example.growingmobilef1.Fragment.PilotsRankingFragment;
 
 public class MainActivity extends AppCompatActivity {
 

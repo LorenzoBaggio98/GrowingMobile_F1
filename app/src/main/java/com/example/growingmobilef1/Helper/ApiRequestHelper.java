@@ -1,36 +1,29 @@
-package com.example.growingmobilef1;
+package com.example.growingmobilef1.Helper;
 
-import android.content.Context;
 import android.util.Log;
-
-import java.io.BufferedInputStream;
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 
-public class ApiRequestHelper implements Runnable{
+public class ApiRequestHelper{
 
-    private Context mAppContext;
-    private String mUrl;
-
-    public ApiRequestHelper(Context aContext, String aUrl){
-        this.mAppContext = aContext;
-        this.mUrl = aUrl;
+    public ApiRequestHelper(){
+        ;
     }
 
-    @Override
-    public void run() {
-        getContentFromUrl(mUrl);
-    }
-
-    public void getContentFromUrl(String aUrl) {
+    // Function to do the api request and return a JSON object with the response
+    // Parse the JSON with a custom Helper class in the fragment
+    public JSONObject getContentFromUrl(String aUrl) {
         StringBuilder vStringBuilder = new StringBuilder();
+        JSONObject vResponseJsonObject = new JSONObject();
         try {
+
             URL vUrl = new URL(aUrl);
             HttpURLConnection vUrlConnection = (HttpURLConnection) vUrl.openConnection();
             if (vUrlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -41,17 +34,24 @@ public class ApiRequestHelper implements Runnable{
                 while ((vLine = vBufferedReader.readLine()) != null) {
                     vStringBuilder.append(vLine).append("\n");
                 }
-
                 vUrlConnection.disconnect();
+
+                try {
+                    // The API response must be parsed multiple times to isolate the races
+                    vResponseJsonObject = new JSONObject(String.valueOf(vStringBuilder));
+
+                } catch (JSONException e) {
+                    Log.e("JSON Parser", "Error parsing data " + e.toString());
+                }
             }else{
                 throw new IOException(vUrlConnection.getResponseMessage());
             }
-
         } catch(StackOverflowError | Exception s){
             s.printStackTrace();
         } catch(Error e){
             e.printStackTrace();
         }
-    }
 
+        return vResponseJsonObject;
+    }
 }

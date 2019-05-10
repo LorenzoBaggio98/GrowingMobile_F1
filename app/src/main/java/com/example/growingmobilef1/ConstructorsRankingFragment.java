@@ -14,7 +14,7 @@ public class ConstructorsRankingFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View vView = inflater.inflate(R.layout.fragment_constructors_ranking, null);
+        View vView = inflater.inflate(R.layout.fragment_constructors_ranking, container, false);
 
         return vView;
     }

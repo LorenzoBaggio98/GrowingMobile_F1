@@ -14,7 +14,7 @@ public class PilotsRankingFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View vView = inflater.inflate(R.layout.fragment_pilots_ranking, null);
+        View vView = inflater.inflate(R.layout.fragment_pilots_ranking, container, false);
         return vView;
     }
 }

@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
             case CALENDAR_FRAGMENT : CalendarFragment vCalendarFragment = CalendarFragment.newInstance();break;
             case PILOTS_RANKING_FRAGMENT : PilotsRankingFragment vPilotsFragment = PilotsRankingFragment.newInstance(); break;
             case CONSTRUCTORS_RANKING_FRAGMENT :  ConstructorsRankingFragment vConstructorsFragment = ConstructorsRankingFragment.newInstance();break;
-
         }
 
         CalendarFragment vCalendarFragment = CalendarFragment.newInstance();

@@ -73,7 +73,7 @@ public class CalendarFragment extends Fragment {
         private CalendarRaceDataHelper vCalendarRaceDataHelper;
         @Override
         protected String doInBackground(String... params) {
-            ApiRequestHelper vApiRequestHelper = new ApiRequestHelper("http://ergast.com/api/f1/current.json");
+            ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
             vCalendarRaceDataHelper = new CalendarRaceDataHelper();
 
             vJsonToParse = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current.json");

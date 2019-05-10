@@ -1,4 +1,6 @@
-package com.example.growingmobilef1;
+package com.example.growingmobilef1.Helper;
+
+import com.example.growingmobilef1.Model.CalendarRaceItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;

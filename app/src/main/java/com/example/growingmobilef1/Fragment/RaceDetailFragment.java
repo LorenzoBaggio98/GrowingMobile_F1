@@ -1,4 +1,4 @@
-package com.example.growingmobilef1;
+package com.example.growingmobilef1.Fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -6,6 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.growingmobilef1.Model.CalendarRaceItem;
+import com.example.growingmobilef1.R;
 
 public class RaceDetailFragment extends Fragment {
 

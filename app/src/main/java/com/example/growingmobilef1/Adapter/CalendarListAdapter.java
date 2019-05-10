@@ -1,10 +1,13 @@
-package com.example.growingmobilef1;
+package com.example.growingmobilef1.Adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.example.growingmobilef1.Model.CalendarRaceItem;
+import com.example.growingmobilef1.R;
 
 import java.util.ArrayList;
 

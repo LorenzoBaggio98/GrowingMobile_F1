@@ -1,4 +1,4 @@
-package com.example.growingmobilef1;
+package com.example.growingmobilef1.Model;
 
 import android.os.Parcelable;
 

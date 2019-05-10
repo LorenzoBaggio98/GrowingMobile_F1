@@ -6,7 +6,7 @@ import com.example.growingmobilef1.Interface.IListableObject;
 
 import java.io.Serializable;
 
-public class CalendarRaceItem implements Serializable, IListableObject {
+public class  CalendarRaceItem implements Serializable, IListableObject {
 
     private int mId;
     private String mSeason;

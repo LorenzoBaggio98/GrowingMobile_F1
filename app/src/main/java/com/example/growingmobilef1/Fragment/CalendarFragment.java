@@ -70,16 +70,17 @@ public class CalendarFragment extends Fragment {
     // Private class needed to perform the API call asynchronously
     private class CalendarApiAsyncCaller extends AsyncTask<String, Void, String> {
 
-        private JSONObject vJsonToParse;
-        private CalendarRaceDataHelper vCalendarRaceDataHelper;
+        private JSONObject mJsonToParse;
+        private CalendarRaceDataHelper mCalendarRaceDataHelper;
+
         @Override
         protected String doInBackground(String... params) {
            // ApiRequestHelper vApiRequestHelper = new ApiRequestHelper("http://ergast.com/api/f1/current.json");
             ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
-            vCalendarRaceDataHelper = new CalendarRaceDataHelper();
+            mCalendarRaceDataHelper = new CalendarRaceDataHelper();
 
-            vJsonToParse = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current.json");
-            mCalendarRaceItemArraylist =  vCalendarRaceDataHelper.getArraylist(vJsonToParse);
+            mJsonToParse = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current.json");
+            mCalendarRaceItemArraylist =  mCalendarRaceDataHelper.getArraylist(mJsonToParse);
             return null;
         }
 

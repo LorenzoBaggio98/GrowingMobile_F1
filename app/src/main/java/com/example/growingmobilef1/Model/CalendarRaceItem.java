@@ -1,9 +1,6 @@
 package com.example.growingmobilef1.Model;
 
-import android.os.Parcelable;
-
 import com.example.growingmobilef1.Interface.IListableObject;
-
 import java.io.Serializable;
 
 public class CalendarRaceItem implements Serializable, IListableObject {

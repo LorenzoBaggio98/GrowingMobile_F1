@@ -1,4 +1,4 @@
-package com.example.growingmobilef1.Fragment;
+package com.example.growingmobilef1.Fragment_Activity;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -8,15 +8,16 @@ import android.view.ViewGroup;
 
 import com.example.growingmobilef1.R;
 
-public class PilotsRankingFragment extends Fragment {
+public class ConstructorsRankingFragment extends Fragment {
 
-    public static PilotsRankingFragment newInstance(){
-        return new PilotsRankingFragment();
+    public static ConstructorsRankingFragment newInstance() {
+        return new ConstructorsRankingFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View vView = inflater.inflate(R.layout.fragment_pilots_ranking, container, false);
+        View vView = inflater.inflate(R.layout.fragment_constructors_ranking, container, false);
+
         return vView;
     }
 }

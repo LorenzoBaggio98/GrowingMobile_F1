@@ -17,40 +17,47 @@ public class CalendarRaceDataHelper {
     public ArrayList<IListableObject> getArraylist(JSONObject aJsonToParse){
         ArrayList<IListableObject> vCalendarRaceItemArraylist = new ArrayList<>();
 
-        try {
-            JSONObject vMRDataObject = aJsonToParse.getJSONObject("MRData");
-            JSONObject vRaceTableObject = vMRDataObject.getJSONObject("RaceTable");
-            // This array contains all the races
-            JSONArray vRacesArray = vRaceTableObject.getJSONArray("Races");
+        if(aJsonToParse.length() != 0){
 
-            // Create a JSONObject for each race
-            for (int i = 0; i < vRacesArray.length(); i++) {
-                JSONObject vRacesObject  = vRacesArray.getJSONObject(i);
-                JSONObject vCircuitObject = vRacesObject.getJSONObject("Circuit");
-                JSONObject vLocationObject = vCircuitObject.getJSONObject("Location");
+            try {
+                JSONObject vMRDataObject = aJsonToParse.getJSONObject("MRData");
+                JSONObject vRaceTableObject = vMRDataObject.getJSONObject("RaceTable");
 
-                // Create a CalendarRaceItem object with the datas retrieved
-                // Populate an arrayList with all these objects
-                CalendarRaceItem vCalendarRaceItem = new CalendarRaceItem();
-                vCalendarRaceItem.setmLat(vLocationObject.getString("lat"));
-                vCalendarRaceItem.setmLong(vLocationObject.getString("long"));
-                vCalendarRaceItem.setmLocality(vLocationObject.getString("locality"));
-                vCalendarRaceItem.setmCountry(vLocationObject.getString("country"));
-                vCalendarRaceItem.setmCircuitId(vCircuitObject.getString("circuitId"));
-                vCalendarRaceItem.setmWiki(vCircuitObject.getString("url"));
-                vCalendarRaceItem.setmCircuitName(vCircuitObject.getString("circuitName"));
-                vCalendarRaceItem.setmRaceSeason(vRacesObject.getString("season"));
-                vCalendarRaceItem.setmRound(vRacesObject.getString("round"));
-                vCalendarRaceItem.setmCurrentWiki(vRacesObject.getString("url"));
-                vCalendarRaceItem.setmRaceName(vRacesObject.getString("raceName"));
-                vCalendarRaceItem.setmDate(vRacesObject.getString("date"));
-                vCalendarRaceItem.setmTime(vRacesObject.getString("time"));
+                // This array contains all the races
+                JSONArray vRacesArray = vRaceTableObject.getJSONArray("Races");
 
-                vCalendarRaceItemArraylist.add(vCalendarRaceItem);
+                // Create a JSONObject for each race
+                for (int i = 0; i < vRacesArray.length(); i++) {
+                    JSONObject vRacesObject  = vRacesArray.getJSONObject(i);
+                    JSONObject vCircuitObject = vRacesObject.getJSONObject("Circuit");
+                    JSONObject vLocationObject = vCircuitObject.getJSONObject("Location");
+
+                    // Create a CalendarRaceItem object with the datas retrieved
+                    // Populate an arrayList with all these objects
+                    CalendarRaceItem vCalendarRaceItem = new CalendarRaceItem();
+
+                    vCalendarRaceItem.setmLat(vLocationObject.getString("lat"));
+                    vCalendarRaceItem.setmLong(vLocationObject.getString("long"));
+                    vCalendarRaceItem.setmLocality(vLocationObject.getString("locality"));
+                    vCalendarRaceItem.setmCountry(vLocationObject.getString("country"));
+
+                    vCalendarRaceItem.setmCircuitId(vCircuitObject.getString("circuitId"));
+                    vCalendarRaceItem.setmWiki(vCircuitObject.getString("url"));
+                    vCalendarRaceItem.setmCircuitName(vCircuitObject.getString("circuitName"));
+
+                    vCalendarRaceItem.setmRaceSeason(vRacesObject.getString("season"));
+                    vCalendarRaceItem.setmRound(vRacesObject.getString("round"));
+                    vCalendarRaceItem.setmCurrentWiki(vRacesObject.getString("url"));
+                    vCalendarRaceItem.setmRaceName(vRacesObject.getString("raceName"));
+                    vCalendarRaceItem.setmDate(vRacesObject.getString("date"));
+                    vCalendarRaceItem.setmTime(vRacesObject.getString("time"));
+
+                    vCalendarRaceItemArraylist.add(vCalendarRaceItem);
+                }
+
+            } catch (JSONException e){
+                e.printStackTrace();
             }
-
-        } catch (JSONException e){
-            e.printStackTrace();
         }
 
         return vCalendarRaceItemArraylist;

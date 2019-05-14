@@ -10,7 +10,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class RaceDetailDataHelper {
+public class RaceResultsDataHelper {
 
     public ArrayList<RaceResultsItem> getRaceResults(JSONObject aJsonToParse){
 
@@ -34,8 +34,10 @@ public class RaceDetailDataHelper {
                     // Iterate the Results
                     for(int j = 0; j < vResults.length(); j++) {
 
-                        JSONObject vSingleResult = vResults.getJSONObject(i);
+                        // Get the Json Object
+                        JSONObject vSingleResult = vResults.getJSONObject(j);
 
+                        // Parsing of the json to the Object
                         RaceResultsItem vRaceResultsItem = RaceResultsItem.fromJson(vSingleResult);
 
                         vRaceResultsArray.add(vRaceResultsItem);

@@ -3,6 +3,9 @@ package com.example.growingmobilef1.Model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -12,7 +15,7 @@ public class Driver {
     private int permanentNumber;
     private String code;
     //todo vedere se farlo URL al posto di String
-    private String url;
+    private URL url;
     private String givenName;
     private String familyName;
     private String dateOfBirth;
@@ -25,18 +28,18 @@ public class Driver {
         if(json.length() != 0){
             try{
 
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
                 tempDriver.driverId = json.getString("driverId");
                 tempDriver.permanentNumber = json.getInt("permanentNumber");
                 tempDriver.code = json.getString("code");
-                tempDriver.url = json.getString("url");
+                tempDriver.url = new URL(json.getString("url"));
                 tempDriver.givenName = json.getString("givenName");
                 tempDriver.familyName = json.getString("familyName");
                 tempDriver.dateOfBirth = json.getString("dateOfBirth");
                 tempDriver.nationality = json.getString("nationality");
 
             }catch (JSONException e){
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
         }
@@ -68,11 +71,11 @@ public class Driver {
         this.code = code;
     }
 
-    public String getUrl() {
+    public URL getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(URL url) {
         this.url = url;
     }
 

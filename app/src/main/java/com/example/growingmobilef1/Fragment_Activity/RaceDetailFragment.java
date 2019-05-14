@@ -1,6 +1,7 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
-import com.example.growingmobilef1.Helper.RaceDetailDataHelper;
+import com.example.growingmobilef1.Helper.RaceResultsDataHelper;
 import com.example.growingmobilef1.Model.CalendarRaceItem;
 import com.example.growingmobilef1.Model.RaceResultsItem;
 import com.example.growingmobilef1.R;
@@ -20,9 +21,12 @@ import java.util.ArrayList;
 
 public class RaceDetailFragment extends Fragment {
 
+    public static String RESULTS_FRAGMENT = "ResultsFragment";
     public static final String RACE_ITEM = "Tag to pass the calendar race item to the fragment";
 
-    private ArrayList<RaceResultsItem> mRaceResultsItem;
+    // The race's info
+    private CalendarRaceItem mCalendarRace;
+
     private TextView mTitleLabel;
 
     public static RaceDetailFragment newInstance(CalendarRaceItem aCalendarRaceItem) {
@@ -42,31 +46,25 @@ public class RaceDetailFragment extends Fragment {
 
         Bundle vStartingBundle = getArguments();
         if (vStartingBundle != null) {
-            CalendarRaceItem vRaceItem = (CalendarRaceItem)vStartingBundle.getSerializable(RACE_ITEM);
-            mTitleLabel.setText(vRaceItem.getmRaceName());
+
+            // Item passed on CalendarList's click
+            mCalendarRace = (CalendarRaceItem)vStartingBundle.getSerializable(RACE_ITEM);
+            mTitleLabel.setText(mCalendarRace != null ? mCalendarRace.getmRaceName() : null);
         }
 
-        RaceDetailApiAsyncCaller vLongOperation = new RaceDetailApiAsyncCaller();
-        vLongOperation.execute();
+        // Inizialize the Results List Fragment
+        RaceResultsFragment list_results_fragment = (RaceResultsFragment) getChildFragmentManager().findFragmentByTag(RESULTS_FRAGMENT);
+
+        if(list_results_fragment == null){
+
+            FragmentTransaction vFT = getChildFragmentManager().beginTransaction();
+            list_results_fragment = RaceResultsFragment.newInstance(mCalendarRace);
+
+            vFT.replace(R.id.container_race_results, list_results_fragment, RESULTS_FRAGMENT);
+            vFT.commit();
+        }
 
         return vView;
     }
 
-    private class RaceDetailApiAsyncCaller extends AsyncTask<String, Void, String>{
-
-        private JSONObject vJsonToParse;
-        private RaceDetailDataHelper vRaceDetailDataHelper;
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
-            vRaceDetailDataHelper = new RaceDetailDataHelper();
-
-            vJsonToParse = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current/1/results.json");
-            mRaceResultsItem = vRaceDetailDataHelper.getRaceResults(vJsonToParse);
-
-            return null;
-        }
-    }
 }

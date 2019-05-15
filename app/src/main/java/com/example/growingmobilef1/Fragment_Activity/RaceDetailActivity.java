@@ -1,6 +1,5 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
-import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.example.growingmobilef1.MainActivity;
-import com.example.growingmobilef1.Model.CalendarRaceItem;
+import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
 
 public class RaceDetailActivity extends AppCompatActivity {
@@ -19,7 +18,7 @@ public class RaceDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        CalendarRaceItem raceItem = new CalendarRaceItem();
+        Races raceItem = new Races();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_race_detail);
@@ -29,12 +28,12 @@ public class RaceDetailActivity extends AppCompatActivity {
         Bundle startBundle = intent.getExtras();
 
         if(startBundle != null){
-            raceItem = (CalendarRaceItem) startBundle.getSerializable(RaceDetailFragment.RACE_ITEM);
+            raceItem = (Races) startBundle.getSerializable(RaceDetailFragment.RACE_ITEM);
         }
 
         // Set the Action Bar back button and the title
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(raceItem.getmRaceName());
+        getSupportActionBar().setTitle(raceItem.getRaceName());
 
         fragment = (RaceDetailFragment) getFragmentManager().findFragmentByTag(FRAGMENT_TAG);
         if(fragment == null){

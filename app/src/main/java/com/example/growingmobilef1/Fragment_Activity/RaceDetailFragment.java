@@ -2,22 +2,14 @@ package com.example.growingmobilef1.Fragment_Activity;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.growingmobilef1.Helper.ApiRequestHelper;
-import com.example.growingmobilef1.Helper.RaceResultsDataHelper;
-import com.example.growingmobilef1.Model.CalendarRaceItem;
-import com.example.growingmobilef1.Model.RaceResultsItem;
+import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
-
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class RaceDetailFragment extends Fragment {
 
@@ -25,11 +17,11 @@ public class RaceDetailFragment extends Fragment {
     public static final String RACE_ITEM = "Tag to pass the calendar race item to the fragment";
 
     // The race's info
-    private CalendarRaceItem mCalendarRace;
+    private Races mCalendarRace;
 
     private TextView mTitleLabel;
 
-    public static RaceDetailFragment newInstance(CalendarRaceItem aCalendarRaceItem) {
+    public static RaceDetailFragment newInstance(Races aCalendarRaceItem) {
 
         Bundle vBundle = new Bundle();
         vBundle.putSerializable(RACE_ITEM, aCalendarRaceItem);
@@ -48,8 +40,8 @@ public class RaceDetailFragment extends Fragment {
         if (vStartingBundle != null) {
 
             // Item passed on CalendarList's click
-            mCalendarRace = (CalendarRaceItem)vStartingBundle.getSerializable(RACE_ITEM);
-            mTitleLabel.setText(mCalendarRace != null ? mCalendarRace.getmRaceName() : null);
+            mCalendarRace = (Races)vStartingBundle.getSerializable(RACE_ITEM);
+            mTitleLabel.setText(mCalendarRace != null ? mCalendarRace.getRaceName() : null);
         }
 
         // Inizialize the Results List Fragment

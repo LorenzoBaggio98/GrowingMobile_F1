@@ -3,10 +3,11 @@ package com.example.growingmobilef1.Model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class Pilot {
+public class Driver implements Serializable {
 
     private String driverId;
     private int permanentNumber;
@@ -17,21 +18,21 @@ public class Pilot {
     private String dateOfBirth;
     private String nationality;
 
-    public static Pilot fromJson(JSONObject json){
+    public Driver fromJson(JSONObject json){
 
-        Pilot tempPilot = new Pilot();
+        Driver tempDriver = new Driver();
 
         if(json.length() != 0){
             try{
 
-                tempPilot.driverId = json.getString("driverId");
-                tempPilot.permanentNumber = json.getInt("permanentNumber");
-                tempPilot.code = json.getString("code");
-                tempPilot.url = new URL(json.getString("url"));
-                tempPilot.givenName = json.getString("givenName");
-                tempPilot.familyName = json.getString("familyName");
-                tempPilot.dateOfBirth = json.getString("dateOfBirth");
-                tempPilot.nationality = json.getString("nationality");
+                tempDriver.driverId = json.getString("driverId");
+                tempDriver.permanentNumber = json.getInt("permanentNumber");
+                tempDriver.code = json.getString("code");
+                tempDriver.url = new URL(json.getString("url"));
+                tempDriver.givenName = json.getString("givenName");
+                tempDriver.familyName = json.getString("familyName");
+                tempDriver.dateOfBirth = json.getString("dateOfBirth");
+                tempDriver.nationality = json.getString("nationality");
 
             }catch (JSONException e){
                 e.printStackTrace();
@@ -40,7 +41,7 @@ public class Pilot {
             }
         }
 
-        return tempPilot;
+        return tempDriver;
     }
 
     public String getDriverId() {

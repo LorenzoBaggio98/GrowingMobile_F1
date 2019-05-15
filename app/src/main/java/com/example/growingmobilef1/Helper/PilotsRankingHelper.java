@@ -31,7 +31,7 @@ public class PilotsRankingHelper {
 
 
                 int vResultsPoints = vRaceObject.getInt("points");
-                JSONObject vResultsDriver = vRaceObject.getJSONObject("Pilot");
+                JSONObject vResultsDriver = vRaceObject.getJSONObject("Driver");
 
                 PilotRaceItem pilotRaceItem = new PilotRaceItem();
                 //

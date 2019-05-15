@@ -3,14 +3,18 @@ package com.example.growingmobilef1.Model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Constructor {
+import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+public class Constructor implements Serializable {
 
     private String constructorId;
-    private String url;
+    private URL url;
     private String name;
     private String nationality;
 
-    public static Constructor fromJson(JSONObject json){
+    public Constructor fromJson(JSONObject json){
 
         Constructor tempCons = new Constructor();
 
@@ -18,11 +22,13 @@ public class Constructor {
             try{
 
                 tempCons.setConstructorId(json.getString("constructorId"));
-                tempCons.setUrl(json.getString("url"));
+                tempCons.setUrl(new URL(json.getString("url")));
                 tempCons.setName(json.getString("name"));
                 tempCons.setNationality(json.getString("nationality"));
 
             }catch(JSONException e){
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
         }
@@ -38,11 +44,11 @@ public class Constructor {
         this.constructorId = constructorId;
     }
 
-    public String getUrl() {
+    public URL getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(URL url) {
         this.url = url;
     }
 

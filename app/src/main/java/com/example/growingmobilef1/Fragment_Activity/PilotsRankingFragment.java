@@ -10,10 +10,9 @@ import android.widget.ListView;
 
 import com.example.growingmobilef1.Adapter.ListableObjectsAdapter;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
-import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
 import com.example.growingmobilef1.Helper.PilotsRankingHelper;
 import com.example.growingmobilef1.Interface.IListableObject;
-import com.example.growingmobilef1.Model.PilotRaceItem;
+import com.example.growingmobilef1.Model.Driver;
 import com.example.growingmobilef1.R;
 
 import org.json.JSONObject;
@@ -45,7 +44,7 @@ public class PilotsRankingFragment extends Fragment {
     private class PilotsApiAsync extends AsyncTask<String, Void, String> {
         private JSONObject vJsonObjectToParse;
         private ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
-        private PilotRaceItem pilotRaceItem = new PilotRaceItem();
+        private Driver pilotRaceItem = new Driver();
 
         @Override
         protected String doInBackground(String... params) {

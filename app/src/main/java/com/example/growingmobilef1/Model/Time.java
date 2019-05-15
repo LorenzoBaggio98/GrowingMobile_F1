@@ -1,12 +1,14 @@
 package com.example.growingmobilef1.Model;
 import org.json.JSONObject;
 
-public class Time {
+import java.io.Serializable;
+
+public class Time implements Serializable {
 
     private int millis;
     private String time;
 
-    public static Time fromJson(JSONObject json){
+    public Time fromJson(JSONObject json){
 
         Time tempTime = new Time();
 

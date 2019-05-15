@@ -3,7 +3,9 @@ package com.example.growingmobilef1.Model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class FastestLap {
+import java.io.Serializable;
+
+public class FastestLap implements Serializable {
 
     private int rank;
     private int lap;
@@ -11,7 +13,7 @@ public class FastestLap {
     private Time Time;
     private AverageSpeed AverageSpeed;
 
-    public static FastestLap fromJson(JSONObject json){
+    public FastestLap fromJson(JSONObject json){
 
         Time tempTime = new Time();
         AverageSpeed tempAS = new AverageSpeed();

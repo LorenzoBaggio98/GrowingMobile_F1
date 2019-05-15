@@ -3,14 +3,16 @@ package com.example.growingmobilef1.Model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RaceResultsItem {
+import java.io.Serializable;
+
+public class RaceResults implements Serializable {
 
     private int number;
     private int position;
     private String positionText;
     private int points;
 
-    private Pilot Pilot;
+    private Driver Driver;
     private Constructor Constructor;
 
     private int grid;
@@ -19,15 +21,15 @@ public class RaceResultsItem {
     private Time Time;
     private FastestLap FastestLap;
 
-    public RaceResultsItem(){
+    public RaceResults(){
 
     }
 
-    public static RaceResultsItem fromJson(JSONObject json){
+    public static RaceResults fromJson(JSONObject json){
 
-        RaceResultsItem temp = new RaceResultsItem();
+        RaceResults temp = new RaceResults();
 
-        Pilot tempPilot = new Pilot();
+        Driver tempDriver = new Driver();
         Constructor tempCons = new Constructor();
         Time tempTime = new Time();
         FastestLap tempFL = new FastestLap();
@@ -40,7 +42,7 @@ public class RaceResultsItem {
                 temp.setPositionText(json.getString("positionText"));
                 temp.setPoints(json.getInt("points"));
 
-                temp.setPilot(tempPilot.fromJson(json.getJSONObject("Pilot")));
+                temp.setDriver(tempDriver.fromJson(json.getJSONObject("Driver")));
                 temp.setConstructor(tempCons.fromJson(json.getJSONObject("Constructor")));
 
                 temp.setGrid(json.getInt("grid"));
@@ -90,12 +92,12 @@ public class RaceResultsItem {
         this.points = points;
     }
 
-    public Pilot getPilot() {
-        return Pilot;
+    public Driver getDriver() {
+        return Driver;
     }
 
-    public void setPilot(Pilot pilot) {
-        Pilot = pilot;
+    public void setDriver(Driver driver) {
+        Driver = driver;
     }
 
     public int getGrid() {

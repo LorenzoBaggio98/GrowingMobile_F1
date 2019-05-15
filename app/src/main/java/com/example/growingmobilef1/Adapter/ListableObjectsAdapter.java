@@ -7,7 +7,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.growingmobilef1.Interface.IListableObject;
-import com.example.growingmobilef1.Model.CalendarRaceItem;
 import com.example.growingmobilef1.R;
 
 import java.util.ArrayList;

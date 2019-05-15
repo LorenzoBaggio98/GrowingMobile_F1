@@ -11,8 +11,8 @@ import android.widget.ListView;
 import com.example.growingmobilef1.Adapter.RaceResultsAdapter;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.RaceResultsDataHelper;
-import com.example.growingmobilef1.Model.CalendarRaceItem;
-import com.example.growingmobilef1.Model.RaceResultsItem;
+import com.example.growingmobilef1.Model.RaceResults;
+import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
 
 import org.json.JSONObject;
@@ -24,13 +24,13 @@ public class RaceResultsFragment extends Fragment {
     public static final String RACE_ITEM = "RI";
 
     // Array containing the race's results
-    private ArrayList<RaceResultsItem> mRaceResultsArrayList;
-    private CalendarRaceItem mCalendarRace;
+    private ArrayList<RaceResults> mRaceResultsArrayList;
+    private Races mCalendarRace;
 
     private ListView mListViewResult;
 
     // Pass the calendar to perform the URL query
-    public static RaceResultsFragment newInstance(CalendarRaceItem aCalendarRaceItem) {
+    public static RaceResultsFragment newInstance(Races aCalendarRaceItem) {
 
         Bundle vBundle = new Bundle();
         vBundle.putSerializable(RACE_ITEM, aCalendarRaceItem);
@@ -52,7 +52,7 @@ public class RaceResultsFragment extends Fragment {
         if (vStartingBundle != null) {
 
             // Item passed on CalendarList's click
-            mCalendarRace = (CalendarRaceItem)vStartingBundle.getSerializable(RACE_ITEM);
+            mCalendarRace = (Races)vStartingBundle.getSerializable(RACE_ITEM);
         }
 
         RaceResultsApiAsynCaller vLongOperation = new RaceResultsApiAsynCaller();
@@ -72,7 +72,7 @@ public class RaceResultsFragment extends Fragment {
             ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
             vRaceDetailDataHelper = new RaceResultsDataHelper();
 
-            String downloadUrl = String.format("http://ergast.com/api/f1/current/%s/results.json", mCalendarRace.getmRound());
+            String downloadUrl = String.format("http://ergast.com/api/f1/current/%s/results.json", mCalendarRace.getRound());
 
             vJsonToParse = vApiRequestHelper.getContentFromUrl(downloadUrl);
             mRaceResultsArrayList = vRaceDetailDataHelper.getRaceResults(vJsonToParse);

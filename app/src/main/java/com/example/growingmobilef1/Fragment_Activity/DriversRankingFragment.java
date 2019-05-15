@@ -3,10 +3,12 @@ package com.example.growingmobilef1.Fragment_Activity;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.example.growingmobilef1.Adapter.DriversAdapter;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
@@ -23,6 +25,9 @@ public class DriversRankingFragment extends Fragment {
 
     private ArrayList<DriverStandings> mArrayListPilots;
     private ListView mListView;
+    private ProgressBar mProgressBar;
+
+    PilotsApiAsync vPilotsApiAsync = new PilotsApiAsync();
 
     public static DriversRankingFragment newInstance() {
         return new DriversRankingFragment();
@@ -33,8 +38,10 @@ public class DriversRankingFragment extends Fragment {
         View vView = inflater.inflate(R.layout.fragment_pilots_ranking, container, false);
 
         mListView = vView.findViewById(R.id.listViewPilots);
+        mProgressBar=vView.findViewById(R.id.progressBarDriver);
 
-        PilotsApiAsync vPilotsApiAsync = new PilotsApiAsync();
+
+
         vPilotsApiAsync.execute();
 
         return vView;
@@ -48,6 +55,8 @@ public class DriversRankingFragment extends Fragment {
 
         @Override
         protected String doInBackground(String... params) {
+            mProgressBar.setVisibility(View.VISIBLE);
+
 
             vJsonObjectToParse = vApiRequestHelper.getContentFromUrl("https://ergast.com/api/f1/current/driverStandings.json");
             mArrayListPilots = DriversRankingHelper.getArrayListPilotsPoints(vJsonObjectToParse);
@@ -58,6 +67,7 @@ public class DriversRankingFragment extends Fragment {
         protected void onPostExecute(String result) {
             DriversAdapter vDriversAdapter = new DriversAdapter(mArrayListPilots);
             mListView.setAdapter(vDriversAdapter);
+            mProgressBar.setVisibility(View.INVISIBLE);
         }
     }
 }

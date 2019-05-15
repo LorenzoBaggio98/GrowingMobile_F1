@@ -1,6 +1,10 @@
 package com.example.growingmobilef1.Helper;
 
 import android.util.Log;
+import android.widget.Toast;
+
+import com.example.growingmobilef1.MainActivity;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.BufferedReader;
@@ -22,6 +26,8 @@ public class ApiRequestHelper{
     public JSONObject getContentFromUrl(String aUrl) {
         StringBuilder vStringBuilder = new StringBuilder();
         JSONObject vResponseJsonObject = new JSONObject();
+        Boolean vHasErrors = false;
+
         try {
 
             URL vUrl = new URL(aUrl);
@@ -41,17 +47,21 @@ public class ApiRequestHelper{
                     vResponseJsonObject = new JSONObject(String.valueOf(vStringBuilder));
 
                 } catch (JSONException e) {
+                    vHasErrors = true;
                     Log.e("JSON Parser", "Error parsing data " + e.toString());
                 }
             }else{
+                vHasErrors = true;
                 throw new IOException(vUrlConnection.getResponseMessage());
             }
         } catch(StackOverflowError | Exception s){
             s.printStackTrace();
+            vHasErrors = true;
         } catch(Error e){
             e.printStackTrace();
+            vHasErrors = true;
         }
 
-        return vResponseJsonObject;
+        return (vHasErrors) ? null : vResponseJsonObject;
     }
 }

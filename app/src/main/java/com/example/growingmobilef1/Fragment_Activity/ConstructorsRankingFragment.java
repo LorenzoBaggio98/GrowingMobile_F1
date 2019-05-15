@@ -8,7 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.ProgressBar;
+import android.widget.Toast;
 import com.example.growingmobilef1.Adapter.ConstructorsAdapter;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.ConstructorsDataHelper;
@@ -26,6 +27,8 @@ public class ConstructorsRankingFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+    private ProgressBar mPgsBar;
+    private View vView;
 
     public static ConstructorsRankingFragment newInstance() {
         return new ConstructorsRankingFragment();
@@ -33,7 +36,7 @@ public class ConstructorsRankingFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View vView = inflater.inflate(R.layout.fragment_constructors_ranking, container, false);
+        vView = inflater.inflate(R.layout.fragment_constructors_ranking, container, false);
 
         // Call the async class to perform the api call
         CalendarApiAsyncCaller vLongOperation = new CalendarApiAsyncCaller();
@@ -46,6 +49,11 @@ public class ConstructorsRankingFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         mAdapter = new ConstructorsAdapter(new ArrayList<IListableObject>());
         recyclerView.setAdapter(mAdapter);
+
+        // progressbar
+        mPgsBar = (ProgressBar)vView.findViewById(R.id.progress_loaderC);
+        // start loading
+        mPgsBar.setVisibility(vView.VISIBLE);
 
 
         return vView;
@@ -66,6 +74,7 @@ public class ConstructorsRankingFragment extends Fragment {
             // get json from api
             vJsonToParse = vApiRequestHelper.getContentFromUrl("https://ergast.com/api/f1/current/constructorStandings.json");
 
+
             // parse json to list
             mConstructorsItemArraylist =  vConstructorsDataHelper.getArraylist(vJsonToParse);
             return null;
@@ -73,9 +82,14 @@ public class ConstructorsRankingFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String result) {
-
             ((ConstructorsAdapter)mAdapter).updateData(mConstructorsItemArraylist);
-            mAdapter.notifyDataSetChanged();
+
+            if(vJsonToParse == null) {
+                Toast.makeText(getActivity(), "Can't fetch ranking, check internet connection", Toast.LENGTH_LONG);
+            } else {
+                mPgsBar.setVisibility(vView.GONE);
+            }
+
         }
     }
 

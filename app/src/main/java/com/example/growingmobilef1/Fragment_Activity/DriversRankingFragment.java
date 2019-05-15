@@ -8,24 +8,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.example.growingmobilef1.Adapter.ListableObjectsAdapter;
+import com.example.growingmobilef1.Adapter.DriversAdapter;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.PilotsRankingHelper;
-import com.example.growingmobilef1.Interface.IListableObject;
 import com.example.growingmobilef1.Model.Driver;
+import com.example.growingmobilef1.Model.DriverStandings;
 import com.example.growingmobilef1.R;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class PilotsRankingFragment extends Fragment {
+public class DriversRankingFragment extends Fragment {
 
-    private ArrayList<IListableObject> mArrayListPilots;
+    private ArrayList<DriverStandings> mArrayListPilots;
     private ListView mListView;
 
-    public static PilotsRankingFragment newInstance() {
-        return new PilotsRankingFragment();
+    public static DriversRankingFragment newInstance() {
+        return new DriversRankingFragment();
     }
 
     @Override
@@ -49,15 +49,15 @@ public class PilotsRankingFragment extends Fragment {
         @Override
         protected String doInBackground(String... params) {
 
-            vJsonObjectToParse = vApiRequestHelper.getContentFromUrl("https://ergast.com/api/f1/current/last/results.json");
-            mArrayListPilots = PilotsRankingHelper.getArayListPilotsPoints(vJsonObjectToParse);
+            vJsonObjectToParse = vApiRequestHelper.getContentFromUrl("https://ergast.com/api/f1/current/driverStandings.json");
+            mArrayListPilots = PilotsRankingHelper.getArrayListPilotsPoints(vJsonObjectToParse);
             return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
-            ListableObjectsAdapter vListableObjectsAdapterPilots = new ListableObjectsAdapter(mArrayListPilots);
-            mListView.setAdapter(vListableObjectsAdapterPilots);
+            DriversAdapter vDriversAdapter = new DriversAdapter(mArrayListPilots);
+            mListView.setAdapter(vDriversAdapter);
         }
     }
 }

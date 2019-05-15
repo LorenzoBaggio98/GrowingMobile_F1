@@ -1,9 +1,6 @@
 package com.example.growingmobilef1.Helper;
 
-import android.util.Log;
-
-import com.example.growingmobilef1.Interface.IListableObject;
-import com.example.growingmobilef1.Model.PilotRaceItem;
+import com.example.growingmobilef1.Model.DriverStandings;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,43 +11,35 @@ import java.util.ArrayList;
 public class PilotsRankingHelper {
 
 
-    public static ArrayList<IListableObject> getArayListPilotsPoints(JSONObject aJsonsToParse) {
+    public static ArrayList<DriverStandings> getArrayListPilotsPoints(JSONObject aJsonsToParse) {
 
-        ArrayList<IListableObject> arrayListPilotsPoints = new ArrayList<>();
+        ArrayList<DriverStandings> arrayListPilotsPoints = new ArrayList<>();
 
         try {
             JSONObject vMdataObject = aJsonsToParse.getJSONObject("MRData");
-            JSONObject vRaceTableObject = vMdataObject.getJSONObject("RaceTable");
-            JSONArray vRacesArray = vRaceTableObject.getJSONArray("Races");
-            JSONObject vResultRaces =  vRacesArray.getJSONObject(0);
-            JSONArray vResults =vResultRaces.getJSONArray("Results");
+            JSONObject vStandingTable=vMdataObject.getJSONObject("StandingsTable");
 
-            for (int i = 0; i < vResults.length(); i++) {
-
-                JSONObject vRaceObject = vResults.getJSONObject(i);
+            JSONArray vStandingsLists = vStandingTable.getJSONArray("StandingsLists");
 
 
-                int vResultsPoints = vRaceObject.getInt("points");
-                JSONObject vResultsDriver = vRaceObject.getJSONObject("Driver");
+            for(int j = 0; j < vStandingsLists.length(); j++){
+                JSONObject vResultRaces =  vStandingsLists.getJSONObject(j);
 
-                PilotRaceItem pilotRaceItem = new PilotRaceItem();
-                //
-               // pilotRaceItem.setDriverId(vResultsDriver.getInt("permanentNumber"));
-                pilotRaceItem.setGivenName(vResultsDriver.getString("givenName"));
-                pilotRaceItem.setFamilyName(vResultsDriver.getString("familyName"));
-                pilotRaceItem.setDateOfBirth(vResultsDriver.getString("dateOfBirth"));
-                pilotRaceItem.setNationality(vResultsDriver.getString("nationality"));
+                JSONArray vDriverStandings = vResultRaces.getJSONArray("DriverStandings");
 
+                for (int i = 0; i < vDriverStandings.length(); i++) {
 
-                pilotRaceItem.setPoints(vResultsPoints);
+                    // Get DriverStanding object
+                    JSONObject vDriverStanding = vDriverStandings.getJSONObject(i);
 
-                arrayListPilotsPoints.add(pilotRaceItem);
-
+                    DriverStandings vTempDriverS = DriverStandings.fromJson(vDriverStanding);
+                    arrayListPilotsPoints.add(vTempDriverS);
+                }
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
 
         return arrayListPilotsPoints;
     }

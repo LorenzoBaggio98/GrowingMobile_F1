@@ -67,7 +67,7 @@ public class ListableObjectsAdapter extends BaseAdapter {
         ViewHolder vHolder = (ViewHolder)vView.getTag();
 
         vHolder.mMainInformationLabel.setText("" + getItem(position).getmMainInformation());
-        vHolder.mOptionalInformationLabel.setText(getItem(position).getmOptionalInformation());
+        vHolder.mOptionalInformationLabel.setText(""+getItem(position).getmOptionalInformation());
         vHolder.mSecondaryInformationLabel.setText("" + getItem(position).getmSecondaryInformation());
 
         return vView;

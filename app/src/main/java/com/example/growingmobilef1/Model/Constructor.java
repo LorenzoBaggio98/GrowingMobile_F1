@@ -18,18 +18,20 @@ public class Constructor implements Serializable {
 
         Constructor tempCons = new Constructor();
 
-        if(json.length() != 0){
-            try{
+        if(json != null){
+            if(json.length() != 0){
+                try{
 
-                tempCons.setConstructorId(json.getString("constructorId"));
-                tempCons.setUrl(new URL(json.getString("url")));
-                tempCons.setName(json.getString("name"));
-                tempCons.setNationality(json.getString("nationality"));
+                    tempCons.setConstructorId(json.getString("constructorId"));
+                    tempCons.setUrl(new URL(json.getString("url")));
+                    tempCons.setName(json.getString("name"));
+                    tempCons.setNationality(json.getString("nationality"));
 
-            }catch(JSONException e){
-                e.printStackTrace();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
+                }catch(JSONException e){
+                    e.printStackTrace();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

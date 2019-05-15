@@ -75,11 +75,6 @@ public class CalendarFragment extends Fragment {
 
         intent.putExtras(bundle);
         startActivity(intent);
-
-        /*FragmentTransaction vFT = getFragmentManager().beginTransaction();
-        RaceDetailFragment vRaceDetailFrag = RaceDetailFragment.newInstance(aRaceItem);
-        vFT.replace(R.id.main_act_fragment_container, vRaceDetailFrag, RACE_DETAIL_FRAGMENT);
-        vFT.commit();*/
     }
 
     // Private class needed to perform the API call asynchronously

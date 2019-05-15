@@ -47,7 +47,6 @@ public class RaceDetailFragment extends Fragment {
 
     // The race's info
     private Races mCalendarRace;
-    private TextView mTitleLabel;
     private Button mNotificationButton;
     private Date mRaceDate;
 
@@ -64,7 +63,6 @@ public class RaceDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vView = inflater.inflate(R.layout.fragment_race_detail, container, false);
 
-        mTitleLabel = vView.findViewById(R.id.frag_race_detail_name);
         mNotificationButton = vView.findViewById(R.id.btn_race_notify);
 
         Bundle vStartingBundle = getArguments();
@@ -72,7 +70,6 @@ public class RaceDetailFragment extends Fragment {
 
             // Item passed on CalendarList's click
             mCalendarRace = (Races)vStartingBundle.getSerializable(RACE_ITEM);
-            mTitleLabel.setText(mCalendarRace != null ? mCalendarRace.getRaceName() : "");
             // Get the race time
             mRaceDate = mCalendarRace.getDate();
 

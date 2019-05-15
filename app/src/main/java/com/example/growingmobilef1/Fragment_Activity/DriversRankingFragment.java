@@ -38,7 +38,7 @@ public class DriversRankingFragment extends Fragment {
         View vView = inflater.inflate(R.layout.fragment_pilots_ranking, container, false);
 
         mListView = vView.findViewById(R.id.listViewPilots);
-        mProgressBar=vView.findViewById(R.id.progressBarDriver);
+        mProgressBar=vView.findViewById(R.id.frag_calendar_progress_bar);
 
 
 

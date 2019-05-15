@@ -1,10 +1,6 @@
 package com.example.growingmobilef1.Model;
 
-import com.example.growingmobilef1.Interface.IListableObject;
-
-
-
-public class PilotRaceItem implements IListableObject {
+public class PilotRaceItem  {
     private int driverId;
     private String url;
     private String givenName;
@@ -25,83 +21,59 @@ public class PilotRaceItem implements IListableObject {
         this.points = points;
     }
 
-    public int getDriverId() {
-        return driverId;
-    }
-
     public void setDriverId(int driverId) {
         this.driverId = driverId;
-    }
-
-    public String getUrl() {
-        return url;
     }
 
     public void setUrl(String url) {
         this.url = url;
     }
 
-    public String getGivenName() {
-        return givenName;
-    }
-
     public void setGivenName(String givenName) {
         this.givenName = givenName;
-    }
-
-    public String getFamilyName() {
-        return familyName;
     }
 
     public void setFamilyName(String familyName) {
         this.familyName = familyName;
     }
 
-    public String getDateOfBirth() {
-        return dateOfBirth;
-    }
-
     public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getNationality() {
-        return nationality;
     }
 
     public void setNationality(String nationality) {
         this.nationality = nationality;
     }
 
-    @Override
-    public int getmId() {
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    public int getDriverId() {
         return driverId;
     }
 
-    @Override
-    public String getmMainInformation() {
+    public String getUrl() {
+        return url;
+    }
+
+    public String getGivenName() {
         return givenName;
     }
 
-    @Override
-    public String getmOptionalInformation() {
+    public String getFamilyName() {
         return familyName;
     }
 
-    @Override
-    public String getmSecondaryInformation() {
-        return  ""+points;
+    public String getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    @Override
-    public Boolean isButtonRequired() {
-        return false;
+    public String getNationality() {
+        return nationality;
     }
+
     public int getPoints() {
         return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
     }
 }

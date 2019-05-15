@@ -14,32 +14,35 @@ import java.util.ArrayList;
 public class PilotsRankingHelper {
 
 
-    public static ArrayList<IListableObject> getArayListPilotsPoints(JSONObject aJsonsToParse) {
+    public static ArrayList<PilotRaceItem> getArayListPilotsPoints(JSONObject aJsonsToParse) {
 
-        ArrayList<IListableObject> arrayListPilotsPoints = new ArrayList<>();
+        ArrayList<PilotRaceItem> arrayListPilotsPoints = new ArrayList<>();
 
         try {
             JSONObject vMdataObject = aJsonsToParse.getJSONObject("MRData");
-            JSONObject vRaceTableObject = vMdataObject.getJSONObject("RaceTable");
-            JSONArray vRacesArray = vRaceTableObject.getJSONArray("Races");
-            JSONObject vResultRaces =  vRacesArray.getJSONObject(0);
-            JSONArray vResults =vResultRaces.getJSONArray("Results");
+            JSONObject vStandingTable=vMdataObject.getJSONObject("StandingsTable");
+            JSONArray vStandingsLists=vStandingTable.getJSONArray("StandingsLists");
+            JSONObject vResultRaces =  vStandingsLists.getJSONObject(0);
+            JSONArray vDriverStandings = vResultRaces.getJSONArray("DriverStandings");
+//            JSONObject vRaceTableObject = vMdataObject.getJSONObject("RaceTable");
+//            JSONArray vRacesArray = vRaceTableObject.getJSONArray("Races");
+//            JSONObject vResultRaces =  vRacesArray.getJSONObject(0);
+//            JSONArray vResults =vResultRaces.getJSONArray("Results");
 
-            for (int i = 0; i < vResults.length(); i++) {
+            for (int i = 0; i < vDriverStandings.length(); i++) {
 
-                JSONObject vRaceObject = vResults.getJSONObject(i);
+                JSONObject vObjectItemDriversStandings = vDriverStandings.getJSONObject(i);
 
 
-                int vResultsPoints = vRaceObject.getInt("points");
-                JSONObject vResultsDriver = vRaceObject.getJSONObject("Driver");
+                int vResultsPoints = vObjectItemDriversStandings.getInt("points");
+                JSONObject vResultsInfoDriver = vObjectItemDriversStandings.getJSONObject("Driver");
 
                 PilotRaceItem pilotRaceItem = new PilotRaceItem();
-                //
-               // pilotRaceItem.setDriverId(vResultsDriver.getInt("permanentNumber"));
-                pilotRaceItem.setGivenName(vResultsDriver.getString("givenName"));
-                pilotRaceItem.setFamilyName(vResultsDriver.getString("familyName"));
-                pilotRaceItem.setDateOfBirth(vResultsDriver.getString("dateOfBirth"));
-                pilotRaceItem.setNationality(vResultsDriver.getString("nationality"));
+
+                pilotRaceItem.setGivenName(vResultsInfoDriver.getString("givenName"));
+                pilotRaceItem.setFamilyName(vResultsInfoDriver.getString("familyName"));
+                pilotRaceItem.setDateOfBirth(vResultsInfoDriver.getString("dateOfBirth"));
+                pilotRaceItem.setNationality(vResultsInfoDriver.getString("nationality"));
 
 
                 pilotRaceItem.setPoints(vResultsPoints);

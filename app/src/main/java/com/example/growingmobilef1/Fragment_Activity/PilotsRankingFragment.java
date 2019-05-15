@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.growingmobilef1.Adapter.ListableObjectsAdapter;
+import com.example.growingmobilef1.Adapter.PilotsAdapter;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
 import com.example.growingmobilef1.Helper.PilotsRankingHelper;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 
 public class PilotsRankingFragment extends Fragment {
 
-    private ArrayList<IListableObject> mArrayListPilots;
+    private ArrayList<PilotRaceItem> mArrayListPilots;
     private ListView mListView;
 
     public static PilotsRankingFragment newInstance() {
@@ -50,15 +51,15 @@ public class PilotsRankingFragment extends Fragment {
         @Override
         protected String doInBackground(String... params) {
 
-            vJsonObjectToParse = vApiRequestHelper.getContentFromUrl("https://ergast.com/api/f1/current/last/results.json");
+            vJsonObjectToParse = vApiRequestHelper.getContentFromUrl("https://ergast.com/api/f1/current/driverStandings.json");
             mArrayListPilots = PilotsRankingHelper.getArayListPilotsPoints(vJsonObjectToParse);
             return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
-            ListableObjectsAdapter vListableObjectsAdapterPilots = new ListableObjectsAdapter(mArrayListPilots);
-            mListView.setAdapter(vListableObjectsAdapterPilots);
+            PilotsAdapter vPilotsAdapter = new PilotsAdapter(mArrayListPilots);
+            mListView.setAdapter(vPilotsAdapter);
         }
     }
 }

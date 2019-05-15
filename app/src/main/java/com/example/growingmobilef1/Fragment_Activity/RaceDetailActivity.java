@@ -43,7 +43,7 @@ public class RaceDetailActivity extends AppCompatActivity {
 
             fragment = RaceDetailFragment.newInstance(raceItem);
 
-            vFT.replace(R.id.fragment_race_container, fragment, FRAGMENT_TAG);
+            vFT.replace(R.id.container_race_fragment, fragment, FRAGMENT_TAG);
             vFT.commit();
 
         }

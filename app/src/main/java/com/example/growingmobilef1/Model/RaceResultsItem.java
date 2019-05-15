@@ -11,10 +11,13 @@ public class RaceResultsItem {
     private int points;
 
     private Driver Driver;
+    private Constructor Constructor;
 
     private int grid;
     private int laps;
     private String status;
+    private Time Time;
+    private FastestLap FastestLap;
 
     public RaceResultsItem(){
 
@@ -22,8 +25,12 @@ public class RaceResultsItem {
 
     public static RaceResultsItem fromJson(JSONObject json){
 
-        Driver tempDriver = new Driver();
         RaceResultsItem temp = new RaceResultsItem();
+
+        Driver tempDriver = new Driver();
+        Constructor tempCons = new Constructor();
+        Time tempTime = new Time();
+        FastestLap tempFL = new FastestLap();
 
         if(json.length() != 0){
             try{
@@ -32,12 +39,16 @@ public class RaceResultsItem {
                 temp.setPosition(json.getInt("position"));
                 temp.setPositionText(json.getString("positionText"));
                 temp.setPoints(json.getInt("points"));
+
                 temp.setDriver(tempDriver.fromJson(json.getJSONObject("Driver")));
+                temp.setConstructor(tempCons.fromJson(json.getJSONObject("Constructor")));
 
                 temp.setGrid(json.getInt("grid"));
                 temp.setLaps(json.getInt("laps"));
                 temp.setStatus(json.getString("status"));
 
+                temp.setTime(tempTime.fromJson(json.optJSONObject("Time")));
+                temp.setFastestLap(tempFL.fromJson(json.getJSONObject("FastestLap")));
 
             }catch (JSONException e){
                 e.printStackTrace();
@@ -109,5 +120,29 @@ public class RaceResultsItem {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public com.example.growingmobilef1.Model.Constructor getConstructor() {
+        return Constructor;
+    }
+
+    public void setConstructor(com.example.growingmobilef1.Model.Constructor constructor) {
+        Constructor = constructor;
+    }
+
+    public com.example.growingmobilef1.Model.Time getTime() {
+        return Time;
+    }
+
+    public void setTime(com.example.growingmobilef1.Model.Time time) {
+        Time = time;
+    }
+
+    public com.example.growingmobilef1.Model.FastestLap getFastestLap() {
+        return FastestLap;
+    }
+
+    public void setFastestLap(com.example.growingmobilef1.Model.FastestLap fastestLap) {
+        FastestLap = fastestLap;
     }
 }

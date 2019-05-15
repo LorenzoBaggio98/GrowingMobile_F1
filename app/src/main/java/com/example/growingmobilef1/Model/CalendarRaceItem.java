@@ -1,10 +1,10 @@
 package com.example.growingmobilef1.Model;
 
-import android.os.Parcelable;
-
 import com.example.growingmobilef1.Interface.IListableObject;
-
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class CalendarRaceItem implements Serializable, IListableObject {
 
@@ -12,6 +12,8 @@ public class CalendarRaceItem implements Serializable, IListableObject {
     private String mSeason;
     private String mDate;
     private String mTime;
+    private Date mParsedDate;
+    private Boolean isNotificationScheduled = false;
     private String mRaceSeason;
     private String mRound;
     private String mCurrentWiki;
@@ -100,6 +102,27 @@ public class CalendarRaceItem implements Serializable, IListableObject {
 
     public void setmTime(String mTime) {
         this.mTime = mTime;
+    }
+
+    public Date getmParsedDate() {
+        Date vDate = new Date();
+        String vDay = getmDate();
+        String vHour = getmTime();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        try {
+            vDate = simpleDateFormat.parse(vDay + 'T' + vHour);
+        } catch (ParseException e){
+            e.printStackTrace();
+        }
+        return vDate;
+    }
+
+    public Boolean getNotificationScheduled() {
+        return isNotificationScheduled;
+    }
+
+    public void setNotificationScheduled(Boolean notificationScheduled) {
+        isNotificationScheduled = notificationScheduled;
     }
 
     public String getmRaceSeason() {

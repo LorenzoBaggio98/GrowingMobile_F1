@@ -1,7 +1,6 @@
 package com.example.growingmobilef1.Helper;
 
-import com.example.growingmobilef1.Model.Driver;
-import com.example.growingmobilef1.Model.RaceResultsItem;
+import com.example.growingmobilef1.Model.RaceResults;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,9 +11,9 @@ import java.util.ArrayList;
 
 public class RaceResultsDataHelper {
 
-    public ArrayList<RaceResultsItem> getRaceResults(JSONObject aJsonToParse){
+    public ArrayList<RaceResults> getRaceResults(JSONObject aJsonToParse){
 
-        ArrayList<RaceResultsItem> vRaceResultsArray = new ArrayList<>();
+        ArrayList<RaceResults> vRaceResultsArray = new ArrayList<>();
 
         if (aJsonToParse.length() != 0){
 
@@ -38,9 +37,9 @@ public class RaceResultsDataHelper {
                         JSONObject vSingleResult = vResults.getJSONObject(j);
 
                         // Parsing of the json to the Object
-                        RaceResultsItem vRaceResultsItem = RaceResultsItem.fromJson(vSingleResult);
+                        RaceResults vRaceResults = RaceResults.fromJson(vSingleResult);
 
-                        vRaceResultsArray.add(vRaceResultsItem);
+                        vRaceResultsArray.add(vRaceResults);
                     }
                 }
 

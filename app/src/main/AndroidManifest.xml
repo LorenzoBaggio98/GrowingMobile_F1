@@ -25,6 +25,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".AlertReceiver">
+            <intent-filter>
+                <action android:name="com.andrea.action.DISPLAY_NOTIFICATION" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

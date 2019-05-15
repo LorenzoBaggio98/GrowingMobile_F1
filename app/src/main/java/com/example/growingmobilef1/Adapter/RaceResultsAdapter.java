@@ -6,16 +6,16 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.growingmobilef1.Model.RaceResultsItem;
+import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.R;
 
 import java.util.ArrayList;
 
 public class RaceResultsAdapter extends BaseAdapter {
 
-    private ArrayList<RaceResultsItem> dataList;
+    private ArrayList<RaceResults> dataList;
 
-    public RaceResultsAdapter(ArrayList<RaceResultsItem> data){
+    public RaceResultsAdapter(ArrayList<RaceResults> data){
         this.dataList = data;
     }
 
@@ -25,7 +25,7 @@ public class RaceResultsAdapter extends BaseAdapter {
     }
 
     @Override
-    public RaceResultsItem getItem(int position) {
+    public RaceResults getItem(int position) {
         return dataList.get(position);
     }
 
@@ -56,7 +56,7 @@ public class RaceResultsAdapter extends BaseAdapter {
         }
 
         ViewHolder vHolder = (ViewHolder) cellView.getTag();
-        RaceResultsItem tempItem = getItem(position);
+        RaceResults tempItem = getItem(position);
 
         vHolder.txt_position.setText(""+tempItem.getPosition());
         vHolder.txt_driver.setText(tempItem.getDriver().getDriverId());

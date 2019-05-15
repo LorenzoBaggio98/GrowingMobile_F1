@@ -3,30 +3,34 @@ package com.example.growingmobilef1.Fragment_Activity;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
-import com.example.growingmobilef1.Adapter.ListableObjectsAdapter;
+import com.example.growingmobilef1.Adapter.DriversAdapter;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
-import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
-import com.example.growingmobilef1.Helper.PilotsRankingHelper;
-import com.example.growingmobilef1.Interface.IListableObject;
-import com.example.growingmobilef1.Model.PilotRaceItem;
+import com.example.growingmobilef1.Helper.DriversRankingHelper;
+import com.example.growingmobilef1.Model.Driver;
+import com.example.growingmobilef1.Model.DriverStandings;
 import com.example.growingmobilef1.R;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class PilotsRankingFragment extends Fragment {
+public class DriversRankingFragment extends Fragment {
 
-    private ArrayList<IListableObject> mArrayListPilots;
+    private ArrayList<DriverStandings> mArrayListPilots;
     private ListView mListView;
+    private ProgressBar mProgressBar;
 
-    public static PilotsRankingFragment newInstance() {
-        return new PilotsRankingFragment();
+    PilotsApiAsync vPilotsApiAsync = new PilotsApiAsync();
+
+    public static DriversRankingFragment newInstance() {
+        return new DriversRankingFragment();
     }
 
     @Override
@@ -34,8 +38,10 @@ public class PilotsRankingFragment extends Fragment {
         View vView = inflater.inflate(R.layout.fragment_pilots_ranking, container, false);
 
         mListView = vView.findViewById(R.id.listViewPilots);
+        mProgressBar=vView.findViewById(R.id.progressBarDriver);
 
-        PilotsApiAsync vPilotsApiAsync = new PilotsApiAsync();
+
+
         vPilotsApiAsync.execute();
 
         return vView;
@@ -45,20 +51,23 @@ public class PilotsRankingFragment extends Fragment {
     private class PilotsApiAsync extends AsyncTask<String, Void, String> {
         private JSONObject vJsonObjectToParse;
         private ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
-        private PilotRaceItem pilotRaceItem = new PilotRaceItem();
+        private Driver pilotRaceItem = new Driver();
 
         @Override
         protected String doInBackground(String... params) {
+            mProgressBar.setVisibility(View.VISIBLE);
 
-            vJsonObjectToParse = vApiRequestHelper.getContentFromUrl("https://ergast.com/api/f1/current/last/results.json");
-            mArrayListPilots = PilotsRankingHelper.getArayListPilotsPoints(vJsonObjectToParse);
+
+            vJsonObjectToParse = vApiRequestHelper.getContentFromUrl("https://ergast.com/api/f1/current/driverStandings.json");
+            mArrayListPilots = DriversRankingHelper.getArrayListPilotsPoints(vJsonObjectToParse);
             return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
-            ListableObjectsAdapter vListableObjectsAdapterPilots = new ListableObjectsAdapter(mArrayListPilots);
-            mListView.setAdapter(vListableObjectsAdapterPilots);
+            DriversAdapter vDriversAdapter = new DriversAdapter(mArrayListPilots);
+            mListView.setAdapter(vDriversAdapter);
+            mProgressBar.setVisibility(View.INVISIBLE);
         }
     }
 }

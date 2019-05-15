@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.example.growingmobilef1.Adapter.ListableObjectsAdapter;
 import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
@@ -27,6 +28,7 @@ public class CalendarFragment extends Fragment {
     private ArrayList<IListableObject> mCalendarRaceItemArraylist;
 
     private ListView mListView;
+    private ProgressBar mPgsBar;
 
     public static CalendarFragment newInstance() {
         return new CalendarFragment();
@@ -37,6 +39,7 @@ public class CalendarFragment extends Fragment {
         View vView = inflater.inflate(R.layout.fragment_calendar, container, false);
 
         mListView = vView.findViewById(R.id.frag_calendar_listview);
+        mPgsBar = vView.findViewById(R.id.frag_calendar_progress_bar);
 
         // Call the async class to perform the api call
         CalendarApiAsyncCaller vLongOperation = new CalendarApiAsyncCaller();
@@ -95,6 +98,7 @@ public class CalendarFragment extends Fragment {
         protected void onPostExecute(String result) {
             ListableObjectsAdapter vCalendarListAdapter = new ListableObjectsAdapter(mCalendarRaceItemArraylist);
             mListView.setAdapter(vCalendarListAdapter);
+            mPgsBar.setVisibility(View.GONE);
         }
     }
 }

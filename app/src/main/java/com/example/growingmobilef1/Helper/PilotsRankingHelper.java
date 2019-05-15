@@ -24,10 +24,6 @@ public class PilotsRankingHelper {
             JSONArray vStandingsLists=vStandingTable.getJSONArray("StandingsLists");
             JSONObject vResultRaces =  vStandingsLists.getJSONObject(0);
             JSONArray vDriverStandings = vResultRaces.getJSONArray("DriverStandings");
-//            JSONObject vRaceTableObject = vMdataObject.getJSONObject("RaceTable");
-//            JSONArray vRacesArray = vRaceTableObject.getJSONArray("Races");
-//            JSONObject vResultRaces =  vRacesArray.getJSONObject(0);
-//            JSONArray vResults =vResultRaces.getJSONArray("Results");
 
             for (int i = 0; i < vDriverStandings.length(); i++) {
 

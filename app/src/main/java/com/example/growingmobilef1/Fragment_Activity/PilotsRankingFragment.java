@@ -3,10 +3,12 @@ package com.example.growingmobilef1.Fragment_Activity;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.example.growingmobilef1.Adapter.ListableObjectsAdapter;
 import com.example.growingmobilef1.Adapter.PilotsAdapter;
@@ -25,6 +27,9 @@ public class PilotsRankingFragment extends Fragment {
 
     private ArrayList<PilotRaceItem> mArrayListPilots;
     private ListView mListView;
+    private ProgressBar mProgressBar;
+
+    PilotsApiAsync vPilotsApiAsync = new PilotsApiAsync();
 
     public static PilotsRankingFragment newInstance() {
         return new PilotsRankingFragment();
@@ -35,8 +40,10 @@ public class PilotsRankingFragment extends Fragment {
         View vView = inflater.inflate(R.layout.fragment_pilots_ranking, container, false);
 
         mListView = vView.findViewById(R.id.listViewPilots);
+        mProgressBar=vView.findViewById(R.id.progressBarDriver);
 
-        PilotsApiAsync vPilotsApiAsync = new PilotsApiAsync();
+
+
         vPilotsApiAsync.execute();
 
         return vView;
@@ -50,6 +57,8 @@ public class PilotsRankingFragment extends Fragment {
 
         @Override
         protected String doInBackground(String... params) {
+            mProgressBar.setVisibility(View.VISIBLE);
+
 
             vJsonObjectToParse = vApiRequestHelper.getContentFromUrl("https://ergast.com/api/f1/current/driverStandings.json");
             mArrayListPilots = PilotsRankingHelper.getArayListPilotsPoints(vJsonObjectToParse);
@@ -60,6 +69,8 @@ public class PilotsRankingFragment extends Fragment {
         protected void onPostExecute(String result) {
             PilotsAdapter vPilotsAdapter = new PilotsAdapter(mArrayListPilots);
             mListView.setAdapter(vPilotsAdapter);
+            mProgressBar.setVisibility(View.INVISIBLE);
+
         }
     }
 }

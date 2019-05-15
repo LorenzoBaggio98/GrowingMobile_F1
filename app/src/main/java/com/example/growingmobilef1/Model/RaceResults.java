@@ -3,7 +3,9 @@ package com.example.growingmobilef1.Model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RaceResultsItem {
+import java.io.Serializable;
+
+public class RaceResults implements Serializable {
 
     private int number;
     private int position;
@@ -19,13 +21,13 @@ public class RaceResultsItem {
     private Time Time;
     private FastestLap FastestLap;
 
-    public RaceResultsItem(){
+    public RaceResults(){
 
     }
 
-    public static RaceResultsItem fromJson(JSONObject json){
+    public static RaceResults fromJson(JSONObject json){
 
-        RaceResultsItem temp = new RaceResultsItem();
+        RaceResults temp = new RaceResults();
 
         Driver tempDriver = new Driver();
         Constructor tempCons = new Constructor();
@@ -90,11 +92,11 @@ public class RaceResultsItem {
         this.points = points;
     }
 
-    public com.example.growingmobilef1.Model.Driver getDriver() {
+    public Driver getDriver() {
         return Driver;
     }
 
-    public void setDriver(com.example.growingmobilef1.Model.Driver driver) {
+    public void setDriver(Driver driver) {
         Driver = driver;
     }
 

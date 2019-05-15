@@ -5,29 +5,25 @@
 
     <TextView
         android:id="@+id/txt_race_result_position"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="TextView" />
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/txt_race_result_driver"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="TextView" />
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/txt_race_result_time"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="TextView" />
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/txt_race_result_time_sep"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="TextView" />
+        android:layout_weight="1" />
 </LinearLayout>

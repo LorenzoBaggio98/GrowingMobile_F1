@@ -16,11 +16,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.AlertReceiver;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.RaceResultsDataHelper;
-import com.example.growingmobilef1.Model.CalendarRaceItem;
-import com.example.growingmobilef1.Model.RaceResultsItem;
+import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Time;
 import com.example.growingmobilef1.R;
 
@@ -42,12 +42,12 @@ public class RaceDetailFragment extends Fragment {
     public static final String RACE_ALERT = "Tag to send the race item to the AlertReceiver";
 
     // The race's info
-    private CalendarRaceItem mCalendarRace;
+    private Races mCalendarRace;
     private TextView mTitleLabel;
     private Button mNotificationButton;
     private Date mRaceDate;
 
-    public static RaceDetailFragment newInstance(CalendarRaceItem aCalendarRaceItem) {
+    public static RaceDetailFragment newInstance(Races aCalendarRaceItem) {
 
         Bundle vBundle = new Bundle();
         vBundle.putSerializable(RACE_ITEM, aCalendarRaceItem);
@@ -67,10 +67,10 @@ public class RaceDetailFragment extends Fragment {
         if (vStartingBundle != null) {
 
             // Item passed on CalendarList's click
-            mCalendarRace = (CalendarRaceItem)vStartingBundle.getSerializable(RACE_ITEM);
-            mTitleLabel.setText(mCalendarRace != null ? mCalendarRace.getmRaceName() : "");
+            mCalendarRace = (Races)vStartingBundle.getSerializable(RACE_ITEM);
+            mTitleLabel.setText(mCalendarRace != null ? mCalendarRace.getRaceName() : "");
             // Get the race time
-            mRaceDate = mCalendarRace.getmParsedDate();
+            mRaceDate = mCalendarRace.getDate();
 
             // Check if the race occurred, in case disable the notification button
             checkDate(mRaceDate);

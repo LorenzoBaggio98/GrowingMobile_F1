@@ -3,25 +3,22 @@ package com.example.growingmobilef1.Model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
-public class Driver {
+public class Driver implements Serializable {
 
     private String driverId;
     private int permanentNumber;
     private String code;
-    //todo vedere se farlo URL al posto di String
     private URL url;
     private String givenName;
     private String familyName;
     private String dateOfBirth;
     private String nationality;
 
-    public static Driver fromJson(JSONObject json){
+    public Driver fromJson(JSONObject json){
 
         Driver tempDriver = new Driver();
 

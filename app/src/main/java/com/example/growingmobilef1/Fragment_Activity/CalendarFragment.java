@@ -1,12 +1,9 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +13,8 @@ import android.widget.ListView;
 import com.example.growingmobilef1.Adapter.ListableObjectsAdapter;
 import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
 import com.example.growingmobilef1.Interface.IListableObject;
-import com.example.growingmobilef1.Model.CalendarRaceItem;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
+import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
 
 import org.json.JSONObject;
@@ -48,12 +45,12 @@ public class CalendarFragment extends Fragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CalendarRaceItem vRaceItem = new CalendarRaceItem();
+                Races vRaceItem = new Races();
 
                 // Looks for the clicked item in the ArrayList, then pass it to the detail fragment
                 for (int i = 0; i < mCalendarRaceItemArraylist.size(); i++) {
                     if (mCalendarRaceItemArraylist.get(i).getmId() == id){
-                        vRaceItem = (CalendarRaceItem)mCalendarRaceItemArraylist.get(position);
+                        vRaceItem = (Races)mCalendarRaceItemArraylist.get(position);
                     }
                 }
                 launchRaceDetailFragment(vRaceItem);
@@ -66,7 +63,7 @@ public class CalendarFragment extends Fragment {
      *
      * @param aRaceItem
      */
-    private void launchRaceDetailFragment(CalendarRaceItem aRaceItem){
+    private void launchRaceDetailFragment(Races aRaceItem){
 
         Intent intent = new Intent(getContext(), RaceDetailActivity.class);
         Bundle bundle = new Bundle();

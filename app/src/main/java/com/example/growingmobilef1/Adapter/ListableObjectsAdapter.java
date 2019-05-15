@@ -7,7 +7,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.growingmobilef1.Interface.IListableObject;
-import com.example.growingmobilef1.Model.CalendarRaceItem;
 import com.example.growingmobilef1.R;
 
 import java.util.ArrayList;
@@ -43,16 +42,22 @@ public class ListableObjectsAdapter extends BaseAdapter {
 
             // Check which cell layout to load
 
-            if (getItem(position).isButtonRequired()) {
-                vView = vInflater.inflate(R.layout.list_item_calendar, parent, false);
-            } else {
-                vView = vInflater.inflate(R.layout.list_item_ranking, parent, false);
-            }
-
             ViewHolder vViewHolder = new ViewHolder();
-            vViewHolder.mMainInformationLabel = vView.findViewById(R.id.list_item_calendar_label_race_name);
-            vViewHolder.mOptionalInformationLabel = vView.findViewById(R.id.list_item_calendar_label_date);
-            vViewHolder.mSecondaryInformationLabel = vView.findViewById(R.id.list_item_calendar_label_hour);
+
+            //if (getItem(position).isButtonRequired()) {
+                vView = vInflater.inflate(R.layout.list_item_calendar, parent, false);
+
+                vViewHolder.mMainInformationLabel = vView.findViewById(R.id.list_item_calendar_label_race_name);
+                vViewHolder.mOptionalInformationLabel = vView.findViewById(R.id.list_item_calendar_label_date);
+                vViewHolder.mSecondaryInformationLabel = vView.findViewById(R.id.list_item_calendar_label_hour);
+
+            /*} else {
+                vView = vInflater.inflate(R.layout.list_item_ranking, parent, false);
+
+                vViewHolder.mMainInformationLabel = vView.findViewById(R.id.labelConstructorName);
+                vViewHolder.mOptionalInformationLabel = vView.findViewById(R.id.labelConstructorScore);
+            }*/
+
 
             vView.setTag(vViewHolder);
 
@@ -62,7 +67,7 @@ public class ListableObjectsAdapter extends BaseAdapter {
         ViewHolder vHolder = (ViewHolder)vView.getTag();
 
         vHolder.mMainInformationLabel.setText("" + getItem(position).getmMainInformation());
-        vHolder.mOptionalInformationLabel.setText(getItem(position).getmOptionalInformation());
+        vHolder.mOptionalInformationLabel.setText(""+getItem(position).getmOptionalInformation());
         vHolder.mSecondaryInformationLabel.setText("" + getItem(position).getmSecondaryInformation());
 
         return vView;

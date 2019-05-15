@@ -1,6 +1,5 @@
 package com.example.growingmobilef1.Helper;
 
-import com.example.growingmobilef1.Model.Driver;
 import com.example.growingmobilef1.Model.RaceResultsItem;
 
 import org.json.JSONArray;

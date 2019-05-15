@@ -5,37 +5,33 @@ import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
-public class Driver {
+public class Pilot {
 
     private String driverId;
     private int permanentNumber;
     private String code;
-    //todo vedere se farlo URL al posto di String
     private URL url;
     private String givenName;
     private String familyName;
     private String dateOfBirth;
     private String nationality;
 
-    public static Driver fromJson(JSONObject json){
+    public static Pilot fromJson(JSONObject json){
 
-        Driver tempDriver = new Driver();
+        Pilot tempPilot = new Pilot();
 
         if(json.length() != 0){
             try{
 
-                tempDriver.driverId = json.getString("driverId");
-                tempDriver.permanentNumber = json.getInt("permanentNumber");
-                tempDriver.code = json.getString("code");
-                tempDriver.url = new URL(json.getString("url"));
-                tempDriver.givenName = json.getString("givenName");
-                tempDriver.familyName = json.getString("familyName");
-                tempDriver.dateOfBirth = json.getString("dateOfBirth");
-                tempDriver.nationality = json.getString("nationality");
+                tempPilot.driverId = json.getString("driverId");
+                tempPilot.permanentNumber = json.getInt("permanentNumber");
+                tempPilot.code = json.getString("code");
+                tempPilot.url = new URL(json.getString("url"));
+                tempPilot.givenName = json.getString("givenName");
+                tempPilot.familyName = json.getString("familyName");
+                tempPilot.dateOfBirth = json.getString("dateOfBirth");
+                tempPilot.nationality = json.getString("nationality");
 
             }catch (JSONException e){
                 e.printStackTrace();
@@ -44,7 +40,7 @@ public class Driver {
             }
         }
 
-        return tempDriver;
+        return tempPilot;
     }
 
     public String getDriverId() {

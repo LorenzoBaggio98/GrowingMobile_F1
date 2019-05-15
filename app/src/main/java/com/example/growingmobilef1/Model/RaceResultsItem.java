@@ -10,7 +10,7 @@ public class RaceResultsItem {
     private String positionText;
     private int points;
 
-    private Driver Driver;
+    private Pilot Pilot;
     private Constructor Constructor;
 
     private int grid;
@@ -27,7 +27,7 @@ public class RaceResultsItem {
 
         RaceResultsItem temp = new RaceResultsItem();
 
-        Driver tempDriver = new Driver();
+        Pilot tempPilot = new Pilot();
         Constructor tempCons = new Constructor();
         Time tempTime = new Time();
         FastestLap tempFL = new FastestLap();
@@ -40,7 +40,7 @@ public class RaceResultsItem {
                 temp.setPositionText(json.getString("positionText"));
                 temp.setPoints(json.getInt("points"));
 
-                temp.setDriver(tempDriver.fromJson(json.getJSONObject("Driver")));
+                temp.setPilot(tempPilot.fromJson(json.getJSONObject("Pilot")));
                 temp.setConstructor(tempCons.fromJson(json.getJSONObject("Constructor")));
 
                 temp.setGrid(json.getInt("grid"));
@@ -90,12 +90,12 @@ public class RaceResultsItem {
         this.points = points;
     }
 
-    public com.example.growingmobilef1.Model.Driver getDriver() {
-        return Driver;
+    public Pilot getPilot() {
+        return Pilot;
     }
 
-    public void setDriver(com.example.growingmobilef1.Model.Driver driver) {
-        Driver = driver;
+    public void setPilot(Pilot pilot) {
+        Pilot = pilot;
     }
 
     public int getGrid() {

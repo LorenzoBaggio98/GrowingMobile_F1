@@ -59,7 +59,7 @@ public class RaceResultsAdapter extends BaseAdapter {
         RaceResultsItem tempItem = getItem(position);
 
         vHolder.txt_position.setText(""+tempItem.getPosition());
-        vHolder.txt_driver.setText(tempItem.getDriver().getDriverId());
+        vHolder.txt_driver.setText(tempItem.getPilot().getDriverId());
         vHolder.txt_time.setText(tempItem.getTime().getTime() != null ? tempItem.getTime().getTime() : "");
 
         if(tempItem.getPosition() != 1){

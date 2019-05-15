@@ -1,9 +1,12 @@
-package com.example.growingmobilef1.Fragment;
+package com.example.growingmobilef1.Fragment_Activity;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +27,6 @@ import java.util.ArrayList;
 
 public class CalendarFragment extends Fragment {
 
-    private static final String RACE_DETAIL_FRAGMENT = "Tag for launching RaceDetailFragment";
-
     private ArrayList<IListableObject> mCalendarRaceItemArraylist;
 
     private ListView mListView;
@@ -37,6 +38,7 @@ public class CalendarFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vView = inflater.inflate(R.layout.fragment_calendar, container, false);
+
         mListView = vView.findViewById(R.id.frag_calendar_listview);
 
         // Call the async class to perform the api call
@@ -60,11 +62,24 @@ public class CalendarFragment extends Fragment {
        return vView;
     }
 
+    /**
+     *
+     * @param aRaceItem
+     */
     private void launchRaceDetailFragment(CalendarRaceItem aRaceItem){
-        FragmentTransaction vFT = getFragmentManager().beginTransaction();
+
+        Intent intent = new Intent(getContext(), RaceDetailActivity.class);
+        Bundle bundle = new Bundle();
+
+        bundle.putSerializable(RaceDetailFragment.RACE_ITEM, aRaceItem);
+
+        intent.putExtras(bundle);
+        startActivity(intent);
+
+        /*FragmentTransaction vFT = getFragmentManager().beginTransaction();
         RaceDetailFragment vRaceDetailFrag = RaceDetailFragment.newInstance(aRaceItem);
         vFT.replace(R.id.main_act_fragment_container, vRaceDetailFrag, RACE_DETAIL_FRAGMENT);
-        vFT.commit();
+        vFT.commit();*/
     }
 
     // Private class needed to perform the API call asynchronously
@@ -74,7 +89,7 @@ public class CalendarFragment extends Fragment {
         private CalendarRaceDataHelper vCalendarRaceDataHelper;
         @Override
         protected String doInBackground(String... params) {
-           // ApiRequestHelper vApiRequestHelper = new ApiRequestHelper("http://ergast.com/api/f1/current.json");
+
             ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
             vCalendarRaceDataHelper = new CalendarRaceDataHelper();
 

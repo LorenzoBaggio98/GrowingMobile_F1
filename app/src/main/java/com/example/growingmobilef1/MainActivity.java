@@ -1,5 +1,6 @@
 package com.example.growingmobilef1;
 
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
@@ -7,15 +8,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
 import android.view.MenuItem;
 
-import com.example.growingmobilef1.Fragment.CalendarFragment;
-import com.example.growingmobilef1.Fragment.ConstructorsRankingFragment;
-import com.example.growingmobilef1.Fragment.PilotsRankingFragment;
+import com.example.growingmobilef1.Fragment_Activity.CalendarFragment;
+import com.example.growingmobilef1.Fragment_Activity.ConstructorsRankingFragment;
+import com.example.growingmobilef1.Fragment_Activity.PilotsRankingFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String CALENDAR_FRAGMENT = "tag for launching the calendar fragment";
-    private static final String PILOTS_RANKING_FRAGMENT = "tag for launching the pilots ranking fragment";
-    private static final String CONSTRUCTORS_RANKING_FRAGMENT = "tag for launching the constructors ranking fragment";
+    private static final String CALENDAR_FRAGMENT = "Calendar";
+    private static final String PILOTS_RANKING_FRAGMENT = "Pilots";
+    private static final String CONSTRUCTORS_RANKING_FRAGMENT = "Constructors";
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -24,13 +25,13 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.tab_bar_calendar:
-                    launchCalendarFragment();
+                    launchFragment(CALENDAR_FRAGMENT, CalendarFragment.newInstance());
                     return true;
                 case R.id.tab_bar_pilots_ranking:
-                    launchPilotsRankingFragment();
+                    launchFragment(PILOTS_RANKING_FRAGMENT, PilotsRankingFragment.newInstance());
                     return true;
                 case R.id.tab_bar_constructors_ranking:
-                    launchConstructorsRankingFragment();
+                    launchFragment(CONSTRUCTORS_RANKING_FRAGMENT, ConstructorsRankingFragment.newInstance());
                     return true;
             }
             return false;
@@ -42,28 +43,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        launchCalendarFragment();
+
+        launchFragment(CALENDAR_FRAGMENT, CalendarFragment.newInstance());
+
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
-    private void launchCalendarFragment() {
-        FragmentTransaction vFT = getFragmentManager().beginTransaction();
-        CalendarFragment vCalendarFragment = CalendarFragment.newInstance();
-        vFT.replace(R.id.main_act_fragment_container, vCalendarFragment, CALENDAR_FRAGMENT);
-        vFT.commit();
-    }
+    private void launchFragment(String tag, Fragment aFragment){
 
-    private void launchPilotsRankingFragment(){
-        FragmentTransaction vFT = getFragmentManager().beginTransaction();
-        PilotsRankingFragment vPilotsFragment = PilotsRankingFragment.newInstance();
-        vFT.replace(R.id.main_act_fragment_container, vPilotsFragment, PILOTS_RANKING_FRAGMENT);
-        vFT.commit();
-    }
+        // Set the Action Bar title
+        getSupportActionBar().setTitle(tag);
 
-    private void launchConstructorsRankingFragment() {
+        // Set the correct fragment
         FragmentTransaction vFT = getFragmentManager().beginTransaction();
-        ConstructorsRankingFragment vConstructorsFragment = ConstructorsRankingFragment.newInstance();
-        vFT.replace(R.id.main_act_fragment_container, vConstructorsFragment, CONSTRUCTORS_RANKING_FRAGMENT);
+        vFT.replace(R.id.main_act_fragment_container, aFragment, tag);
         vFT.commit();
     }
 

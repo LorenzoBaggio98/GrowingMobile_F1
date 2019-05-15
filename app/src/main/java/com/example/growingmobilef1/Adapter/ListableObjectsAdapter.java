@@ -43,16 +43,22 @@ public class ListableObjectsAdapter extends BaseAdapter {
 
             // Check which cell layout to load
 
+            ViewHolder vViewHolder = new ViewHolder();
+
             if (getItem(position).isButtonRequired()) {
                 vView = vInflater.inflate(R.layout.list_item_calendar, parent, false);
+
+                vViewHolder.mMainInformationLabel = vView.findViewById(R.id.list_item_calendar_label_race_name);
+                vViewHolder.mOptionalInformationLabel = vView.findViewById(R.id.list_item_calendar_label_date);
+                vViewHolder.mSecondaryInformationLabel = vView.findViewById(R.id.list_item_calendar_label_hour);
+
             } else {
                 vView = vInflater.inflate(R.layout.list_item_ranking, parent, false);
+
+                vViewHolder.mMainInformationLabel = vView.findViewById(R.id.labelConstructorName);
+                vViewHolder.mOptionalInformationLabel = vView.findViewById(R.id.labelConstructorScore);
             }
 
-            ViewHolder vViewHolder = new ViewHolder();
-            vViewHolder.mMainInformationLabel = vView.findViewById(R.id.list_item_calendar_label_race_name);
-            vViewHolder.mOptionalInformationLabel = vView.findViewById(R.id.list_item_calendar_label_date);
-            vViewHolder.mSecondaryInformationLabel = vView.findViewById(R.id.list_item_calendar_label_hour);
 
             vView.setTag(vViewHolder);
 

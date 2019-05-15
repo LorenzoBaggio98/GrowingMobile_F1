@@ -14,7 +14,7 @@ import java.nio.charset.Charset;
 public class ApiRequestHelper{
 
     public ApiRequestHelper(){
-        ;
+
     }
 
     // Function to do the api request and return a JSON object with the response

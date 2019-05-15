@@ -1,9 +1,11 @@
 package com.example.growingmobilef1.Model;
 
+import com.example.growingmobilef1.Interface.IListableObject;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ConstructorStandings {
+public class ConstructorStandings implements IListableObject {
 
     private int position;
     private String positionText;
@@ -20,7 +22,7 @@ public class ConstructorStandings {
         if(json.length() != 0){
             try{
 
-                tempConsStand.setPosition(json.getInt("number"));
+                tempConsStand.setPosition(json.getInt("position"));
                 tempConsStand.setPositionText(json.getString("positionText"));
                 tempConsStand.setPoints(json.getInt("points"));
                 tempConsStand.setWins(json.getInt("wins"));
@@ -74,5 +76,30 @@ public class ConstructorStandings {
 
     public void setConstructor(com.example.growingmobilef1.Model.Constructor constructor) {
         Constructor = constructor;
+    }
+
+    @Override
+    public int getmId() {
+        return 0;
+    }
+
+    @Override
+    public String getmMainInformation() {
+        return getConstructor().getName();
+    }
+
+    @Override
+    public String getmOptionalInformation() {
+        return "" + getPosition();
+    }
+
+    @Override
+    public String getmSecondaryInformation() {
+        return "" + getPoints();
+    }
+
+    @Override
+    public Boolean isButtonRequired() {
+        return false;
     }
 }

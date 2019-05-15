@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class PilotsRankingHelper {
+public class DriversRankingHelper {
 
 
     public static ArrayList<DriverStandings> getArrayListPilotsPoints(JSONObject aJsonsToParse) {
@@ -20,7 +20,6 @@ public class PilotsRankingHelper {
             JSONObject vStandingTable=vMdataObject.getJSONObject("StandingsTable");
 
             JSONArray vStandingsLists = vStandingTable.getJSONArray("StandingsLists");
-
 
             for(int j = 0; j < vStandingsLists.length(); j++){
                 JSONObject vResultRaces =  vStandingsLists.getJSONObject(j);

@@ -10,7 +10,7 @@ import android.widget.ListView;
 
 import com.example.growingmobilef1.Adapter.DriversAdapter;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
-import com.example.growingmobilef1.Helper.PilotsRankingHelper;
+import com.example.growingmobilef1.Helper.DriversRankingHelper;
 import com.example.growingmobilef1.Model.Driver;
 import com.example.growingmobilef1.Model.DriverStandings;
 import com.example.growingmobilef1.R;
@@ -50,7 +50,7 @@ public class DriversRankingFragment extends Fragment {
         protected String doInBackground(String... params) {
 
             vJsonObjectToParse = vApiRequestHelper.getContentFromUrl("https://ergast.com/api/f1/current/driverStandings.json");
-            mArrayListPilots = PilotsRankingHelper.getArrayListPilotsPoints(vJsonObjectToParse);
+            mArrayListPilots = DriversRankingHelper.getArrayListPilotsPoints(vJsonObjectToParse);
             return null;
         }
 

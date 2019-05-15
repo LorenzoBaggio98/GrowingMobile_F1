@@ -70,7 +70,7 @@ public class DriverStandings {
         this.wins = wins;
     }
 
-    public com.example.growingmobilef1.Model.Driver getDriver() {
+    public Driver getDriver() {
         return Driver;
     }
 

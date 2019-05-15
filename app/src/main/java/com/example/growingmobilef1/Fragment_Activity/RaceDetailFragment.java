@@ -35,6 +35,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Fragment Container -
+ * Contains the fragment with the Image and the fragment with the Result List
+ */
 public class RaceDetailFragment extends Fragment {
 
     public static final String RESULTS_FRAGMENT = "ResultsFragment";

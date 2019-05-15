@@ -10,6 +10,10 @@ import com.example.growingmobilef1.MainActivity;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
 
+/**
+ * Activity of the Race Detail -
+ *
+ */
 public class RaceDetailActivity extends AppCompatActivity {
 
     public static String FRAGMENT_TAG = "RaceFragment";

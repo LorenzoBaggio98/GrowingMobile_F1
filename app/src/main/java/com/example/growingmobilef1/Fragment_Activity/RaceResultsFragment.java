@@ -19,6 +19,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * Fragment Result List -
+ * Container of the Race Results List
+ */
 public class RaceResultsFragment extends Fragment {
 
     public static final String RACE_ITEM = "RI";

@@ -7,22 +7,39 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/frag_race_detail_name"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_weight="0"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/btn_race_notify"
+        <TextView
+            android:id="@+id/label_race_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Date" />
+
+        <Button
+            android:id="@+id/btn_race_notify"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Remind Me" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/circuit_img"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Remind Me" />
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        app:srcCompat="@drawable/ic_car" />
 
     <FrameLayout
         android:id="@+id/container_race_results"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="5">
 
     </FrameLayout>
 

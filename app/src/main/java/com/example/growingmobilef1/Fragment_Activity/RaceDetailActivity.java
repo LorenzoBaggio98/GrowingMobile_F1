@@ -1,51 +1,53 @@
 package com.example.growingmobilef1.Fragment_Activity;
-
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+
+
+import com.example.growingmobilef1.Adapter.ViewPagerAdapter;
 import com.example.growingmobilef1.MainActivity;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
 
 public class RaceDetailActivity extends AppCompatActivity {
-
-    public static String FRAGMENT_TAG = "RaceFragment";
-    RaceDetailFragment fragment;
+    private ViewPager mViewPager;
+    private TabLayout mTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
 
         Races raceItem = new Races();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_race_detail);
 
-        //
+        mViewPager=findViewById(R.id.viewPager);
+        mTabLayout=findViewById(R.id.tabLayout);
+
         Intent intent = getIntent();
         Bundle startBundle = intent.getExtras();
-
         if(startBundle != null){
             raceItem = (Races) startBundle.getSerializable(RaceDetailFragment.RACE_ITEM);
         }
+
+        ViewPagerAdapter viewPagerAdapter=new ViewPagerAdapter(getSupportFragmentManager());
+        viewPagerAdapter.addFragment("FP",RaceDetailFragment.newInstance(raceItem));
+        viewPagerAdapter.addFragment("QUALI",new TwoFragmentDetail());
+        viewPagerAdapter.addFragment("RACE",new ThreeFragmentDetail());
+        mViewPager.setAdapter(viewPagerAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
+
 
         // Set the Action Bar back button and the title
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(raceItem.getRaceName());
 
-        fragment = (RaceDetailFragment) getFragmentManager().findFragmentByTag(FRAGMENT_TAG);
-        if(fragment == null){
 
-            FragmentTransaction vFT = getFragmentManager().beginTransaction();
-
-            fragment = RaceDetailFragment.newInstance(raceItem);
-
-            vFT.replace(R.id.container_race_fragment, fragment, FRAGMENT_TAG);
-            vFT.commit();
-
-        }
     }
 
     /**

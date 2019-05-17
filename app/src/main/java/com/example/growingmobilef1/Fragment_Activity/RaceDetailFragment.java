@@ -1,14 +1,12 @@
 package com.example.growingmobilef1.Fragment_Activity;
-
+import android.support.v4.app.Fragment;
 import android.app.AlarmManager;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,20 +16,11 @@ import android.widget.Toast;
 
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.AlertReceiver;
-import com.example.growingmobilef1.Helper.ApiRequestHelper;
-import com.example.growingmobilef1.Helper.RaceResultsDataHelper;
-import com.example.growingmobilef1.Model.RaceResults;
-import com.example.growingmobilef1.Model.Time;
 import com.example.growingmobilef1.R;
-
-import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 

@@ -1,40 +1,22 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
 import android.support.v4.app.Fragment;
-
-
-import android.app.Activity;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-
 import android.os.Bundle;
-
 import android.support.v4.app.FragmentTransaction;
-
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.growingmobilef1.MainActivity;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.AlertReceiver;
 import com.example.growingmobilef1.R;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.util.Calendar;
 import java.util.Date;
@@ -44,7 +26,7 @@ public class RaceDetailFragment extends Fragment {
     public static final String RESULTS_FRAGMENT = "ResultsFragment";
     public static final String RACE_ITEM = "Tag to pass the calendar race item to the fragment";
     public static final String RACE_ALERT = "Tag to send the race item to the AlertReceiver";
-    private static final String ERROR_TAG = "ERROR_TAG";
+
 
     // The race's info
     private Races mCalendarRace;
@@ -78,22 +60,7 @@ public class RaceDetailFragment extends Fragment {
             // Check if the race occurred, in case disable the notification button
             checkDate(mRaceDate);
 
-            ImageView iw= (ImageView)vView.findViewById(R.id.circuit_img);
-            try {
 
-                String vCircuitId = mCalendarRace.getCircuit().getCircuitId();
-                // get input stream
-                InputStream ims = container.getContext().getAssets().open("circuits/" + vCircuitId + ".png");
-
-                // load image as Drawable
-                Drawable d = Drawable.createFromStream(ims, null);
-                // set image to ImageView
-                iw.setImageDrawable(d);
-                ims .close();
-
-            } catch(IOException ex) {
-                Log.e(ERROR_TAG,"Error on circuit image reading");
-            }
         }
 
         // Inizialize the Results List Fragment
@@ -180,3 +147,4 @@ public class RaceDetailFragment extends Fragment {
     }
 
 }
+

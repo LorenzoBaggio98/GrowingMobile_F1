@@ -1,11 +1,13 @@
 package com.example.growingmobilef1.Fragment_Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
-
+import android.widget.ImageView;
 
 
 import com.example.growingmobilef1.Adapter.ViewPagerAdapter;
@@ -13,10 +15,14 @@ import com.example.growingmobilef1.MainActivity;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 public class RaceDetailActivity extends AppCompatActivity {
+    private static final String ERROR_TAG = "ERROR_TAG";
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
-
+    private  ImageView mImageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -28,12 +34,16 @@ public class RaceDetailActivity extends AppCompatActivity {
 
         mViewPager=findViewById(R.id.viewPager);
         mTabLayout=findViewById(R.id.tabLayout);
+        mImageView= (ImageView)findViewById(R.id.circuit_img);
 
         Intent intent = getIntent();
         Bundle startBundle = intent.getExtras();
         if(startBundle != null){
             raceItem = (Races) startBundle.getSerializable(RaceDetailFragment.RACE_ITEM);
+
         }
+
+        // Set the tabBar with ViewPageAdapter and TabLayout
 
         ViewPagerAdapter viewPagerAdapter=new ViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFragment("FP",RaceDetailFragment.newInstance(raceItem));
@@ -47,7 +57,23 @@ public class RaceDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(raceItem.getRaceName());
 
+        // Set the image circuit
+        try {
 
+            String vCircuitId = raceItem.getCircuit().getCircuitId();
+
+            // get input stream
+            InputStream ims =getApplicationContext().getAssets().open("circuits/" + vCircuitId + ".png");
+
+            // load image as Drawable
+            Drawable d = Drawable.createFromStream(ims, null);
+            // set image to ImageView
+            mImageView.setImageDrawable(d);
+            ims .close();
+
+        } catch(IOException ex) {
+            Log.e(ERROR_TAG,"Error on circuit image reading");
+        }
     }
 
     /**

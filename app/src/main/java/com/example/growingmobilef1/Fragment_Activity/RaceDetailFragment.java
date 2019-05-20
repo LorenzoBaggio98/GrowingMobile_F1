@@ -1,37 +1,23 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
+import android.support.v4.app.Fragment;
 import android.app.AlarmManager;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.AlertReceiver;
-import com.example.growingmobilef1.Helper.ApiRequestHelper;
-import com.example.growingmobilef1.Helper.RaceResultsDataHelper;
-import com.example.growingmobilef1.Model.RaceResults;
-import com.example.growingmobilef1.Model.Time;
 import com.example.growingmobilef1.R;
-
-import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -44,6 +30,7 @@ public class RaceDetailFragment extends Fragment {
     public static final String RESULTS_FRAGMENT = "ResultsFragment";
     public static final String RACE_ITEM = "Tag to pass the calendar race item to the fragment";
     public static final String RACE_ALERT = "Tag to send the race item to the AlertReceiver";
+
 
     // The race's info
     private Races mCalendarRace;
@@ -65,6 +52,7 @@ public class RaceDetailFragment extends Fragment {
 
         mNotificationButton = vView.findViewById(R.id.btn_race_notify);
 
+
         Bundle vStartingBundle = getArguments();
         if (vStartingBundle != null) {
 
@@ -75,6 +63,8 @@ public class RaceDetailFragment extends Fragment {
 
             // Check if the race occurred, in case disable the notification button
             checkDate(mRaceDate);
+
+
         }
 
         // Inizialize the Results List Fragment
@@ -161,3 +151,4 @@ public class RaceDetailFragment extends Fragment {
     }
 
 }
+

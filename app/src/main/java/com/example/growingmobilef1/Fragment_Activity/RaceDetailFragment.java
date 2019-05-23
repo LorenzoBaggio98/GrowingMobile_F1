@@ -64,7 +64,6 @@ public class RaceDetailFragment extends Fragment {
             // Check if the race occurred, in case disable the notification button
             checkDate(mRaceDate);
 
-
         }
 
         // Inizialize the Results List Fragment

@@ -13,7 +13,6 @@ import android.os.Bundle;
 
 import com.example.growingmobilef1.Fragment_Activity.RaceDetailActivity;
 import com.example.growingmobilef1.Fragment_Activity.RaceDetailFragment;
-import com.example.growingmobilef1.Model.CalendarRaceItem;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

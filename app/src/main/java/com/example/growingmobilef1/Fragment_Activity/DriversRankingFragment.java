@@ -1,9 +1,10 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
-import android.app.Fragment;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 
 public class DriversRankingFragment extends Fragment {
 
+    private static final String SAVE_LISTPILOTS = "SAVE_LISTPILOTS";
     private ArrayList<DriverStandings> mArrayListPilots;
     private ListView mListView;
     private ProgressBar mProgressBar;
@@ -39,10 +41,25 @@ public class DriversRankingFragment extends Fragment {
 
         mListView = vView.findViewById(R.id.listViewPilots);
         mProgressBar=vView.findViewById(R.id.frag_calendar_progress_bar);
+if(savedInstanceState !=null){
 
-        vPilotsApiAsync.execute();
+    mArrayListPilots = (ArrayList<DriverStandings>) savedInstanceState.getSerializable(SAVE_LISTPILOTS);
+    DriversAdapter vDriversAdapter = new DriversAdapter(mArrayListPilots);
+    mListView.setAdapter(vDriversAdapter);
+
+}else{
+    vPilotsApiAsync.execute();
+
+}
+
 
         return vView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(SAVE_LISTPILOTS,mArrayListPilots);
     }
 
     private class PilotsApiAsync extends AsyncTask<String, Void, String> {
@@ -55,6 +72,7 @@ public class DriversRankingFragment extends Fragment {
             mProgressBar.setVisibility(View.VISIBLE);
 
             vJsonObjectToParse = vApiRequestHelper.getContentFromUrl("https://ergast.com/api/f1/current/driverStandings.json");
+
             mArrayListPilots = DriversRankingHelper.getArrayListPilotsPoints(vJsonObjectToParse);
             return null;
         }
@@ -66,5 +84,7 @@ public class DriversRankingFragment extends Fragment {
             mProgressBar.setVisibility(View.INVISIBLE);
         }
     }
+
+
 }
 

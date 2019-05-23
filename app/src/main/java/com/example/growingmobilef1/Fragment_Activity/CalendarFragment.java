@@ -1,6 +1,6 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,7 +23,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+
 
 
 public class CalendarFragment extends Fragment {

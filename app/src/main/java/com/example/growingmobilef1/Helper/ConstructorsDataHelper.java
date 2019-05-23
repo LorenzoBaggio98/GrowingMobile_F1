@@ -2,7 +2,6 @@ package com.example.growingmobilef1.Helper;
 
 import com.example.growingmobilef1.Interface.IListableObject;
 import com.example.growingmobilef1.Model.ConstructorStandings;
-import com.example.growingmobilef1.Model.ConstructorsItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;

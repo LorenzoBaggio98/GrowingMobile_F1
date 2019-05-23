@@ -45,7 +45,7 @@ public class ConstructorsAdapter extends RecyclerView.Adapter<ConstructorsAdapte
     public void updateData(List<IListableObject> viewModels) {
         mValues.clear();
         mValues.addAll(viewModels);
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
     }
 
     // Clean all elements of the recycler

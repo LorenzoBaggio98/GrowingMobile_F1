@@ -57,7 +57,6 @@ public class RaceDetailActivity extends AppCompatActivity {
 
         mPageAdapter.addFragment("RACE", RaceResultsFragment.newInstance(raceItem));
         mPageAdapter.addFragment("QUALI", QualifyingResultsFragment.newInstance(raceItem));
-        
         mPageAdapter.addFragment("FP", RaceResultsFragment.newInstance(raceItem));
 
         setPagerAdapter();

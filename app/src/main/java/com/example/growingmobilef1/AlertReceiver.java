@@ -14,6 +14,7 @@ import android.os.Bundle;
 import com.example.growingmobilef1.Fragment_Activity.RaceDetailActivity;
 import com.example.growingmobilef1.Fragment_Activity.RaceDetailFragment;
 import com.example.growingmobilef1.Model.Races;
+import com.example.growingmobilef1.Utils.NotificationUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -35,7 +36,7 @@ public class AlertReceiver extends BroadcastReceiver {
         // Get the Race detail object as an array of bytes from the bundle, then cast it to the proper object
         Bundle vStartBundle = intent.getExtras();
         if (vStartBundle != null) {
-            ByteArrayInputStream vByteArrayInput = new ByteArrayInputStream(intent.getByteArrayExtra(RaceDetailFragment.RACE_ALERT));
+            ByteArrayInputStream vByteArrayInput = new ByteArrayInputStream(intent.getByteArrayExtra(NotificationUtil.RACE_ALERT));
             ObjectInput vObjectInput = null;
             try {
                 vObjectInput = new ObjectInputStream(vByteArrayInput);

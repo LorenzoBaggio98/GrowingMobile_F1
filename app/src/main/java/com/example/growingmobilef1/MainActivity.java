@@ -112,6 +112,4 @@ public class MainActivity extends AppCompatActivity {
         vNavView.setItemTextColor(navMenuTextList);
         vNavView.setItemIconTintList(navMenuIconList);
     }
-
-
 }

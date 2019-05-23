@@ -27,11 +27,16 @@ import java.util.Date;
  */
 public class RaceDetailFragment extends Fragment {
 
+    public interface OnFragmentLoad{
+        void onFragmentLoaded();
+    }
+    private OnFragmentLoad mListener;
+
     public static final String RESULTS_FRAGMENT = "ResultsFragment";
     public static final String RACE_ITEM = "Tag to pass the calendar race item to the fragment";
     public static final String RACE_ALERT = "Tag to send the race item to the AlertReceiver";
 
-
+    private RaceResultsFragment mListResultsFragment;
     // The race's info
     private Races mCalendarRace;
     private Button mNotificationButton;
@@ -52,14 +57,13 @@ public class RaceDetailFragment extends Fragment {
 
         mNotificationButton = vView.findViewById(R.id.btn_race_notify);
 
-
         Bundle vStartingBundle = getArguments();
         if (vStartingBundle != null) {
 
             // Item passed on CalendarList's click
             mCalendarRace = (Races)vStartingBundle.getSerializable(RACE_ITEM);
             // Get the race time
-            mRaceDate = mCalendarRace.getDate();
+            mRaceDate = mCalendarRace.getmDate();
 
             // Check if the race occurred, in case disable the notification button
             checkDate(mRaceDate);
@@ -67,15 +71,12 @@ public class RaceDetailFragment extends Fragment {
         }
 
         // Inizialize the Results List Fragment
-        RaceResultsFragment list_results_fragment = (RaceResultsFragment) getChildFragmentManager().findFragmentByTag(RESULTS_FRAGMENT);
+        mListResultsFragment = (RaceResultsFragment) getChildFragmentManager().findFragmentByTag(RESULTS_FRAGMENT);
 
-        if(list_results_fragment == null){
+        if(mListResultsFragment == null){
+            launchRaceResultsFragments();
 
-            FragmentTransaction vFT = getChildFragmentManager().beginTransaction();
-            list_results_fragment = RaceResultsFragment.newInstance(mCalendarRace);
-
-            vFT.replace(R.id.container_race_results, list_results_fragment, RESULTS_FRAGMENT);
-            vFT.commit();
+            mListener.onFragmentLoaded();
         }
 
         mNotificationButton.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +89,15 @@ public class RaceDetailFragment extends Fragment {
         });
 
         return vView;
+    }
+
+    private void launchRaceResultsFragments(){
+        FragmentTransaction vFT = getChildFragmentManager().beginTransaction();
+        mListResultsFragment = RaceResultsFragment.newInstance(mCalendarRace);
+
+        vFT.replace(R.id.container_race_results, mListResultsFragment, RESULTS_FRAGMENT);
+        vFT.commit();
+
     }
 
     private void sendNotification(Date aDate){
@@ -149,5 +159,18 @@ public class RaceDetailFragment extends Fragment {
             mNotificationButton.setText("Remind me");
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentLoad){
+            mListener = (OnFragmentLoad)context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
 }
 

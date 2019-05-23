@@ -2,8 +2,11 @@ package com.example.growingmobilef1;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
 import android.view.MenuItem;
@@ -42,9 +45,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        BottomNavigationView navView = findViewById(R.id.main_act_nav_view);
 
         launchFragment(CALENDAR_FRAGMENT, CalendarFragment.newInstance());
+        setNavMenuItemThemeColors();
 
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
@@ -59,5 +63,56 @@ public class MainActivity extends AppCompatActivity {
         vFT.replace(R.id.main_act_fragment_container, aFragment, tag);
         vFT.commit();
     }
+
+    public void setNavMenuItemThemeColors(){
+        BottomNavigationView vNavView = findViewById(R.id.main_act_nav_view);
+        //Setting default colors for menu item Text and Icon
+        int navPrimaryIconColor = getColor(R.color.colorPrimary);
+        int navBlackTextColor = getColor(R.color.colorBlack);
+
+        //Defining ColorStateList for menu item Text
+        ColorStateList navMenuTextList = new ColorStateList(
+                new int[][]{
+                        new int[]{android.R.attr.state_checked},
+                        new int[]{android.R.attr.state_enabled},
+                        new int[]{android.R.attr.state_pressed},
+                        new int[]{android.R.attr.state_focused},
+                        new int[]{android.R.attr.state_pressed},
+                        new int[]{-android.R.attr.state_checked},
+                },
+                new int[] {
+                        navPrimaryIconColor,
+                        navBlackTextColor,
+                        navBlackTextColor,
+                        navBlackTextColor,
+                        navBlackTextColor,
+                        navBlackTextColor
+                }
+        );
+
+        //Defining ColorStateList for menu item Icon
+        ColorStateList navMenuIconList = new ColorStateList(
+                new int[][]{
+                        new int[]{android.R.attr.state_checked},
+                        new int[]{android.R.attr.state_enabled},
+                        new int[]{android.R.attr.state_pressed},
+                        new int[]{android.R.attr.state_focused},
+                        new int[]{android.R.attr.state_pressed},
+                        new int[]{-android.R.attr.state_checked},
+                },
+                new int[] {
+                        navPrimaryIconColor,
+                        navBlackTextColor,
+                        navBlackTextColor,
+                        navBlackTextColor,
+                        navBlackTextColor,
+                        navBlackTextColor
+                }
+        );
+
+        vNavView.setItemTextColor(navMenuTextList);
+        vNavView.setItemIconTintList(navMenuIconList);
+    }
+
 
 }

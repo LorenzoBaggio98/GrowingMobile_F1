@@ -14,6 +14,7 @@ import com.example.growingmobilef1.Adapter.ConstructorsAdapter;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.ConstructorsDataHelper;
 import com.example.growingmobilef1.Interface.IListableObject;
+import com.example.growingmobilef1.Model.ConstructorStandings;
 import com.example.growingmobilef1.R;
 
 import org.json.JSONObject;
@@ -47,7 +48,7 @@ public class ConstructorsRankingFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(container.getContext());
         recyclerView.setLayoutManager(layoutManager);
-        mAdapter = new ConstructorsAdapter(new ArrayList<IListableObject>());
+        mAdapter = new ConstructorsAdapter(new ArrayList<ConstructorStandings>());
         recyclerView.setAdapter(mAdapter);
 
         // progressbar
@@ -64,7 +65,7 @@ public class ConstructorsRankingFragment extends Fragment {
 
         private JSONObject vJsonToParse;
         private ConstructorsDataHelper vConstructorsDataHelper;
-        private ArrayList<IListableObject> mConstructorsItemArraylist;
+        private ArrayList<ConstructorStandings> mConstructorsItemArraylist;
 
         @Override
         protected String doInBackground(String... params) {

@@ -13,6 +13,7 @@ import android.os.Bundle;
 
 import com.example.growingmobilef1.Fragment_Activity.RaceDetailActivity;
 import com.example.growingmobilef1.Fragment_Activity.RaceDetailFragment;
+import com.example.growingmobilef1.Model.Races;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -24,7 +25,7 @@ public class AlertReceiver extends BroadcastReceiver {
     private static final String CHANNEL_ID = "channelId";
     private static final String ALERT_RACE_DETAIL_FRAGMENT = "Tag to send the race item to the detail fragment";
 
-    private CalendarRaceItem mRaceItem;
+    private Races mRaceItem;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -38,7 +39,7 @@ public class AlertReceiver extends BroadcastReceiver {
             ObjectInput vObjectInput = null;
             try {
                 vObjectInput = new ObjectInputStream(vByteArrayInput);
-                mRaceItem = (CalendarRaceItem) vObjectInput.readObject();
+                mRaceItem = (Races) vObjectInput.readObject();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {

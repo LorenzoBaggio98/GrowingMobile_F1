@@ -11,6 +11,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 // Ua
@@ -21,7 +22,7 @@ public class Races implements Serializable, IListableObject {
     private URL url;
     private String raceName;
     private Circuit Circuit;
-    private Date date;
+    private Date mDate;
     private String time;
 
     private Boolean isNotificationScheduled = false;
@@ -42,7 +43,7 @@ public class Races implements Serializable, IListableObject {
                 tempRaces.setUrl(new URL(json.getString("url")));
                 tempRaces.setRaceName(json.getString("raceName"));
                 tempRaces.setCircuit(tempC.fromJson(json.getJSONObject("Circuit")));
-                tempRaces.setDate(sDF.parse(json.getString("date")));
+                tempRaces.setmDate(sDF.parse(json.getString("date")));
                 tempRaces.setTime(json.getString("time"));
 
             }catch (JSONException e){
@@ -97,12 +98,12 @@ public class Races implements Serializable, IListableObject {
         Circuit = circuit;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getmDate() {
+        return mDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setmDate(Date date) {
+        this.mDate = date;
     }
 
     public String getTime() {
@@ -134,7 +135,7 @@ public class Races implements Serializable, IListableObject {
 
     @Override
     public String getmOptionalInformation() {
-        return getDate().toString();
+        return getmDate().toString();
     }
 
     @Override
@@ -155,9 +156,26 @@ public class Races implements Serializable, IListableObject {
         isNotificationScheduled = notificationScheduled;
     }
 
+    public Calendar getCalendarDate(){
+        Calendar vCalendar = Calendar.getInstance();
+        vCalendar.setTime(getmDate());
+        return vCalendar;
+    }
+
+    public Calendar getCalendarTime() {
+        Calendar vCalendar = Calendar.getInstance();
+        SimpleDateFormat vDateFormat = new SimpleDateFormat("HH:mm:ss'Z'");
+        try {
+            vCalendar.setTime(vDateFormat.parse(getTime()));
+        } catch (ParseException e){
+            e.printStackTrace();
+        }
+        return vCalendar;
+    }
+
     public Date getmParsedDate() {
         Date vDate = new Date();
-        String vDay = getDate().toString();
+        String vDay = getmDate().toString();
         String vHour = getTime();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         try {

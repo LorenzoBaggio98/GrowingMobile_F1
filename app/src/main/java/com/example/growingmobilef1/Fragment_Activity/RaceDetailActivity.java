@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -24,39 +25,42 @@ import com.example.growingmobilef1.R;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class RaceDetailActivity extends AppCompatActivity {
+public class RaceDetailActivity extends AppCompatActivity implements RaceDetailFragment.OnFragmentLoad{
     private static final String ERROR_TAG = "ERROR_TAG";
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private  ImageView mImageView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private SwipeRefreshLayout.OnRefreshListener mSwipeRefreshListener;
+
+    ViewPagerAdapter mPageAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
-        Races raceItem = new Races();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_race_detail);
 
+        Races raceItem = new Races();
+
         mViewPager = findViewById(R.id.viewPager);
         mTabLayout = findViewById(R.id.tabLayout);
-        mImageView = (ImageView)findViewById(R.id.circuit_img);
+        mSwipeRefreshLayout = findViewById(R.id.activity_race_detail_refresh_layout);
+        mImageView = findViewById(R.id.circuit_img);
 
         Intent intent = getIntent();
         Bundle startBundle = intent.getExtras();
-
-        if(startBundle != null){
+        if (startBundle != null) {
             raceItem = (Races) startBundle.getSerializable(RaceDetailFragment.RACE_ITEM);
+
         }
 
         // Set the tabBar with ViewPageAdapter and TabLayout
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragment("RACE", RaceDetailFragment.newInstance(raceItem));
-        viewPagerAdapter.addFragment("QUALI", new TwoFragmentDetail());
-        viewPagerAdapter.addFragment("FP", new ThreeFragmentDetail());
+        mPageAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        mPageAdapter.addFragment("RACE", RaceDetailFragment.newInstance(raceItem));
+        mPageAdapter.addFragment("QUALI", new TwoFragmentDetail());
+        mPageAdapter.addFragment("FP", new ThreeFragmentDetail());
 
-        mViewPager.setAdapter(viewPagerAdapter);
-        mTabLayout.setupWithViewPager(mViewPager);
+        setPagerAdapter();
 
         // Set the Action Bar back button and the title
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -64,7 +68,6 @@ public class RaceDetailActivity extends AppCompatActivity {
 
         // Set the image circuit
         try {
-
             String vCircuitId = raceItem.getCircuit().getCircuitId();
 
             // get input stream
@@ -72,14 +75,29 @@ public class RaceDetailActivity extends AppCompatActivity {
 
             // load image as Drawable
             Drawable d = Drawable.createFromStream(ims, null);
-
             // set image to ImageView
             mImageView.setImageDrawable(d);
-            ims .close();
+            ims.close();
 
-        } catch(IOException ex) {
-            Log.e(ERROR_TAG,"Error on circuit image reading");
+        } catch (IOException ex) {
+            Log.e(ERROR_TAG, "Error on circuit image reading");
         }
+
+        mSwipeRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i("REFRESH", "onRefresh called from SwipeRefreshLayout");
+                setPagerAdapter();
+            }
+        };
+
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override public void run() {
+               // mSwipeRefreshLayout.setRefreshing(true);
+                // directly call onRefresh() method
+                mSwipeRefreshListener.onRefresh();
+            }
+        });
     }
 
     /**
@@ -101,5 +119,20 @@ public class RaceDetailActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void stopRefreshingAnimation(){
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void setPagerAdapter(){
+        mViewPager.setAdapter(mPageAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
+        onFragmentLoaded();
+    }
+
+    @Override
+    public void onFragmentLoaded() {
+        stopRefreshingAnimation();
     }
 }

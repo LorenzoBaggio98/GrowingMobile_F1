@@ -52,12 +52,15 @@ public class RaceDetailActivity extends AppCompatActivity {
 
         }
 
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         // Set the tabBar with ViewPageAdapter and TabLayout
         mPageAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        mPageAdapter.addFragment("RACE", RaceResultsFragment.newInstance(raceItem));
-        mPageAdapter.addFragment("QUALI", QualifyingResultsFragment.newInstance(raceItem));
-        mPageAdapter.addFragment("FP", RaceResultsFragment.newInstance(raceItem));
+        mPageAdapter.addFragment("FP1", RaceResultsFragment.newInstance(raceItem));
+        mPageAdapter.addFragment("FP2", RaceResultsFragment.newInstance(raceItem));
+        mPageAdapter.addFragment("FP3", RaceResultsFragment.newInstance(raceItem));
+        mPageAdapter.addFragment("Qualifying", QualifyingResultsFragment.newInstance(raceItem));
+        mPageAdapter.addFragment("Race", RaceResultsFragment.newInstance(raceItem));
 
         setPagerAdapter();
 

@@ -45,11 +45,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.main_act_nav_view);
-
+    if (savedInstanceState == null){
         launchFragment(CALENDAR_FRAGMENT, CalendarFragment.newInstance());
+    }
+
         setNavMenuItemThemeColors();
 
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     private void launchFragment(String tag, Fragment aFragment){

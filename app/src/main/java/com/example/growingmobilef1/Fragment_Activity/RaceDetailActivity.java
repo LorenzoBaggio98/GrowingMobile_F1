@@ -56,9 +56,9 @@ public class RaceDetailActivity extends AppCompatActivity implements RaceDetailF
 
         // Set the tabBar with ViewPageAdapter and TabLayout
         mPageAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        mPageAdapter.addFragment("RACE", RaceDetailFragment.newInstance(raceItem));
-        mPageAdapter.addFragment("QUALI", new TwoFragmentDetail());
-        mPageAdapter.addFragment("FP", new ThreeFragmentDetail());
+        mPageAdapter.addFragment("RACE", RaceResultsFragment.newInstance(raceItem));
+        mPageAdapter.addFragment("QUALI", RaceResultsFragment.newInstance(raceItem));
+        mPageAdapter.addFragment("FP", RaceResultsFragment.newInstance(raceItem));
 
         setPagerAdapter();
 

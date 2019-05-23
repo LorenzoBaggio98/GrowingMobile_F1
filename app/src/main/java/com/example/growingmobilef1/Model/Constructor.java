@@ -16,7 +16,7 @@ public class Constructor implements Serializable {
     private String name;
     private String nationality;
 
-    public Constructor fromJson(JSONObject json){
+    public static Constructor fromJson(JSONObject json){
 
         Constructor tempCons = new Constructor();
 

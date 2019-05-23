@@ -42,12 +42,15 @@ public class DriversAdapter extends BaseAdapter {
         if (convertView == null){
             LayoutInflater vInflater = LayoutInflater.from(parent.getContext());
 
-            vView = vInflater.inflate(R.layout.list_item_drivers, parent,false);
+            vView = vInflater.inflate(R.layout.list_item_drivers_nostate, parent,false);
             vHolder = new ViewHolder();
 
-            vHolder.mtxtName = vView.findViewById(R.id.textViewNameDriver);
-            vHolder.mtxtSurnale = vView.findViewById(R.id.textViewSurnameDriver);
-            vHolder.mtxtPoints = vView.findViewById(R.id.textViewPointsDriver);
+            vHolder.mPositionLabel = vView.findViewById(R.id.list_item_driver_position);
+            vHolder.mSurnameLabel = vView.findViewById(R.id.list_item_driver_surname);
+            vHolder.mNameLabel = vView.findViewById(R.id.list_item_driver_name);
+            vHolder.mTeamLabel = vView.findViewById(R.id.list_item_driver_team);
+           // vHolder.mNationalityLabel = vView.findViewById(R.id.list_item_driver_nationality);
+            vHolder.mPointsLabel = vView.findViewById(R.id.list_item_driver_points);
 
             vView.setTag(vHolder);
 
@@ -56,13 +59,16 @@ public class DriversAdapter extends BaseAdapter {
             vHolder = (ViewHolder)vView.getTag();
         }
 
-        vHolder.mtxtName.setText(mArrayListDrivers.get(position).getDriver().getGivenName());
-        vHolder.mtxtSurnale.setText(mArrayListDrivers.get(position).getDriver().getFamilyName());
-        vHolder.mtxtPoints.setText(""+mArrayListDrivers.get(position).getPoints());
+        vHolder.mPositionLabel.setText("" + mArrayListDrivers.get(position).getPositionText() );
+        vHolder.mSurnameLabel.setText(mArrayListDrivers.get(position).getDriver().getFamilyName());
+        vHolder.mNameLabel.setText(" " + mArrayListDrivers.get(position).getDriver().getGivenName());
+        vHolder.mTeamLabel.setText(mArrayListDrivers.get(position).getConstructor().getName());
+      //  vHolder.mNationalityLabel.setText(mArrayListDrivers.get(position).getDriver().getNationality());
+        vHolder.mPointsLabel.setText(mArrayListDrivers.get(position).getPoints() + " Pts");
 
         return vView;
     }
     private class ViewHolder{
-        public TextView mtxtName, mtxtSurnale, mtxtPoints;
+        public TextView mPositionLabel, mSurnameLabel, mNameLabel, mTeamLabel, mNationalityLabel, mPointsLabel;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.growingmobilef1.Helper;
 
 import com.example.growingmobilef1.Interface.IListableObject;
+import com.example.growingmobilef1.Model.CalendarRaceItem;
 import com.example.growingmobilef1.Model.Races;
 
 import org.json.JSONArray;
@@ -14,9 +15,9 @@ public class CalendarRaceDataHelper {
     public CalendarRaceDataHelper() {
     }
 
-    public ArrayList<IListableObject> getArraylist(JSONObject aJsonToParse){
+    public ArrayList<Races> getArraylist(JSONObject aJsonToParse){
 
-        ArrayList<IListableObject> vCalendarRaceItemArraylist = new ArrayList<>();
+        ArrayList<Races> vCalendarRaceItemArraylist = new ArrayList<>();
 
         if(aJsonToParse.length() != 0){
 

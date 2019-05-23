@@ -11,21 +11,29 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import com.example.growingmobilef1.Adapter.ListableObjectsAdapter;
+import com.example.growingmobilef1.Adapter.RacesAdapter;
 import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
-import com.example.growingmobilef1.Interface.IListableObject;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
+import com.example.growingmobilef1.Helper.RaceResultsDataHelper;
+import com.example.growingmobilef1.Model.CalendarRaceItem;
+import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class CalendarFragment extends Fragment {
 
-    private ArrayList<IListableObject> mCalendarRaceItemArraylist;
+    private ArrayList<Races> mCalendarRaceItemArraylist;
+    private HashMap<String, ArrayList<RaceResults>> mRaceResultsMap;
+    private ArrayList<RaceResults> mRaceResultsArrayList;
 
     private ListView mListView;
     private ProgressBar mPgsBar;
@@ -80,7 +88,8 @@ public class CalendarFragment extends Fragment {
     // Private class needed to perform the API call asynchronously
     private class CalendarApiAsyncCaller extends AsyncTask<String, Void, String> {
 
-        private JSONObject mJsonToParse;
+        // Races calendar variables
+        private JSONObject mJsonCalendarToParse;
         private CalendarRaceDataHelper mCalendarRaceDataHelper;
 
         @Override
@@ -89,14 +98,27 @@ public class CalendarFragment extends Fragment {
             ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
             mCalendarRaceDataHelper = new CalendarRaceDataHelper();
 
-            mJsonToParse = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current.json");
-            mCalendarRaceItemArraylist =  mCalendarRaceDataHelper.getArraylist(mJsonToParse);
+            RaceResultsDataHelper vRaceResultsDataHelper = new RaceResultsDataHelper();
+            mJsonCalendarToParse = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current.json");
+            if (mJsonCalendarToParse != null) {
+                mCalendarRaceItemArraylist =  mCalendarRaceDataHelper.getArraylist(mJsonCalendarToParse);
+            }
+
+            mRaceResultsMap = new HashMap<String, ArrayList<RaceResults>>() {
+            };
+           /* for (int i = 0; i < mCalendarRaceItemArraylist.size(); i++) {
+                JSONObject vJsonToParse = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current/"
+                        + mCalendarRaceItemArraylist.get(i).getRound() + "/results.json");
+                mRaceResultsArrayList = vRaceResultsDataHelper.getRaceResults(vJsonToParse);
+                mRaceResultsMap.put(mCalendarRaceItemArraylist.get(i).getRaceName(), mRaceResultsArrayList);
+            }*/
+
             return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
-            ListableObjectsAdapter vCalendarListAdapter = new ListableObjectsAdapter(mCalendarRaceItemArraylist);
+            RacesAdapter vCalendarListAdapter = new RacesAdapter(mCalendarRaceItemArraylist, mRaceResultsMap);
             mListView.setAdapter(vCalendarListAdapter);
             mPgsBar.setVisibility(View.GONE);
         }

@@ -40,13 +40,10 @@ public class DriversRankingFragment extends Fragment {
         mListView = vView.findViewById(R.id.listViewPilots);
         mProgressBar=vView.findViewById(R.id.frag_calendar_progress_bar);
 
-
-
         vPilotsApiAsync.execute();
 
         return vView;
     }
-
 
     private class PilotsApiAsync extends AsyncTask<String, Void, String> {
         private JSONObject vJsonObjectToParse;
@@ -56,7 +53,6 @@ public class DriversRankingFragment extends Fragment {
         @Override
         protected String doInBackground(String... params) {
             mProgressBar.setVisibility(View.VISIBLE);
-
 
             vJsonObjectToParse = vApiRequestHelper.getContentFromUrl("https://ergast.com/api/f1/current/driverStandings.json");
             mArrayListPilots = DriversRankingHelper.getArrayListPilotsPoints(vJsonObjectToParse);

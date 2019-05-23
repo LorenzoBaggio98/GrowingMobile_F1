@@ -12,8 +12,8 @@ import java.util.ArrayList;
 
 public class ConstructorsDataHelper {
 
-    public ArrayList<IListableObject> getArraylist(JSONObject aJsonToParse){
-        ArrayList<IListableObject> vCalendarRaceItemArraylist = new ArrayList<>();
+    public ArrayList<ConstructorStandings> getArraylist(JSONObject aJsonToParse){
+        ArrayList<ConstructorStandings> vCalendarRaceItemArraylist = new ArrayList<>();
 
         try {
             JSONObject vMRDataObject = aJsonToParse.getJSONObject("MRData");

@@ -1,7 +1,6 @@
 package com.example.growingmobilef1.Adapter;
 
 import android.support.annotation.NonNull;
-import android.support.v4.util.SparseArrayCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.growingmobilef1.Interface.IListableObject;
+import com.example.growingmobilef1.Model.Constructor;
+import com.example.growingmobilef1.Model.ConstructorStandings;
+import com.example.growingmobilef1.Model.ConstructorsItem;
 import com.example.growingmobilef1.R;
 
 import java.util.ArrayList;
@@ -17,24 +19,24 @@ import java.util.List;
 // must be paramitized to access to viewHolder and use custom layout widjet
 public class ConstructorsAdapter extends RecyclerView.Adapter<ConstructorsAdapter.ViewHolder> {
 
-    List<IListableObject> mValues;
+    List<ConstructorStandings> mValues;
 
     // class used to protect from the calling findViewById on each bind
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public TextView mConstructorName;
-        public TextView mConstructorScore;
+        public TextView mConstructorPosition, mConstructorName,mConstructorScore;
 
-        public ViewHolder(View vView) {
+        private ViewHolder(View vView) {
             super(vView);
 
-            // sets label widjets
-            mConstructorName = vView.findViewById(R.id.labelConstructorName);
-            mConstructorScore = vView.findViewById(R.id.labelConstructorScore);
+            // sets label widgets
+            mConstructorPosition = vView.findViewById(R.id.list_item_constructor_position);
+            mConstructorName = vView.findViewById(R.id.list_item_constructor_name);
+            mConstructorScore = vView.findViewById(R.id.list_item_constructor_score);
         }
     }
 
-    public ConstructorsAdapter(List<IListableObject> vValues) {
+    public ConstructorsAdapter(List<ConstructorStandings> vValues) {
         mValues = vValues;
     }
 
@@ -42,7 +44,7 @@ public class ConstructorsAdapter extends RecyclerView.Adapter<ConstructorsAdapte
         mValues = new ArrayList<>();
     }
 
-    public void updateData(List<IListableObject> viewModels) {
+    public void updateData(List<ConstructorStandings> viewModels) {
         mValues.clear();
         mValues.addAll(viewModels);
         notifyDataSetChanged();
@@ -55,7 +57,7 @@ public class ConstructorsAdapter extends RecyclerView.Adapter<ConstructorsAdapte
     }
 
     // Add a list of items -- change to type used
-    public void addAll(List<IListableObject> list) {
+    public void addAll(List<ConstructorStandings> list) {
         mValues.addAll(list);
         notifyDataSetChanged();
     }
@@ -75,8 +77,9 @@ public class ConstructorsAdapter extends RecyclerView.Adapter<ConstructorsAdapte
     // Sets the data for each row
     @Override
     public void onBindViewHolder(@NonNull ViewHolder vViewHolder, int i) {
-        vViewHolder.mConstructorName.setText(mValues.get(i).getmMainInformation());
-        vViewHolder.mConstructorScore.setText(mValues.get(i).getmSecondaryInformation());
+        vViewHolder.mConstructorPosition.setText(mValues.get(i).getPosition() + "");
+        vViewHolder.mConstructorName.setText(mValues.get(i).getConstructor().getName());
+        vViewHolder.mConstructorScore.setText(mValues.get(i).getPoints() + " Pts");
     }
 
 

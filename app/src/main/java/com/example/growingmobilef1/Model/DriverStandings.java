@@ -20,7 +20,6 @@ public class DriverStandings {
 
         if(json.length() != 0){
             try{
-
                 tempDrivStand.setPosition(json.getInt("position"));
                 tempDrivStand.setPositionText(json.getString("positionText"));
                 tempDrivStand.setPoints(json.getInt("points"));
@@ -32,7 +31,6 @@ public class DriverStandings {
             }catch (JSONException e){
                 e.printStackTrace();
             }
-
         }
 
         return tempDrivStand;

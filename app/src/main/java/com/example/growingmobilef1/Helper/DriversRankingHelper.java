@@ -1,5 +1,6 @@
 package com.example.growingmobilef1.Helper;
 
+import com.example.growingmobilef1.Model.Constructor;
 import com.example.growingmobilef1.Model.DriverStandings;
 
 import org.json.JSONArray;
@@ -31,7 +32,12 @@ public class DriversRankingHelper {
                     // Get DriverStanding object
                     JSONObject vDriverStanding = vDriverStandings.getJSONObject(i);
 
+                    JSONArray vJSONArrayConstructor = vDriverStanding.getJSONArray("Constructors");
+                    JSONObject vJSONObjectConstructor = vJSONArrayConstructor.getJSONObject(0);
                     DriverStandings vTempDriverS = DriverStandings.fromJson(vDriverStanding);
+                    Constructor vConstructor = Constructor.fromJson(vJSONObjectConstructor);
+
+                    vTempDriverS.setConstructor(vConstructor);
                     arrayListPilotsPoints.add(vTempDriverS);
                 }
             }

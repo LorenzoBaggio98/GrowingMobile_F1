@@ -4,16 +4,16 @@
     <item
         android:id="@+id/tab_bar_calendar"
         android:icon="@drawable/baseline_calendar_today_24"
-        android:title="Calendar" />
+        android:title="Calendar"/>
 
     <item
         android:id="@+id/tab_bar_pilots_ranking"
         android:icon="@drawable/ic_trophy"
-        android:title="Pilots ranking" />
+        android:title="Pilots" />
 
     <item
         android:id="@+id/tab_bar_constructors_ranking"
         android:icon="@drawable/ic_car"
-        android:title="Constructors Ranking" />
+        android:title="Constructors" />
 
 </menu>

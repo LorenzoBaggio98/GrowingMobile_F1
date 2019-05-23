@@ -50,8 +50,10 @@ public class CalendarFragment extends Fragment {
         mPgsBar = vView.findViewById(R.id.frag_calendar_progress_bar);
 
         // Call the async class to perform the api call
-        CalendarApiAsyncCaller vLongOperation = new CalendarApiAsyncCaller();
-        vLongOperation.execute();
+        CalendarApiAsyncCaller vCalendarAsyncCaller = new CalendarApiAsyncCaller();
+        vCalendarAsyncCaller.execute();
+        CalendarPodiumApiAsyncCaller vPodiumAsyncCaller = new CalendarPodiumApiAsyncCaller();
+        vPodiumAsyncCaller.execute();
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -68,6 +70,11 @@ public class CalendarFragment extends Fragment {
             }
         });
        return vView;
+    }
+
+    private void setListAdapter(){
+        RacesAdapter vCalendarListAdapter = new RacesAdapter(mCalendarRaceItemArraylist, mRaceResultsMap);
+        mListView.setAdapter(vCalendarListAdapter);
     }
 
     /**
@@ -97,29 +104,53 @@ public class CalendarFragment extends Fragment {
 
             ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
             mCalendarRaceDataHelper = new CalendarRaceDataHelper();
+            mRaceResultsMap = new HashMap<>();
 
             RaceResultsDataHelper vRaceResultsDataHelper = new RaceResultsDataHelper();
             mJsonCalendarToParse = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current.json");
             if (mJsonCalendarToParse != null) {
                 mCalendarRaceItemArraylist =  mCalendarRaceDataHelper.getArraylist(mJsonCalendarToParse);
             }
-
-            mRaceResultsMap = new HashMap<String, ArrayList<RaceResults>>() {
-            };
-           /* for (int i = 0; i < mCalendarRaceItemArraylist.size(); i++) {
-                JSONObject vJsonToParse = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current/"
-                        + mCalendarRaceItemArraylist.get(i).getRound() + "/results.json");
-                mRaceResultsArrayList = vRaceResultsDataHelper.getRaceResults(vJsonToParse);
-                mRaceResultsMap.put(mCalendarRaceItemArraylist.get(i).getRaceName(), mRaceResultsArrayList);
-            }*/
-
             return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
-            RacesAdapter vCalendarListAdapter = new RacesAdapter(mCalendarRaceItemArraylist, mRaceResultsMap);
-            mListView.setAdapter(vCalendarListAdapter);
+            if (!mRaceResultsMap.isEmpty()){
+                setListAdapter();
+            }
+            mPgsBar.setVisibility(View.GONE);
+        }
+
+    }
+
+    private class CalendarPodiumApiAsyncCaller extends AsyncTask<String, Void, String> {
+        CalendarRaceDataHelper vCalendarRaceDataHelper = new CalendarRaceDataHelper();
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
+            RaceResultsDataHelper vRaceResultsDataHelper = new RaceResultsDataHelper();
+
+            mRaceResultsMap = new HashMap<>();
+
+            JSONObject vResultsObject = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current/results.json?limit=10000");
+            ArrayList<Races> vRacesArrayList = vCalendarRaceDataHelper.getArraylist(vResultsObject);
+
+            for (Races vRaceResult: vRacesArrayList) {
+                for (Races vRace: mCalendarRaceItemArraylist) {
+                    if (vRaceResult.getRaceName().equals(vRace.getRaceName())) {
+                        mRaceResultsMap.put(vRace.getRaceName(), vRaceResult.getResults());
+                    }
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            setListAdapter();
             mPgsBar.setVisibility(View.GONE);
         }
     }

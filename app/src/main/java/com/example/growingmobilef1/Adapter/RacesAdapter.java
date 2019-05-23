@@ -76,8 +76,8 @@ public class RacesAdapter extends BaseAdapter {
 
         vHolder.mRaceLabel.setText("" + getItem(position).getmMainInformation());
 
-        String vPositionLabelString = "BOT / HAM / VER";
-       /*  if (mRaceResultsMap.get(getItem(position).getRaceName()).size() != 0) {
+        String vPositionLabelString = "";
+        if (mRaceResultsMap.containsKey(getItem(position).getRaceName())) {
            for (int i = 0; i < 3; i++){
                 String vPosition = mRaceResultsMap.get(getItem(position).getRaceName()).get(i).getDriver().getCode();
                 if (i < 2)
@@ -86,7 +86,7 @@ public class RacesAdapter extends BaseAdapter {
                     vPositionLabelString += vPosition;
 
             }
-        }*/
+        }
 
         vHolder.mPodiumLabel.setText(vPositionLabelString);
 

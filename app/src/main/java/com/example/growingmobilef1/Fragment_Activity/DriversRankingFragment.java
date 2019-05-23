@@ -1,5 +1,6 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -30,7 +31,7 @@ public class DriversRankingFragment extends Fragment {
 
     PilotsApiAsync vPilotsApiAsync = new PilotsApiAsync();
 
-    public static android.app.Fragment newInstance() {
+    public static DriversRankingFragment newInstance() {
         return new DriversRankingFragment();
     }
 
@@ -40,26 +41,26 @@ public class DriversRankingFragment extends Fragment {
 
         mListView = vView.findViewById(R.id.listViewPilots);
         mProgressBar=vView.findViewById(R.id.frag_calendar_progress_bar);
-//if(savedInstanceState !=null){
-//
-//    mArrayListPilots = (ArrayList<DriverStandings>) savedInstanceState.getSerializable(SAVE_LISTPILOTS);
-//    DriversAdapter vDriversAdapter = new DriversAdapter(mArrayListPilots);
-//    mListView.setAdapter(vDriversAdapter);
-//
-//}else{
-//    vPilotsApiAsync.execute();
-//
-//}
-//
+if(savedInstanceState !=null){
+
+    mArrayListPilots = (ArrayList<DriverStandings>) savedInstanceState.getSerializable(SAVE_LISTPILOTS);
+    DriversAdapter vDriversAdapter = new DriversAdapter(mArrayListPilots);
+    mListView.setAdapter(vDriversAdapter);
+
+}else{
+    vPilotsApiAsync.execute();
+
+}
+
 
         return vView;
     }
 
-//    @Override
-//    public void onSaveInstanceState(@NonNull Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        outState.putSerializable(SAVE_LISTPILOTS,mArrayListPilots);
-//    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(SAVE_LISTPILOTS,mArrayListPilots);
+    }
 
     private class PilotsApiAsync extends AsyncTask<String, Void, String> {
         private JSONObject vJsonObjectToParse;

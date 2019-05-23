@@ -1,6 +1,6 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.example.growingmobilef1.Adapter.ConstructorsAdapter;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.ConstructorsDataHelper;
-import com.example.growingmobilef1.Interface.IListableObject;
+
 import com.example.growingmobilef1.Model.ConstructorStandings;
 import com.example.growingmobilef1.R;
 

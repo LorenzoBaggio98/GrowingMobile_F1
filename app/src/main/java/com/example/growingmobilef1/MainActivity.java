@@ -1,12 +1,11 @@
 package com.example.growingmobilef1;
-
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
+
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.NavigationView;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
 import android.view.MenuItem;
@@ -59,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(tag);
 
         // Set the correct fragment
-        FragmentTransaction vFT = getFragmentManager().beginTransaction();
+        FragmentTransaction vFT = getSupportFragmentManager().beginTransaction();
         vFT.replace(R.id.main_act_fragment_container, aFragment, tag);
         vFT.commit();
     }

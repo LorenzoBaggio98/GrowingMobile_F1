@@ -2,12 +2,12 @@
 
 <android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/activity_race_detail_refresh_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_race_detail_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -17,13 +17,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1.5"
+                android:orientation="vertical"
                 android:layout_marginBottom="4dp">
 
                 <ImageView
                     android:id="@+id/circuit_img"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:srcCompat="@drawable/ic_car" />
+                    android:layout_height="0dp"
+                    android:layout_weight="2" />
+
 
             </LinearLayout>
 

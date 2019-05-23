@@ -2,6 +2,7 @@ package com.example.growingmobilef1.Model;
 
 import com.example.growingmobilef1.Interface.IListableObject;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,6 +34,7 @@ public class Races implements Serializable, IListableObject {
         Races tempRaces = new Races();
         Circuit tempC = new Circuit();
 
+
         SimpleDateFormat sDF = new SimpleDateFormat("yyyy-MM-dd");
 
         if(json.length() != 0){
@@ -46,6 +48,13 @@ public class Races implements Serializable, IListableObject {
                 tempRaces.setmDate(sDF.parse(json.getString("date")));
                 tempRaces.setTime(json.getString("time"));
 
+                ArrayList<RaceResults> vRaceResultsArrayList = new ArrayList<>();
+                RaceResults vRaceResult = new RaceResults();
+                JSONArray temp = json.getJSONArray("Results");
+                for(int i = 0; i < temp.length(); i++) {
+                    vRaceResultsArrayList.add(RaceResults.fromJson(temp.getJSONObject(i)));
+                }
+                tempRaces.setResults(vRaceResultsArrayList);
             }catch (JSONException e){
                 e.printStackTrace();
             } catch (MalformedURLException e) {

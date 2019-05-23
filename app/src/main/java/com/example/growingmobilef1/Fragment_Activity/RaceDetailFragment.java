@@ -1,5 +1,6 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
+import android.app.Notification;
 import android.support.v4.app.Fragment;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.AlertReceiver;
 import com.example.growingmobilef1.R;
+import com.example.growingmobilef1.Utils.NotificationUtil;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -34,7 +37,7 @@ public class RaceDetailFragment extends Fragment {
 
     public static final String RESULTS_FRAGMENT = "ResultsFragment";
     public static final String RACE_ITEM = "Tag to pass the calendar race item to the fragment";
-    public static final String RACE_ALERT = "Tag to send the race item to the AlertReceiver";
+    //public static final String RACE_ALERT = "Tag to send the race item to the AlertReceiver";
 
     private RaceResultsFragment mListResultsFragment;
     // The race's info
@@ -102,6 +105,9 @@ public class RaceDetailFragment extends Fragment {
 
     private void sendNotification(Date aDate){
 
+        NotificationUtil notification = new NotificationUtil(aDate, getContext(), mCalendarRace);
+        notification.sendNotification();
+        /*
         AlarmManager vAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         Intent vNotificationIntent = new Intent(getContext(), AlertReceiver.class);
 
@@ -138,6 +144,7 @@ public class RaceDetailFragment extends Fragment {
             vAlarmManager.cancel(vBroadcast);
             Toast.makeText(getContext(), "Notification cancelled", Toast.LENGTH_LONG).show();
         }
+        */
     }
 
     // Disable the notification button if the race already occured

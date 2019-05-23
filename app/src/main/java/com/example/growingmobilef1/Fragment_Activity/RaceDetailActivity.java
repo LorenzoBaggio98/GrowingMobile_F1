@@ -25,13 +25,12 @@ import com.example.growingmobilef1.R;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class RaceDetailActivity extends AppCompatActivity implements RaceDetailFragment.OnFragmentLoad{
+public class RaceDetailActivity extends AppCompatActivity {
+
     private static final String ERROR_TAG = "ERROR_TAG";
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
-    private  ImageView mImageView;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private SwipeRefreshLayout.OnRefreshListener mSwipeRefreshListener;
+    private ImageView mImageView;
 
     ViewPagerAdapter mPageAdapter;
 
@@ -44,7 +43,6 @@ public class RaceDetailActivity extends AppCompatActivity implements RaceDetailF
 
         mViewPager = findViewById(R.id.viewPager);
         mTabLayout = findViewById(R.id.tabLayout);
-        mSwipeRefreshLayout = findViewById(R.id.activity_race_detail_refresh_layout);
         mImageView = findViewById(R.id.circuit_img);
 
         Intent intent = getIntent();
@@ -56,9 +54,10 @@ public class RaceDetailActivity extends AppCompatActivity implements RaceDetailF
 
         // Set the tabBar with ViewPageAdapter and TabLayout
         mPageAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        mPageAdapter.addFragment("RACE", RaceDetailFragment.newInstance(raceItem));
-        mPageAdapter.addFragment("QUALI", new TwoFragmentDetail());
-        mPageAdapter.addFragment("FP", new ThreeFragmentDetail());
+
+        mPageAdapter.addFragment("RACE", RaceResultsFragment.newInstance(raceItem));
+        mPageAdapter.addFragment("QUALI", QualifyingResultsFragment.newInstance(raceItem));
+        mPageAdapter.addFragment("FP", RaceResultsFragment.newInstance(raceItem));
 
         setPagerAdapter();
 
@@ -82,22 +81,6 @@ public class RaceDetailActivity extends AppCompatActivity implements RaceDetailF
         } catch (IOException ex) {
             Log.e(ERROR_TAG, "Error on circuit image reading");
         }
-
-        mSwipeRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Log.i("REFRESH", "onRefresh called from SwipeRefreshLayout");
-                setPagerAdapter();
-            }
-        };
-
-        mSwipeRefreshLayout.post(new Runnable() {
-            @Override public void run() {
-               // mSwipeRefreshLayout.setRefreshing(true);
-                // directly call onRefresh() method
-                mSwipeRefreshListener.onRefresh();
-            }
-        });
     }
 
     /**
@@ -121,18 +104,9 @@ public class RaceDetailActivity extends AppCompatActivity implements RaceDetailF
         }
     }
 
-    private void stopRefreshingAnimation(){
-        mSwipeRefreshLayout.setRefreshing(false);
-    }
-
     private void setPagerAdapter(){
         mViewPager.setAdapter(mPageAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
-        onFragmentLoaded();
     }
 
-    @Override
-    public void onFragmentLoaded() {
-        stopRefreshingAnimation();
-    }
 }

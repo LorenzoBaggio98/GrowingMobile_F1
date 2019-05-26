@@ -50,11 +50,16 @@ public class Races implements Serializable, IListableObject {
 
                 ArrayList<RaceResults> vRaceResultsArrayList = new ArrayList<>();
                 RaceResults vRaceResult = new RaceResults();
-                JSONArray temp = json.getJSONArray("Results");
-                for(int i = 0; i < temp.length(); i++) {
-                    vRaceResultsArrayList.add(RaceResults.fromJson(temp.getJSONObject(i)));
+
+                JSONArray temp = json.optJSONArray("Results");
+
+                if(temp != null) {
+                    for (int i = 0; i < temp.length(); i++) {
+                        vRaceResultsArrayList.add(RaceResults.fromJson(temp.getJSONObject(i)));
+                    }
+                    tempRaces.setResults(vRaceResultsArrayList);
                 }
-                tempRaces.setResults(vRaceResultsArrayList);
+
             }catch (JSONException e){
                 e.printStackTrace();
             } catch (MalformedURLException e) {

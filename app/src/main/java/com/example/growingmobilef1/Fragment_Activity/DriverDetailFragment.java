@@ -15,7 +15,7 @@ import com.example.growingmobilef1.R;
 
 public class DriverDetailFragment extends Fragment {
 
-private TextView txtName,txtSurname,txtDateOfBirth,txtPermanentNumber,txtNationality,txtOtherInformation;
+private TextView txtName,txtSurname,txtDateOfBirth,txtNationality,txtOtherInformation;
     private static final String VAL_ID ="VAL_ID" ;
 
     @Nullable
@@ -30,11 +30,13 @@ private TextView txtName,txtSurname,txtDateOfBirth,txtPermanentNumber,txtNationa
        Bundle vBundle=getArguments();
        if (vBundle !=null){
         Driver driver=(Driver) vBundle.getSerializable(VAL_ID);
-           txtName.setText(driver.getFamilyName());
+           txtName.setText(driver.getGivenName());
            txtSurname.setText(driver.getFamilyName());
            txtDateOfBirth.setText(driver.getDateOfBirth());
            txtNationality.setText(driver.getNationality());
+
            txtOtherInformation.setText(""+driver.getUrl());
+           txtOtherInformation.setLinksClickable(true);
 
        }
 

@@ -1,20 +1,30 @@
 package com.example.growingmobilef1.Adapter;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class RacesAdapter extends BaseAdapter {
 
@@ -48,18 +58,13 @@ public class RacesAdapter extends BaseAdapter {
             LayoutInflater vInflater = LayoutInflater.from(parent.getContext());
 
             ViewHolder vViewHolder = new ViewHolder();
-            Calendar vCalendar = Calendar.getInstance();
-            vCalendar.setTime(vCalendar.getTime());
-           /* if (mRaceResultsMap.get(getItem(position).getRaceName()).size() != 0) {
-                vView = vInflater.inflate(R.layout.list_item_calendar_last_race, parent, false);
-            }else {*/
-                vView = vInflater.inflate(R.layout.list_item_calendar, parent, false);
-          //  }
+            vView = vInflater.inflate(R.layout.list_item_calendar, parent, false);
 
             vViewHolder.mRaceLabel = vView.findViewById(R.id.list_item_calendar_label_race_name);
             vViewHolder.mPodiumLabel = vView.findViewById(R.id.list_item_calendar_label_podium);
             vViewHolder.mDateLabel = vView.findViewById(R.id.list_item_calendar_label_date);
             vViewHolder.mTimeLabel = vView.findViewById(R.id.list_item_calendar_label_hour);
+            vViewHolder.mContainerLayout = vView.findViewById(R.id.list_item_calendar_container);
 
             vView.setTag(vViewHolder);
 
@@ -68,37 +73,60 @@ public class RacesAdapter extends BaseAdapter {
 
         ViewHolder vHolder = (ViewHolder)vView.getTag();
 
+        // Change list item layout if race has already happened
+        Calendar vCalendarConvertRaceDate = Calendar.getInstance();
+        vCalendarConvertRaceDate.setTime(mRacesArrayList.get(position).getmDate());
+        long raceMilliSecondDate = vCalendarConvertRaceDate.getTimeInMillis();
+        Calendar vCalendar = Calendar.getInstance();
+        vCalendar.setTime(vCalendar.getTime());
+
+        if (raceMilliSecondDate > vCalendar.getTimeInMillis()) {
+            vHolder.mPodiumLabel.setTextColor(Color.BLACK);
+            vHolder.mRaceLabel.setTextColor(Color.BLACK);
+            vHolder.mDateLabel.setTextColor(Color.BLACK);
+            vHolder.mTimeLabel.setTextColor(Color.BLACK);
+            vHolder.mContainerLayout.setBackgroundResource(R.drawable.rectangle_shadow);
+        } else {
+            vHolder.mPodiumLabel.setTextColor(Color.WHITE);
+            vHolder.mRaceLabel.setTextColor(Color.WHITE);
+            vHolder.mDateLabel.setTextColor(Color.WHITE);
+            vHolder.mTimeLabel.setTextColor(Color.WHITE);
+            vHolder.mContainerLayout.setBackgroundResource(R.drawable.last_race_rectangle);
+        }
+
         Calendar vCalendarDate = getItem(position).getCalendarDate();
-        Calendar vCalendarTime = getItem(position).getCalendarTime();
         int vCalendarMonth = vCalendarDate.get(Calendar.MONTH);
+
+        Calendar vCalendarTime = getItem(position).getCalendarTime();
 
         vHolder.mRaceLabel.setText("" + getItem(position).getmMainInformation());
 
+        // Set the podium results (if the race has already occurred)
         String vPositionLabelString = "";
         if (mRaceResultsMap.containsKey(getItem(position).getRaceName())) {
-           for (int i = 0; i < 3; i++){
+            for (int i = 0; i < 3; i++){
                 String vPosition = mRaceResultsMap.get(getItem(position).getRaceName()).get(i).getDriver().getCode();
                 if (i < 2)
                     vPositionLabelString += vPosition + " / ";
                 else
                     vPositionLabelString += vPosition;
-
             }
         }
-
         vHolder.mPodiumLabel.setText(vPositionLabelString);
 
+        // Set date and time of the race
         if (vCalendarMonth != 10 && vCalendarMonth != 11 && vCalendarMonth != 12){
             vHolder.mDateLabel.setText(vCalendarDate.get(Calendar.DAY_OF_MONTH) + " " + vCalendarDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
         } else {
             vHolder.mDateLabel.setText(vCalendarDate.get(Calendar.DAY_OF_MONTH) + " " + vCalendarDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
         }
+        //vHolder.mTimeLabel.setText(vCalendarTime.get(Calendar.HOUR_OF_DAY) + ":" + vCalendarTime.get(Calendar.MINUTE));
         vHolder.mTimeLabel.setText(vCalendarTime.get(Calendar.HOUR_OF_DAY) + ":" + vCalendarTime.get(Calendar.MINUTE));
-
         return vView;
     }
 
     private class ViewHolder {
         TextView mRaceLabel, mPodiumLabel, mDateLabel, mTimeLabel;
+        LinearLayout mContainerLayout;
     }
 }

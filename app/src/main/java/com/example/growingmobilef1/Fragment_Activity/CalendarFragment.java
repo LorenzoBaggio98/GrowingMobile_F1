@@ -81,6 +81,7 @@ public class CalendarFragment extends Fragment {
     private void launchRaceDetailFragment(Races aRaceItem){
 
         Intent intent = new Intent(getContext(), RaceDetailActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         Bundle bundle = new Bundle();
 
         bundle.putSerializable(RaceDetailFragment.RACE_ITEM, aRaceItem);

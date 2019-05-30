@@ -14,6 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 // Ua
 public class Races implements Serializable, IListableObject {
@@ -23,6 +25,7 @@ public class Races implements Serializable, IListableObject {
     private URL url;
     private String raceName;
     private Circuit Circuit;
+
     private Date mDate;
     private String time;
 
@@ -33,7 +36,6 @@ public class Races implements Serializable, IListableObject {
 
         Races tempRaces = new Races();
         Circuit tempC = new Circuit();
-
 
         SimpleDateFormat sDF = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -103,11 +105,11 @@ public class Races implements Serializable, IListableObject {
         this.raceName = raceName;
     }
 
-    public com.example.growingmobilef1.Model.Circuit getCircuit() {
+    public Circuit getCircuit() {
         return Circuit;
     }
 
-    public void setCircuit(com.example.growingmobilef1.Model.Circuit circuit) {
+    public void setCircuit(Circuit circuit) {
         Circuit = circuit;
     }
 
@@ -177,7 +179,10 @@ public class Races implements Serializable, IListableObject {
 
     public Calendar getCalendarTime() {
         Calendar vCalendar = Calendar.getInstance();
-        SimpleDateFormat vDateFormat = new SimpleDateFormat("HH:mm:ss'Z'");
+
+        SimpleDateFormat vDateFormat = new SimpleDateFormat("HH:mm:ss");
+        vDateFormat.setTimeZone(TimeZone.getTimeZone("Europe"));
+
         try {
             vCalendar.setTime(vDateFormat.parse(getTime()));
         } catch (ParseException e){
@@ -186,16 +191,4 @@ public class Races implements Serializable, IListableObject {
         return vCalendar;
     }
 
-    public Date getmParsedDate() {
-        Date vDate = new Date();
-        String vDay = getmDate().toString();
-        String vHour = getTime();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        try {
-            vDate = simpleDateFormat.parse(vDay + 'T' + vHour);
-        } catch (ParseException e){
-            e.printStackTrace();
-        }
-        return vDate;
-    }
 }

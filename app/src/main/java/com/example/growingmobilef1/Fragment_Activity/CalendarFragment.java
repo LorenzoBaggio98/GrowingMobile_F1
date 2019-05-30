@@ -136,10 +136,12 @@ public class CalendarFragment extends Fragment {
             JSONObject vResultsObject = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current/results.json?limit=10000");
             ArrayList<Races> vRacesArrayList = vCalendarRaceDataHelper.getArraylist(vResultsObject);
 
-            for (Races vRaceResult: vRacesArrayList) {
-                for (Races vRace: mCalendarRaceItemArraylist) {
-                    if (vRaceResult.getRaceName().equals(vRace.getRaceName())) {
-                        mRaceResultsMap.put(vRace.getRaceName(), vRaceResult.getResults());
+            if(vRacesArrayList != null){
+                for (Races vRaceResult: vRacesArrayList) {
+                    for (Races vRace: mCalendarRaceItemArraylist) {
+                        if (vRaceResult.getRaceName().equals(vRace.getRaceName())) {
+                            mRaceResultsMap.put(vRace.getRaceName(), vRaceResult.getResults());
+                        }
                     }
                 }
             }

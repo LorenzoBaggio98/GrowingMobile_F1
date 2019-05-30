@@ -40,17 +40,17 @@ public class DriversRankingFragment extends Fragment {
         View vView = inflater.inflate(R.layout.fragment_pilots_ranking, container, false);
 
         mListView = vView.findViewById(R.id.listViewPilots);
-        mProgressBar=vView.findViewById(R.id.frag_calendar_progress_bar);
-if(savedInstanceState !=null){
+        mProgressBar = vView.findViewById(R.id.frag_calendar_progress_bar);
 
-    mArrayListPilots = (ArrayList<DriverStandings>) savedInstanceState.getSerializable(SAVE_LISTPILOTS);
-    DriversAdapter vDriversAdapter = new DriversAdapter(mArrayListPilots);
-    mListView.setAdapter(vDriversAdapter);
+        if(savedInstanceState !=null){
 
-}else{
-    vPilotsApiAsync.execute();
+            mArrayListPilots = (ArrayList<DriverStandings>) savedInstanceState.getSerializable(SAVE_LISTPILOTS);
+            DriversAdapter vDriversAdapter = new DriversAdapter(mArrayListPilots);
+            mListView.setAdapter(vDriversAdapter);
 
-}
+        }else{
+            vPilotsApiAsync.execute();
+        }
 
 
         return vView;

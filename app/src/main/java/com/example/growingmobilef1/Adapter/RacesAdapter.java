@@ -74,8 +74,9 @@ public class RacesAdapter extends BaseAdapter {
         ViewHolder vHolder = (ViewHolder)vView.getTag();
 
         // Change list item layout if race has already happened
-        Calendar vCalendarConvertRaceDate = Calendar.getInstance();
+        Calendar vCalendarConvertRaceDate = Calendar.getInstance(TimeZone.getDefault());
         vCalendarConvertRaceDate.setTime(mRacesArrayList.get(position).getmDate());
+
         long raceMilliSecondDate = vCalendarConvertRaceDate.getTimeInMillis();
         Calendar vCalendar = Calendar.getInstance();
         vCalendar.setTime(vCalendar.getTime());
@@ -94,11 +95,8 @@ public class RacesAdapter extends BaseAdapter {
             vHolder.mContainerLayout.setBackgroundResource(R.drawable.last_race_rectangle);
         }
 
+        /// --- DATE ---
         Calendar vCalendarDate = getItem(position).getCalendarDate();
-        int vCalendarMonth = vCalendarDate.get(Calendar.MONTH);
-
-        Calendar vCalendarTime = getItem(position).getCalendarTime();
-
         vHolder.mRaceLabel.setText("" + getItem(position).getmMainInformation());
 
         // Set the podium results (if the race has already occurred)
@@ -115,12 +113,11 @@ public class RacesAdapter extends BaseAdapter {
         vHolder.mPodiumLabel.setText(vPositionLabelString);
 
         // Set date and time of the race
-        if (vCalendarMonth != 10 && vCalendarMonth != 11 && vCalendarMonth != 12){
-            vHolder.mDateLabel.setText(vCalendarDate.get(Calendar.DAY_OF_MONTH) + " " + vCalendarDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
-        } else {
-            vHolder.mDateLabel.setText(vCalendarDate.get(Calendar.DAY_OF_MONTH) + " " + vCalendarDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
-        }
-        //vHolder.mTimeLabel.setText(vCalendarTime.get(Calendar.HOUR_OF_DAY) + ":" + vCalendarTime.get(Calendar.MINUTE));
+        vHolder.mDateLabel.setText(vCalendarDate.get(Calendar.DAY_OF_MONTH) + " " + vCalendarDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
+
+        /// --- TIME ---
+        Calendar vCalendarTime = getItem(position).getCalendarTime();
+
         vHolder.mTimeLabel.setText(vCalendarTime.get(Calendar.HOUR_OF_DAY) + ":" + vCalendarTime.get(Calendar.MINUTE));
         return vView;
     }

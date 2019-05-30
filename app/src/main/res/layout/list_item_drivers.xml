@@ -80,6 +80,7 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
+        <!--
         <TextView
             android:id="@+id/list_item_driver_nationality"
             android:layout_width="0dp"
@@ -90,6 +91,16 @@
             android:text="Nation"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
+        -->
+
+        <ImageView
+            android:id="@+id/list_item_driver_nationality"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:padding="12dp"
+            android:gravity="center_horizontal|center_vertical"
+            app:srcCompat="@android:color/background_light" />
 
         <TextView
             android:id="@+id/list_item_driver_points"

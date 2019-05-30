@@ -4,9 +4,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.example.growingmobilef1.Model.Driver;
 import com.example.growingmobilef1.Model.DriverStandings;
 import com.example.growingmobilef1.R;
 
@@ -42,15 +44,16 @@ public class DriversAdapter extends BaseAdapter {
         if (convertView == null){
             LayoutInflater vInflater = LayoutInflater.from(parent.getContext());
 
-            vView = vInflater.inflate(R.layout.list_item_drivers_nostate, parent,false);
+            vView = vInflater.inflate(R.layout.list_item_drivers, parent,false);
             vHolder = new ViewHolder();
 
             vHolder.mPositionLabel = vView.findViewById(R.id.list_item_driver_position);
             vHolder.mSurnameLabel = vView.findViewById(R.id.list_item_driver_surname);
             vHolder.mNameLabel = vView.findViewById(R.id.list_item_driver_name);
             vHolder.mTeamLabel = vView.findViewById(R.id.list_item_driver_team);
-           // vHolder.mNationalityLabel = vView.findViewById(R.id.list_item_driver_nationality);
+            //vHolder.mNationalityLabel = vView.findViewById(R.id.list_item_driver_nationality);
             vHolder.mPointsLabel = vView.findViewById(R.id.list_item_driver_points);
+            vHolder.mNationalityImage = vView.findViewById(R.id.list_item_driver_nationality);
 
             vView.setTag(vHolder);
 
@@ -59,16 +62,23 @@ public class DriversAdapter extends BaseAdapter {
             vHolder = (ViewHolder)vView.getTag();
         }
 
-        vHolder.mPositionLabel.setText("" + mArrayListDrivers.get(position).getPositionText() );
-        vHolder.mSurnameLabel.setText(mArrayListDrivers.get(position).getDriver().getFamilyName());
-        vHolder.mNameLabel.setText(" " + mArrayListDrivers.get(position).getDriver().getGivenName());
-        vHolder.mTeamLabel.setText(mArrayListDrivers.get(position).getConstructor().getName());
-      //  vHolder.mNationalityLabel.setText(mArrayListDrivers.get(position).getDriver().getNationality());
-        vHolder.mPointsLabel.setText(mArrayListDrivers.get(position).getPoints() + " Pts");
+        DriverStandings stand = mArrayListDrivers.get(position);
+
+        vHolder.mPositionLabel.setText("" + stand.getPositionText() );
+        vHolder.mSurnameLabel.setText(stand.getDriver().getFamilyName());
+        vHolder.mNameLabel.setText(" " + stand.getDriver().getGivenName());
+        vHolder.mTeamLabel.setText(stand.getConstructor().getName());
+        vHolder.mPointsLabel.setText(stand.getPoints() + " Pts");
+
+        String flag_name = "flag_" + mArrayListDrivers.get(position).getDriver().getNationality().toLowerCase();
+        int flag_drowable = parent.getResources().getIdentifier(flag_name, "drawable", parent.getContext().getPackageName());
+
+        vHolder.mNationalityImage.setImageResource(flag_drowable);
 
         return vView;
     }
     private class ViewHolder{
-        public TextView mPositionLabel, mSurnameLabel, mNameLabel, mTeamLabel, mNationalityLabel, mPointsLabel;
+        public TextView mPositionLabel, mSurnameLabel, mNameLabel, mTeamLabel, mPointsLabel;
+        public ImageView mNationalityImage;
     }
 }

@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -27,10 +26,12 @@ import java.io.InputStream;
 
 public class RaceDetailActivity extends AppCompatActivity {
 
+    public static final String RACE_ITEM = "Tag to pass the calendar race item to the fragment";
     private static final String ERROR_TAG = "ERROR_TAG";
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private ImageView mImageView;
+
 
     ViewPagerAdapter mPageAdapter;
 
@@ -48,7 +49,7 @@ public class RaceDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle startBundle = intent.getExtras();
         if (startBundle != null) {
-            raceItem = (Races) startBundle.getSerializable(RaceDetailFragment.RACE_ITEM);
+            raceItem = (Races) startBundle.getSerializable(RaceDetailActivity.RACE_ITEM);
 
         }
 

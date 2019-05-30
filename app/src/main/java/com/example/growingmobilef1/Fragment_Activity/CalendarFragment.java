@@ -63,7 +63,7 @@ public class CalendarFragment extends Fragment {
                         vRaceItem = (Races)mCalendarRaceItemArraylist.get(position);
                     }
                 }
-                launchRaceDetailFragment(vRaceItem);
+                launchRaceDetailActivity(vRaceItem);
             }
         });
        return vView;
@@ -78,13 +78,13 @@ public class CalendarFragment extends Fragment {
      *
      * @param aRaceItem
      */
-    private void launchRaceDetailFragment(Races aRaceItem){
+    private void launchRaceDetailActivity(Races aRaceItem){
 
         Intent intent = new Intent(getContext(), RaceDetailActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         Bundle bundle = new Bundle();
 
-        bundle.putSerializable(RaceDetailFragment.RACE_ITEM, aRaceItem);
+        bundle.putSerializable(RaceDetailActivity.RACE_ITEM, aRaceItem);
 
         intent.putExtras(bundle);
         startActivity(intent);

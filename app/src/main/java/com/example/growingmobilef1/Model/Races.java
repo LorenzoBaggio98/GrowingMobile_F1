@@ -49,6 +49,7 @@ public class Races implements Serializable, IListableObject {
                 tempRaces.setTime(json.getString("time"));
 
                 ArrayList<RaceResults> vRaceResultsArrayList = new ArrayList<>();
+                RaceResults vRaceResult = new RaceResults();
 
                 JSONArray temp = json.optJSONArray("Results");
 

@@ -19,6 +19,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String CALENDAR_FRAGMENT = "Calendar";
     private static final String PILOTS_RANKING_FRAGMENT = "Pilots";
     private static final String CONSTRUCTORS_RANKING_FRAGMENT = "Constructors";
+    private static final String SAVED_TITLE = "title of the support action bar";
+
+    private String mSupportActionBarTitle;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -45,11 +48,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.main_act_nav_view);
-
+    if (savedInstanceState == null){
         launchFragment(CALENDAR_FRAGMENT, CalendarFragment.newInstance());
+    }
+   else {
+        getSupportActionBar().setTitle(savedInstanceState.getString(SAVED_TITLE));
+   }
+
         setNavMenuItemThemeColors();
 
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mSupportActionBarTitle= getSupportActionBar().getTitle().toString();
+
+        outState.putString(SAVED_TITLE, mSupportActionBarTitle);
     }
 
     private void launchFragment(String tag, Fragment aFragment){

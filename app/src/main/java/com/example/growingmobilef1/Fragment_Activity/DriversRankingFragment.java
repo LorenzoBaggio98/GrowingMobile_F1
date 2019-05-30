@@ -44,39 +44,33 @@ public class DriversRankingFragment extends Fragment {
         View vView = inflater.inflate(R.layout.fragment_pilots_ranking, container, false);
 
         mListView = vView.findViewById(R.id.listViewPilots);
+
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
-//                TextView txtnome=view.findViewById(R.id.list_item_driver_name);
-//
-//                String nome=(String)txtnome.getText();
-//                for (int i=0;i<mArrayListPilots.size();i++){
-//                 //   if ( mArrayListPilots.get(i).getDriver().getDriverId()==
-//                }
+                Driver vdriver = mArrayListPilots.get(position).getDriver();
 
-              Driver vdriver=  mArrayListPilots.get(position).getDriver();
-
-                Intent vIntent=new Intent(getContext(),DriverDetailActivity.class);
-                Bundle vBundle=new Bundle();
-                vBundle.putSerializable("SAVE_ID",vdriver);
+                Intent vIntent = new Intent(getContext(), DriverDetailActivity.class);
+                Bundle vBundle = new Bundle();
+                vBundle.putSerializable("SAVE_ID", vdriver);
                 vIntent.putExtras(vBundle);
                 startActivity(vIntent);
 
             }
         });
-        mProgressBar=vView.findViewById(R.id.frag_calendar_progress_bar);
-if(savedInstanceState !=null){
+        mProgressBar = vView.findViewById(R.id.frag_calendar_progress_bar);
+        if (savedInstanceState != null) {
 
-    mArrayListPilots = (ArrayList<DriverStandings>) savedInstanceState.getSerializable(SAVE_LISTPILOTS);
-    DriversAdapter vDriversAdapter = new DriversAdapter(mArrayListPilots);
-    mListView.setAdapter(vDriversAdapter);
+            mArrayListPilots = (ArrayList<DriverStandings>) savedInstanceState.getSerializable(SAVE_LISTPILOTS);
+            DriversAdapter vDriversAdapter = new DriversAdapter(mArrayListPilots);
+            mListView.setAdapter(vDriversAdapter);
 
-}else{
-    vPilotsApiAsync.execute();
+        } else {
+            vPilotsApiAsync.execute();
 
-}
+        }
 
 
         return vView;
@@ -85,7 +79,7 @@ if(savedInstanceState !=null){
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(SAVE_LISTPILOTS,mArrayListPilots);
+        outState.putSerializable(SAVE_LISTPILOTS, mArrayListPilots);
     }
 
     private class PilotsApiAsync extends AsyncTask<String, Void, String> {

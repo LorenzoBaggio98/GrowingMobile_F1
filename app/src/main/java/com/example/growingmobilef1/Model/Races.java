@@ -11,11 +11,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.TimeZone;
 
 // Ua
@@ -175,48 +173,11 @@ public class Races implements Serializable, IListableObject {
         isNotificationScheduled = notificationScheduled;
     }
 
-    public Date getDateType(){
-
-
-        SimpleDateFormat tempFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        tempFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-
-        Date tempDate = new Date();
-
-        try {
-            tempDate = tempFormat.parse(getmDate() + " " + getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return tempDate;
-    }
-
-    public Calendar getCalendarDate(){
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(getDateType());
-        return calendar;
-    }
-
-    public Calendar getCalendarTime() {
-        Calendar vCalendar = Calendar.getInstance();
-        SimpleDateFormat vDateFormat = new SimpleDateFormat("HH:mm:ss'Z'");
-        vDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-
-        try {
-            vCalendar.setTime(vDateFormat.parse(getTime()));
-        } catch (ParseException e){
-            e.printStackTrace();
-        }
-        return vCalendar;
-    }
-
+    // DateTime dell'elemento nel tipo Date
     public Date getDate(){
 
         SimpleDateFormat tempFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         tempFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-        //tempFormat.setTimeZone(TimeZone.getDefault());
 
         Date tempDate = new Date();
 
@@ -227,6 +188,33 @@ public class Races implements Serializable, IListableObject {
         }
 
         return tempDate;
+    }
+
+
+    // DateTime dell'elemento nel tipo Calendar
+    public Calendar getCalendarDate(){
+
+        // Istanza di Calendar
+        Calendar calendar = Calendar.getInstance();
+
+        // DateFormat con la TimeZone
+        SimpleDateFormat tempFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        tempFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+        // Istanza di Date
+        Date tempDate = new Date();
+
+        // Parsing della data in Date
+        try {
+            tempDate = tempFormat.parse(getmDate() + " " + getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        // Da Date a Calendar
+        calendar.setTime(tempDate);
+
+        return calendar;
     }
 
 }

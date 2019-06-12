@@ -75,9 +75,9 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
     @Override
     public int getItemViewType(int position) {
 
-        Calendar vCalendarConvertRaceDate = Calendar.getInstance();
-        vCalendarConvertRaceDate.setTime(mRacesArrayList.get(position).getDateType());
+        Calendar vCalendarConvertRaceDate = mRacesArrayList.get(position).getCalendarDate();
         long raceMilliSecondDate = vCalendarConvertRaceDate.getTimeInMillis();
+
         Calendar vCalendar = Calendar.getInstance();
         vCalendar.setTime(vCalendar.getTime());
 
@@ -110,57 +110,12 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder (@NonNull ViewHolder vHolder,int position){
+
+
         Calendar vCalendarDate = mRacesArrayList.get(position).getCalendarDate();
+
         int vCalendarMonth = vCalendarDate.get(Calendar.MONTH);
-        //
-        /*
-        Date raceDate = mRacesArrayList.get(position).getDate();
-        LocalDateTime localDate = raceDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
-        long raceMilliSecondDate = raceDate.getTime();
-
-        // CONTROL IF PAST
-        if (raceMilliSecondDate > new Date().getTime()) {
-            vHolder.mPodiumLabel.setTextColor(Color.BLACK);
-            vHolder.mRaceLabel.setTextColor(Color.BLACK);
-            vHolder.mDateLabel.setTextColor(Color.BLACK);
-            vHolder.mTimeLabel.setTextColor(Color.BLACK);
-            vHolder.mContainerLayout.setBackgroundResource(R.drawable.rectangle_shadow);
-        } else {
-            vHolder.mPodiumLabel.setTextColor(Color.WHITE);
-            vHolder.mRaceLabel.setTextColor(Color.WHITE);
-            vHolder.mDateLabel.setTextColor(Color.WHITE);
-            vHolder.mTimeLabel.setTextColor(Color.WHITE);
-            vHolder.mContainerLayout.setBackgroundResource(R.drawable.last_race_rectangle);
-        }
-
-        vHolder.mRaceLabel.setText("" + getItem(position).getmMainInformation());
-
-        // PODIUM
-        // Set the podium results (if the race has already occurred)
-        String vPositionLabelString = "";
-        if (mRaceResultsMap.containsKey(getItem(position).getRaceName())) {
-            for (int i = 0; i < 3; i++){
-                String vPosition = mRaceResultsMap.get(getItem(position).getRaceName()).get(i).getDriver().getCode();
-                if (i < 2)
-                    vPositionLabelString += vPosition + " / ";
-                else
-                    vPositionLabelString += vPosition;
-            }
-        }
-        vHolder.mPodiumLabel.setText(vPositionLabelString);
-
-        /// --- DATE ---
-        // Set date and time of the race
-        vHolder.mDateLabel.setText(""+localDate.getDayOfMonth());
-
-
-        /// --- TIME ---
-        vHolder.mTimeLabel.setText(localDate.getHour()+ ":" + localDate.getMinute());
-
-         */
-
-        Calendar vCalendarTime = mRacesArrayList.get(position).getCalendarTime();
         vHolder.mRaceLabel.setText("" + mRacesArrayList.get(position).getmMainInformation());
 
         // Set the podium results (if the race has already occurred)
@@ -184,7 +139,7 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
             vHolder.mDateLabel.setText(vCalendarDate.get(Calendar.DAY_OF_MONTH) + " " +
                     vCalendarDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
         }
-        vHolder.mTimeLabel.setText(vCalendarTime.get(Calendar.HOUR_OF_DAY) + ":" + vCalendarTime.get(Calendar.MINUTE));
+        vHolder.mTimeLabel.setText(vCalendarDate.get(Calendar.HOUR_OF_DAY) + ":" + vCalendarDate.get(Calendar.MINUTE));
 
         // Change notification icon if notification is scheduled
         if (mRacesArrayList.get(position).getNotificationScheduled()) {

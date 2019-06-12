@@ -1,6 +1,5 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -8,20 +7,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.example.growingmobilef1.Adapter.QualifyingResultsAdapter;
 import com.example.growingmobilef1.Adapter.RacesAdapter;
 import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
-import com.example.growingmobilef1.Helper.RaceResultsDataHelper;
-import com.example.growingmobilef1.Model.QualifyingResults;
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
@@ -118,9 +110,10 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
     @Override
     public void onNotificationScheduled(int aPosition) {
         mNotificationUtil = new NotificationUtil(
-                mCalendarRaceItemArraylist.get(aPosition).getDateType(),
+                mCalendarRaceItemArraylist.get(aPosition).getCalendarDate(),
                 getContext(),
-                mCalendarRaceItemArraylist.get(aPosition));
+                mCalendarRaceItemArraylist.get(aPosition)
+        );
         mNotificationUtil.sendNotification();
     }
 

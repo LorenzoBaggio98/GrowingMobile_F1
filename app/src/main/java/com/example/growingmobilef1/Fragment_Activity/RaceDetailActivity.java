@@ -1,21 +1,12 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
-import android.app.AlarmManager;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -23,7 +14,6 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.example.growingmobilef1.Adapter.ViewPagerAdapter;
-import com.example.growingmobilef1.AlertReceiver;
 import com.example.growingmobilef1.MainActivity;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
@@ -35,6 +25,7 @@ import com.example.growingmobilef1.Utils.NotificationUtil;
  */
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
 import java.util.Date;
 
 public class RaceDetailActivity extends AppCompatActivity {
@@ -110,9 +101,10 @@ public class RaceDetailActivity extends AppCompatActivity {
     // Load the notification icon only if the race hasn't happened yet
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Date vDate =  new Date();
-        vDate.setTime(new Date().getTime());
-        if (mRace.getDateType().after(vDate)) {
+        Calendar vDate =  Calendar.getInstance();
+        vDate.setTime(Calendar.getInstance().getTime());
+
+        if (mRace.getCalendarDate().after(vDate)) {
             getMenuInflater().inflate(R.menu.race_detail_notification, menu);
             Drawable drawable = menu.getItem(0).getIcon();
             drawable.mutate();
@@ -139,7 +131,7 @@ public class RaceDetailActivity extends AppCompatActivity {
                 return true;
 
             case R.id.race_detail_notification:
-                mNotificationUtil = new NotificationUtil(mRace.getDateType(), this, mRace);
+                mNotificationUtil = new NotificationUtil(mRace.getCalendarDate(), this, mRace);
                 manageNotificationIconColor(item);
                 return true;
             default:

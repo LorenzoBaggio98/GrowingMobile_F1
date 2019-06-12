@@ -48,7 +48,6 @@ public class DriversRankingFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-
                 Driver vdriver = mArrayListPilots.get(position).getDriver();
 
                 Intent vIntent = new Intent(getContext(), DriverDetailActivity.class);

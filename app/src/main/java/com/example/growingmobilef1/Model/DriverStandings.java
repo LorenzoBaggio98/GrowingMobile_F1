@@ -18,18 +18,20 @@ public class DriverStandings {
         Driver tempDriver = new Driver();
         Constructor tempCons = new Constructor();
 
-        if(json.length() != 0){
-            try{
-                tempDrivStand.setPosition(json.getInt("position"));
-                tempDrivStand.setPositionText(json.getString("positionText"));
-                tempDrivStand.setPoints(json.getInt("points"));
-                tempDrivStand.setWins(json.getInt("wins"));
+        if(json != null) {
+            if (json.length() != 0) {
+                try {
+                    tempDrivStand.setPosition(json.getInt("position"));
+                    tempDrivStand.setPositionText(json.getString("positionText"));
+                    tempDrivStand.setPoints(json.getInt("points"));
+                    tempDrivStand.setWins(json.getInt("wins"));
 
-                tempDrivStand.setDriver(tempDriver.fromJson(json.getJSONObject("Driver")));
-                tempDrivStand.setConstructor(tempCons.fromJson(json.optJSONObject("Constructor")));
+                    tempDrivStand.setDriver(tempDriver.fromJson(json.getJSONObject("Driver")));
+                    tempDrivStand.setConstructor(tempCons.fromJson(json.optJSONObject("Constructor")));
 
-            }catch (JSONException e){
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

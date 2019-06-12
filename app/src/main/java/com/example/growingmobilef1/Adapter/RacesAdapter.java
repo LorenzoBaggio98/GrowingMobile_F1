@@ -1,5 +1,6 @@
 package com.example.growingmobilef1.Adapter;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,8 +28,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
-import java.time.Instant;
 
 public class RacesAdapter extends BaseAdapter {
 
@@ -42,7 +41,12 @@ public class RacesAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mRacesArrayList.size();
+
+        if(mRacesArrayList != null) {
+            return mRacesArrayList.size();
+        }else{
+            return 0;
+        }
     }
 
     @Override
@@ -130,7 +134,7 @@ public class RacesAdapter extends BaseAdapter {
         // --------------- MIO
 
         Date raceDate = mRacesArrayList.get(position).getDate();
-        LocalDateTime localDate = raceDate.toInstant().atZone(ZoneId.of("Europe/Rome")).toLocalDateTime();
+        LocalDateTime localDate = raceDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
         long raceMilliSecondDate = raceDate.getTime();
 

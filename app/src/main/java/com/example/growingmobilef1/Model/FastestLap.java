@@ -19,16 +19,18 @@ public class FastestLap implements Serializable {
         AverageSpeed tempAS = new AverageSpeed();
         FastestLap tempFast = new FastestLap();
 
-        if(json.length() != 0){
-            try{
+        if(json != null) {
+            if (json.length() != 0) {
+                try {
 
-                tempFast.setRank(json.getInt("rank"));
-                tempFast.setLap(json.getInt("lap"));
-                tempFast.setTime(tempTime.fromJson(json.getJSONObject("Time")));
-                tempFast.setAverageSpeed(tempAS.fromJson(json.getJSONObject("AverageSpeed")));
+                    tempFast.setRank(json.getInt("rank"));
+                    tempFast.setLap(json.getInt("lap"));
+                    tempFast.setTime(tempTime.fromJson(json.getJSONObject("Time")));
+                    tempFast.setAverageSpeed(tempAS.fromJson(json.getJSONObject("AverageSpeed")));
 
-            }catch (JSONException e){
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

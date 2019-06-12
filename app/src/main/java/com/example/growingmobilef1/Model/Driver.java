@@ -22,22 +22,24 @@ public class Driver implements Serializable {
 
         Driver tempDriver = new Driver();
 
-        if(json.length() != 0){
-            try{
+        if(json != null) {
+            if (json.length() != 0) {
+                try {
 
-                tempDriver.driverId = json.getString("driverId");
-                tempDriver.permanentNumber = json.getInt("permanentNumber");
-                tempDriver.code = json.getString("code");
-                tempDriver.url = new URL(json.getString("url"));
-                tempDriver.givenName = json.getString("givenName");
-                tempDriver.familyName = json.getString("familyName");
-                tempDriver.dateOfBirth = json.getString("dateOfBirth");
-                tempDriver.nationality = json.getString("nationality");
+                    tempDriver.driverId = json.getString("driverId");
+                    tempDriver.permanentNumber = json.getInt("permanentNumber");
+                    tempDriver.code = json.getString("code");
+                    tempDriver.url = new URL(json.getString("url"));
+                    tempDriver.givenName = json.getString("givenName");
+                    tempDriver.familyName = json.getString("familyName");
+                    tempDriver.dateOfBirth = json.getString("dateOfBirth");
+                    tempDriver.nationality = json.getString("nationality");
 
-            }catch (JSONException e){
-                e.printStackTrace();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

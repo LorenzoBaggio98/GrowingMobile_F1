@@ -39,36 +39,38 @@ public class Races implements Serializable, IListableObject {
 
         SimpleDateFormat sDF = new SimpleDateFormat("yyyy-MM-dd");
 
-        if(json.length() != 0){
-            try{
+        if(json != null) {
+            if (json.length() != 0) {
+                try {
 
-                tempRaces.setSeason(json.getInt("season"));
-                tempRaces.setRound(json.getInt("round"));
-                tempRaces.setUrl(new URL(json.getString("url")));
-                tempRaces.setRaceName(json.getString("raceName"));
-                tempRaces.setCircuit(tempC.fromJson(json.getJSONObject("Circuit")));
-                //tempRaces.setmDate(sDF.parse(json.getString("date")));
-                tempRaces.setmDate(json.getString("date"));
-                tempRaces.setTime(json.getString("time"));
+                    tempRaces.setSeason(json.getInt("season"));
+                    tempRaces.setRound(json.getInt("round"));
+                    tempRaces.setUrl(new URL(json.getString("url")));
+                    tempRaces.setRaceName(json.getString("raceName"));
+                    tempRaces.setCircuit(tempC.fromJson(json.getJSONObject("Circuit")));
+                    //tempRaces.setmDate(sDF.parse(json.getString("date")));
+                    tempRaces.setmDate(json.getString("date"));
+                    tempRaces.setTime(json.getString("time"));
 
-                ArrayList<RaceResults> vRaceResultsArrayList = new ArrayList<>();
+                    ArrayList<RaceResults> vRaceResultsArrayList = new ArrayList<>();
 
-                JSONArray temp = json.optJSONArray("Results");
+                    JSONArray temp = json.optJSONArray("Results");
 
-                if(temp != null) {
-                    for (int i = 0; i < temp.length(); i++) {
-                        vRaceResultsArrayList.add(RaceResults.fromJson(temp.getJSONObject(i)));
+                    if (temp != null) {
+                        for (int i = 0; i < temp.length(); i++) {
+                            vRaceResultsArrayList.add(RaceResults.fromJson(temp.getJSONObject(i)));
+                        }
+                        tempRaces.setResults(vRaceResultsArrayList);
                     }
-                    tempRaces.setResults(vRaceResultsArrayList);
-                }
 
-            }catch (JSONException e){
-                e.printStackTrace();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } /*catch (ParseException e) {
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } /*catch (ParseException e) {
                 e.printStackTrace();
             }*/
+            }
         }
 
         return tempRaces;
@@ -175,6 +177,8 @@ public class Races implements Serializable, IListableObject {
     public Date getDate(){
 
         SimpleDateFormat tempFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        tempFormat.setTimeZone(TimeZone.getDefault());
+
         Date tempDate = new Date();
 
         try {

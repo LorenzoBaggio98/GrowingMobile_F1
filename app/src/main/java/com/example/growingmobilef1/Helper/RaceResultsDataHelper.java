@@ -15,40 +15,41 @@ public class RaceResultsDataHelper {
 
         ArrayList<RaceResults> vRaceResultsArray = new ArrayList<>();
 
-        if (aJsonToParse.length() != 0){
+        if(aJsonToParse != null) {
+            if (aJsonToParse.length() != 0) {
 
-            try {
-                //TODO uguale, fare uno per tutti
-                JSONObject vMRData = aJsonToParse.getJSONObject("MRData");
-                JSONObject vRaceTable = vMRData.getJSONObject("RaceTable");
+                try {
+                    //TODO uguale, fare uno per tutti
+                    JSONObject vMRData = aJsonToParse.getJSONObject("MRData");
+                    JSONObject vRaceTable = vMRData.getJSONObject("RaceTable");
 
-                JSONArray vRaces = vRaceTable.getJSONArray("Races");
+                    JSONArray vRaces = vRaceTable.getJSONArray("Races");
 
-                for(int i = 0; i < vRaces.length(); i++){
+                    for (int i = 0; i < vRaces.length(); i++) {
 
-                    // Single Race
-                    JSONObject vRace = vRaces.getJSONObject(i);
-                    JSONArray vResults = vRace.getJSONArray("Results");
+                        // Single Race
+                        JSONObject vRace = vRaces.getJSONObject(i);
+                        JSONArray vResults = vRace.getJSONArray("Results");
 
-                    // Iterate the Results
-                    for(int j = 0; j < vResults.length(); j++) {
+                        // Iterate the Results
+                        for (int j = 0; j < vResults.length(); j++) {
 
-                        // Get the Json Object
-                        JSONObject vSingleResult = vResults.getJSONObject(j);
+                            // Get the Json Object
+                            JSONObject vSingleResult = vResults.getJSONObject(j);
 
-                        // Parsing of the json to the Object
-                        RaceResults vRaceResults = RaceResults.fromJson(vSingleResult);
+                            // Parsing of the json to the Object
+                            RaceResults vRaceResults = RaceResults.fromJson(vSingleResult);
 
-                        vRaceResultsArray.add(vRaceResults);
+                            vRaceResultsArray.add(vRaceResults);
+                        }
                     }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-
-
-            }catch (JSONException e){
-                e.printStackTrace();
             }
         }
-
 
         return vRaceResultsArray;
     }

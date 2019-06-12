@@ -71,9 +71,9 @@ public class DriversAdapter extends BaseAdapter {
         vHolder.mPointsLabel.setText(stand.getPoints() + " Pts");
 
         String flag_name = "flag_" + mArrayListDrivers.get(position).getDriver().getNationality().toLowerCase();
-        int flag_drowable = parent.getResources().getIdentifier(flag_name, "drawable", parent.getContext().getPackageName());
+        int flag_drawable = parent.getResources().getIdentifier(flag_name, "drawable", parent.getContext().getPackageName());
 
-        vHolder.mNationalityImage.setImageResource(flag_drowable);
+        vHolder.mNationalityImage.setImageResource(flag_drawable);
 
         return vView;
     }

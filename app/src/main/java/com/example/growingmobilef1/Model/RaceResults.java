@@ -34,26 +34,28 @@ public class RaceResults implements Serializable {
         Time tempTime = new Time();
         FastestLap tempFL = new FastestLap();
 
-        if(json.length() != 0){
-            try{
+        if(json != null) {
+            if (json.length() != 0) {
+                try {
 
-                temp.setNumber(json.getInt("number"));
-                temp.setPosition(json.getInt("position"));
-                temp.setPositionText(json.getString("positionText"));
-                temp.setPoints(json.getInt("points"));
+                    temp.setNumber(json.getInt("number"));
+                    temp.setPosition(json.getInt("position"));
+                    temp.setPositionText(json.getString("positionText"));
+                    temp.setPoints(json.getInt("points"));
 
-                temp.setDriver(tempDriver.fromJson(json.getJSONObject("Driver")));
-                temp.setConstructor(tempCons.fromJson(json.getJSONObject("Constructor")));
+                    temp.setDriver(tempDriver.fromJson(json.getJSONObject("Driver")));
+                    temp.setConstructor(tempCons.fromJson(json.getJSONObject("Constructor")));
 
-                temp.setGrid(json.getInt("grid"));
-                temp.setLaps(json.getInt("laps"));
-                temp.setStatus(json.getString("status"));
+                    temp.setGrid(json.getInt("grid"));
+                    temp.setLaps(json.getInt("laps"));
+                    temp.setStatus(json.getString("status"));
 
-                temp.setTime(tempTime.fromJson(json.optJSONObject("Time")));
-                temp.setFastestLap(tempFL.fromJson(json.getJSONObject("FastestLap")));
+                    temp.setTime(tempTime.fromJson(json.optJSONObject("Time")));
+                    temp.setFastestLap(tempFL.fromJson(json.getJSONObject("FastestLap")));
 
-            }catch (JSONException e){
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

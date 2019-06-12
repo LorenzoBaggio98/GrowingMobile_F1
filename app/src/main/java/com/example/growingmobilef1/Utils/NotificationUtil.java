@@ -13,26 +13,27 @@ import com.example.growingmobilef1.Model.Races;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.Calendar;
 import java.util.Date;
 
 public class NotificationUtil {
 
     public static final String RACE_ALERT = "Tag to send the race item to the AlertReceiver";
 
-    private Date date;
-    private Context context;
-    private Races race;
+    private Calendar mDate;
+    private Context mContext;
+    private Races mRace;
 
-    public NotificationUtil(Date aDate, Context context, Races race){
-        this.date = aDate;
-        this.context = context;
-        this.race = race;
+    public NotificationUtil(Calendar aDate, Context context, Races race){
+        this.mDate = aDate;
+        this.mContext = context;
+        this.mRace = race;
     }
 
     public void sendNotification(){
 
-        AlarmManager vAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent vNotificationIntent = new Intent(context, AlertReceiver.class);
+        AlarmManager vAlarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+        Intent vNotificationIntent = new Intent(mContext, AlertReceiver.class);
 
         // Trasform the CalendarRaceItem object in a byte array to send it to the AlertReceiver
         Bundle vBundle = new Bundle();
@@ -40,7 +41,7 @@ public class NotificationUtil {
         ObjectOutputStream vOutputStream = null;
         try {
             vOutputStream = new ObjectOutputStream(vBiteArrayOutStream);
-            vOutputStream.writeObject(race);
+            vOutputStream.writeObject(mRace);
             vOutputStream.flush();
             byte[] data = vBiteArrayOutStream.toByteArray();
             vNotificationIntent.putExtra(RACE_ALERT, data);
@@ -55,17 +56,24 @@ public class NotificationUtil {
         }
         vNotificationIntent.putExtras(vBundle);
 
-        PendingIntent vBroadcast = PendingIntent.getBroadcast(context, 100, vNotificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent vBroadcast = PendingIntent.getBroadcast(mContext,
+                100,
+                vNotificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
-        if (race.getNotificationScheduled()){
-            date.setMinutes(date.getMinutes() - 10);
-
-            vAlarmManager.setExact(AlarmManager.RTC_WAKEUP, date.getTime(), vBroadcast);
-            Toast.makeText(context, "Notification scheduled for " + date, Toast.LENGTH_LONG).show();
+        if (!mRace.getNotificationScheduled()){
+            Date vDate = new Date();
+            vDate.setTime(new Date().getTime());
+            vDate.setMinutes(vDate.getMinutes() + 1);
+           // mDate.setMinutes(mDate.getMinutes() - 10);
+            vAlarmManager.setExact(AlarmManager.RTC_WAKEUP, vDate.getTime(), vBroadcast);
+            mRace.setNotificationScheduled(true);
+            Toast.makeText(mContext, "Notification scheduled for " + mDate, Toast.LENGTH_LONG).show();
 
         } else {
             vAlarmManager.cancel(vBroadcast);
-            Toast.makeText(context, "Notification cancelled", Toast.LENGTH_LONG).show();
+            mRace.setNotificationScheduled(false);
+            Toast.makeText(mContext, "Notification cancelled", Toast.LENGTH_LONG).show();
         }
     }
 

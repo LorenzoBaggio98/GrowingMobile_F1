@@ -1,22 +1,28 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.ImageViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.ImageView;
-
-
 import com.example.growingmobilef1.Adapter.ViewPagerAdapter;
 import com.example.growingmobilef1.MainActivity;
+import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
+import com.example.growingmobilef1.Utils.LayoutAnimations;
+import com.example.growingmobilef1.Utils.NotificationUtil;
 
 /**
  * Activity of the Race Detail -
@@ -24,13 +30,19 @@ import com.example.growingmobilef1.R;
  */
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
+import java.util.Date;
 
 public class RaceDetailActivity extends AppCompatActivity {
 
+    public static final String RACE_ITEM = "Tag to pass the calendar race item to the fragment";
     private static final String ERROR_TAG = "ERROR_TAG";
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private ImageView mImageView;
+    private Toolbar mToolbar;
+    private Races mRace;
+    private NotificationUtil mNotificationUtil;
 
     ViewPagerAdapter mPageAdapter;
 
@@ -38,39 +50,43 @@ public class RaceDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_race_detail);
-
-        Races raceItem = new Races();
+        mRace = new Races();
 
         mViewPager = findViewById(R.id.viewPager);
         mTabLayout = findViewById(R.id.tabLayout);
         mImageView = findViewById(R.id.circuit_img);
+        mToolbar = findViewById(R.id.toolbar);
 
         Intent intent = getIntent();
         Bundle startBundle = intent.getExtras();
         if (startBundle != null) {
-            raceItem = (Races) startBundle.getSerializable(RaceDetailFragment.RACE_ITEM);
-
+            mRace = (Races) startBundle.getSerializable(RaceDetailActivity.RACE_ITEM);
         }
 
+        ViewGroup.LayoutParams layoutParams = mToolbar.getLayoutParams();
+        layoutParams.height = (int)getApplicationContext().getResources().getDimension(R.dimen.TabLayout_height);
+        mToolbar.setLayoutParams(layoutParams);
+
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+
         // Set the tabBar with ViewPageAdapter and TabLayout
         mPageAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        mPageAdapter.addFragment("FP1", RaceResultsFragment.newInstance(raceItem));
-        mPageAdapter.addFragment("FP2", RaceResultsFragment.newInstance(raceItem));
-        mPageAdapter.addFragment("FP3", RaceResultsFragment.newInstance(raceItem));
-        mPageAdapter.addFragment("Qualifying", QualifyingResultsFragment.newInstance(raceItem));
-        mPageAdapter.addFragment("Race", RaceResultsFragment.newInstance(raceItem));
+        mPageAdapter.addFragment("Race", RaceResultsFragment.newInstance(mRace));
+        mPageAdapter.addFragment("Qualifying", QualifyingResultsFragment.newInstance(mRace));
+        mPageAdapter.addFragment("FP1", RaceResultsFragment.newInstance(mRace));
+        mPageAdapter.addFragment("FP2", RaceResultsFragment.newInstance(mRace));
+        mPageAdapter.addFragment("FP3", RaceResultsFragment.newInstance(mRace));
 
         setPagerAdapter();
 
         // Set the Action Bar back button and the title
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(raceItem.getRaceName());
+        getSupportActionBar().setTitle(mRace.getRaceName());
 
         // Set the image circuit
         try {
-            String vCircuitId = raceItem.getCircuit().getCircuitId();
+            String vCircuitId = mRace.getCircuit().getCircuitId();
 
             // get input stream
             InputStream ims = getApplicationContext().getAssets().open("circuits/" + vCircuitId + ".png");
@@ -84,6 +100,21 @@ public class RaceDetailActivity extends AppCompatActivity {
         } catch (IOException ex) {
             Log.e(ERROR_TAG, "Error on circuit image reading");
         }
+    }
+
+    // Load the notification icon only if the race hasn't happened yet
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Calendar vDate =  Calendar.getInstance();
+        vDate.setTime(Calendar.getInstance().getTime());
+
+        if (mRace.getCalendarDate().after(vDate)) {
+            getMenuInflater().inflate(R.menu.race_detail_notification, menu);
+            Drawable drawable = menu.getItem(0).getIcon();
+            drawable.mutate();
+            drawable.setColorFilter(getResources().getColor(R.color.colorSecondaryLight), PorterDuff.Mode.SRC_ATOP);
+        }
+        return super.onCreateOptionsMenu(menu);
     }
 
     /**
@@ -102,14 +133,27 @@ public class RaceDetailActivity extends AppCompatActivity {
                 finish();
                 return true;
 
+            case R.id.race_detail_notification:
+                mNotificationUtil = new NotificationUtil(mRace.getCalendarDate(), this, mRace);
+                manageNotificationIconColor(item);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    // TODO: Manage the notificaiton icon colors - need to save the scheduled notifications somewhere
+    private void manageNotificationIconColor(MenuItem item){
+        Drawable drawable = item.getIcon();
+        drawable.mutate();
+        //if ()
+            drawable.setColorFilter(getResources().getColor(R.color.colorPrimaryLight), PorterDuff.Mode.SRC_ATOP);
+       // else
+       //     drawable.setColorFilter(getResources().getColor(R.color.colorSecondaryLight), PorterDuff.Mode.SRC_ATOP);
     }
 
     private void setPagerAdapter(){
         mViewPager.setAdapter(mPageAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
     }
-
 }

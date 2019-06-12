@@ -12,7 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.example.growingmobilef1.Fragment_Activity.RaceDetailActivity;
-import com.example.growingmobilef1.Fragment_Activity.RaceDetailFragment;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.Utils.NotificationUtil;
 
@@ -57,12 +56,12 @@ public class AlertReceiver extends BroadcastReceiver {
 
             // Pass the Race detail object to the activity opened on notification click
             Bundle vRaceFragmentBundle = new Bundle();
-            vRaceFragmentBundle.putSerializable(RaceDetailFragment.RACE_ITEM, mRaceItem);
+            vRaceFragmentBundle.putSerializable(RaceDetailActivity.RACE_ITEM, mRaceItem);
             vNotificationIntent.putExtras(vRaceFragmentBundle);
         }
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(RaceDetailActivity.class);
+        stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(vNotificationIntent);
 
         PendingIntent vPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);

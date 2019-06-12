@@ -17,26 +17,28 @@ public class CalendarRaceDataHelper {
 
         ArrayList<Races> vCalendarRaceItemArraylist = new ArrayList<>();
 
-        if(aJsonToParse.length() != 0){
+        if(aJsonToParse != null){
+            if(aJsonToParse.length() != 0){
 
-            try {
-                JSONObject vMRDataObject = aJsonToParse.getJSONObject("MRData");
-                JSONObject vRaceTableObject = vMRDataObject.getJSONObject("RaceTable");
+                try {
+                    JSONObject vMRDataObject = aJsonToParse.getJSONObject("MRData");
+                    JSONObject vRaceTableObject = vMRDataObject.getJSONObject("RaceTable");
 
-                // This array contains all the races
-                JSONArray vRacesArray = vRaceTableObject.getJSONArray("Races");
+                    // This array contains all the races
+                    JSONArray vRacesArray = vRaceTableObject.getJSONArray("Races");
 
-                // Create a JSONObject for each race
-                for (int i = 0; i < vRacesArray.length(); i++) {
+                    // Create a JSONObject for each race
+                    for (int i = 0; i < vRacesArray.length(); i++) {
 
-                    JSONObject vRace  = vRacesArray.getJSONObject(i);
-                    Races vTempRace = Races.fromJson(vRace);
+                        JSONObject vRace  = vRacesArray.getJSONObject(i);
+                        Races vTempRace = Races.fromJson(vRace);
 
-                    vCalendarRaceItemArraylist.add(vTempRace);
+                        vCalendarRaceItemArraylist.add(vTempRace);
+                    }
+
+                } catch (JSONException e){
+                    e.printStackTrace();
                 }
-
-            } catch (JSONException e){
-                e.printStackTrace();
             }
         }
 

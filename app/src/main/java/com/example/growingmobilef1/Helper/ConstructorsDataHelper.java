@@ -14,28 +14,33 @@ public class ConstructorsDataHelper {
     public ArrayList<ConstructorStandings> getArraylist(JSONObject aJsonToParse){
         ArrayList<ConstructorStandings> vCalendarRaceItemArraylist = new ArrayList<>();
 
-        try {
-            JSONObject vMRDataObject = aJsonToParse.getJSONObject("MRData");
-            JSONObject vRaceTableObject = vMRDataObject.getJSONObject("StandingsTable");
-            // This array contains all the races
 
-            JSONArray vStandingsLists = vRaceTableObject.getJSONArray("StandingsLists");
+        if(aJsonToParse != null) {
+            if (aJsonToParse.length() != 0) {
+                try {
+                    JSONObject vMRDataObject = aJsonToParse.getJSONObject("MRData");
+                    JSONObject vRaceTableObject = vMRDataObject.getJSONObject("StandingsTable");
+                    // This array contains all the races
 
-            for(int i = 0; i < vStandingsLists.length(); i++){
-                JSONObject vStanding = vStandingsLists.getJSONObject(i);
+                    JSONArray vStandingsLists = vRaceTableObject.getJSONArray("StandingsLists");
 
-                JSONArray vConstructorStandings = vStanding.getJSONArray("ConstructorStandings");
+                    for (int i = 0; i < vStandingsLists.length(); i++) {
+                        JSONObject vStanding = vStandingsLists.getJSONObject(i);
 
-                for(int j = 0; j < vConstructorStandings.length(); j++) {
+                        JSONArray vConstructorStandings = vStanding.getJSONArray("ConstructorStandings");
 
-                    JSONObject vConstStand = vConstructorStandings.getJSONObject(j);
-                    ConstructorStandings vTempConst = ConstructorStandings.fromJson(vConstStand);
-                    vCalendarRaceItemArraylist.add(vTempConst);
+                        for (int j = 0; j < vConstructorStandings.length(); j++) {
+
+                            JSONObject vConstStand = vConstructorStandings.getJSONObject(j);
+                            ConstructorStandings vTempConst = ConstructorStandings.fromJson(vConstStand);
+                            vCalendarRaceItemArraylist.add(vTempConst);
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
-
-        } catch (JSONException e){
-            e.printStackTrace();
         }
 
         return vCalendarRaceItemArraylist;

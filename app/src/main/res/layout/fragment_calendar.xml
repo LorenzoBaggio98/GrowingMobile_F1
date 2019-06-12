@@ -14,19 +14,25 @@
         android:layout_centerInParent="true"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/frag_calendar_listview"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/frag_calendar_listview" />
+        app:layout_constraintBottom_toBottomOf="@+id/frag_calendar_refresh_layout"
+        app:layout_constraintEnd_toEndOf="@+id/frag_calendar_refresh_layout"
+        app:layout_constraintStart_toStartOf="@+id/frag_calendar_refresh_layout"
+        app:layout_constraintTop_toTopOf="@+id/frag_calendar_refresh_layout" />
 
-    <ListView
-        android:id="@+id/frag_calendar_listview"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:divider="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/frag_calendar_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/frag_calendar_listview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:divider="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 </android.support.constraint.ConstraintLayout>

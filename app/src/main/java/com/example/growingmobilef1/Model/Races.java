@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 // Ua
 public class Races implements Serializable, IListableObject {
@@ -23,7 +24,8 @@ public class Races implements Serializable, IListableObject {
     private URL url;
     private String raceName;
     private Circuit Circuit;
-    private Date mDate;
+
+    private String mDate;
     private String time;
 
     private Boolean isNotificationScheduled = false;
@@ -34,37 +36,39 @@ public class Races implements Serializable, IListableObject {
         Races tempRaces = new Races();
         Circuit tempC = new Circuit();
 
-
         SimpleDateFormat sDF = new SimpleDateFormat("yyyy-MM-dd");
 
-        if(json.length() != 0){
-            try{
+        if(json != null) {
+            if (json.length() != 0) {
+                try {
 
-                tempRaces.setSeason(json.getInt("season"));
-                tempRaces.setRound(json.getInt("round"));
-                tempRaces.setUrl(new URL(json.getString("url")));
-                tempRaces.setRaceName(json.getString("raceName"));
-                tempRaces.setCircuit(tempC.fromJson(json.getJSONObject("Circuit")));
-                tempRaces.setmDate(sDF.parse(json.getString("date")));
-                tempRaces.setTime(json.getString("time"));
+                    tempRaces.setSeason(json.getInt("season"));
+                    tempRaces.setRound(json.getInt("round"));
+                    tempRaces.setUrl(new URL(json.getString("url")));
+                    tempRaces.setRaceName(json.getString("raceName"));
+                    tempRaces.setCircuit(tempC.fromJson(json.getJSONObject("Circuit")));
+                    //tempRaces.setmDate(sDF.parse(json.getString("date")));
+                    tempRaces.setmDate(json.getString("date"));
+                    tempRaces.setTime(json.getString("time"));
 
-                ArrayList<RaceResults> vRaceResultsArrayList = new ArrayList<>();
+                    ArrayList<RaceResults> vRaceResultsArrayList = new ArrayList<>();
 
-                JSONArray temp = json.optJSONArray("Results");
+                    JSONArray temp = json.optJSONArray("Results");
 
-                if(temp != null) {
-                    for (int i = 0; i < temp.length(); i++) {
-                        vRaceResultsArrayList.add(RaceResults.fromJson(temp.getJSONObject(i)));
+                    if (temp != null) {
+                        for (int i = 0; i < temp.length(); i++) {
+                            vRaceResultsArrayList.add(RaceResults.fromJson(temp.getJSONObject(i)));
+                        }
+                        tempRaces.setResults(vRaceResultsArrayList);
                     }
-                    tempRaces.setResults(vRaceResultsArrayList);
-                }
 
-            }catch (JSONException e){
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } /*catch (ParseException e) {
                 e.printStackTrace();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (ParseException e) {
-                e.printStackTrace();
+            }*/
             }
         }
 
@@ -103,19 +107,19 @@ public class Races implements Serializable, IListableObject {
         this.raceName = raceName;
     }
 
-    public com.example.growingmobilef1.Model.Circuit getCircuit() {
+    public Circuit getCircuit() {
         return Circuit;
     }
 
-    public void setCircuit(com.example.growingmobilef1.Model.Circuit circuit) {
+    public void setCircuit(Circuit circuit) {
         Circuit = circuit;
     }
 
-    public Date getmDate() {
+    public String getmDate() {
         return mDate;
     }
 
-    public void setmDate(Date date) {
+    public void setmDate(String date) {
         this.mDate = date;
     }
 
@@ -169,33 +173,48 @@ public class Races implements Serializable, IListableObject {
         isNotificationScheduled = notificationScheduled;
     }
 
+    // DateTime dell'elemento nel tipo Date
+    public Date getDate(){
+
+        SimpleDateFormat tempFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        tempFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+        Date tempDate = new Date();
+
+        try {
+            tempDate = tempFormat.parse(getmDate() + " " + getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return tempDate;
+    }
+
+
+    // DateTime dell'elemento nel tipo Calendar
     public Calendar getCalendarDate(){
-        Calendar vCalendar = Calendar.getInstance();
-        vCalendar.setTime(getmDate());
-        return vCalendar;
-    }
 
-    public Calendar getCalendarTime() {
-        Calendar vCalendar = Calendar.getInstance();
-        SimpleDateFormat vDateFormat = new SimpleDateFormat("HH:mm:ss'Z'");
+        // Istanza di Calendar
+        Calendar calendar = Calendar.getInstance();
+
+        // DateFormat con la TimeZone
+        SimpleDateFormat tempFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        tempFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+        // Istanza di Date
+        Date tempDate = new Date();
+
+        // Parsing della data in Date
         try {
-            vCalendar.setTime(vDateFormat.parse(getTime()));
-        } catch (ParseException e){
+            tempDate = tempFormat.parse(getmDate() + " " + getTime());
+        } catch (ParseException e) {
             e.printStackTrace();
         }
-        return vCalendar;
+
+        // Da Date a Calendar
+        calendar.setTime(tempDate);
+
+        return calendar;
     }
 
-    public Date getmParsedDate() {
-        Date vDate = new Date();
-        String vDay = getmDate().toString();
-        String vHour = getTime();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        try {
-            vDate = simpleDateFormat.parse(vDay + 'T' + vHour);
-        } catch (ParseException e){
-            e.printStackTrace();
-        }
-        return vDate;
-    }
 }

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="4dp"
-        android:background="@drawable/last_race_rectangle"
+        android:background="@drawable/rectangle_shadow"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,7 +34,7 @@
                 android:paddingLeft="8dp"
                 android:paddingTop="8dp"
                 android:text="Race name"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorSecondaryLight"
                 android:textSize="16sp" />
 
             <TextView
@@ -46,7 +46,7 @@
                 android:paddingLeft="8dp"
                 android:paddingBottom="8dp"
                 android:text="Podium"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorSecondaryLight"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -58,7 +58,7 @@
             android:fontFamily="@font/formula_one_regular"
             android:gravity="center_horizontal|center_vertical"
             android:text="Date"
-            android:textColor="@android:color/white"
+            android:textColor="@color/colorSecondaryLight"
             android:textSize="16sp" />
 
         <TextView
@@ -70,7 +70,7 @@
             android:gravity="center_horizontal|center_vertical"
             android:paddingRight="8dp"
             android:text="Hour"
-            android:textColor="@android:color/white"
+            android:textColor="@color/colorSecondaryLight"
             android:textSize="16sp" />
 
     </LinearLayout>

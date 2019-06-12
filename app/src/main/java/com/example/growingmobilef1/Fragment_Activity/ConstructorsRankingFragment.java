@@ -71,8 +71,6 @@ public class ConstructorsRankingFragment extends Fragment {
         mAdapter = new ConstructorsAdapter(new ArrayList<ConstructorStandings>());
         mRecyclerView.setAdapter(mAdapter);
 
-
-
         // create swipe refresh listener...
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -81,9 +79,6 @@ public class ConstructorsRankingFragment extends Fragment {
                 refreshItems();
             }
         });
-
-
-
 
         return vView;
     }
@@ -102,7 +97,6 @@ public class ConstructorsRankingFragment extends Fragment {
 
             // get json from api
             vJsonToParse = vApiRequestHelper.getContentFromUrl("https://ergast.com/api/f1/current/constructorStandings.json");
-
 
             // parse json to list
             mConstructorsItemArraylist =  vConstructorsDataHelper.getArraylist(vJsonToParse);
@@ -130,7 +124,6 @@ public class ConstructorsRankingFragment extends Fragment {
                 }
 
             }
-
         }
     }
 
@@ -141,7 +134,6 @@ public class ConstructorsRankingFragment extends Fragment {
         vLongOperation.execute();
 
     }
-
 
     private void runLayoutAnimation(final RecyclerView recyclerView) {
 
@@ -155,6 +147,4 @@ public class ConstructorsRankingFragment extends Fragment {
         recyclerView.scheduleLayoutAnimation();
 
     }
-
-
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout3"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
 
     <LinearLayout
@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:background="@drawable/rectangle_shadow"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -75,6 +75,17 @@
             android:text="Hour"
             android:textColor="@color/colorBlack"
             android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/list_item_calendar_notification_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:tint="@color/colorSecondaryLight"
+            app:srcCompat="@drawable/ic_notifications_black_24dp" />
 
     </LinearLayout>
 

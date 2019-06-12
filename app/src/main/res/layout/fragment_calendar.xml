@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/frag_calendar_listview" />
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/frag_calendar_listview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

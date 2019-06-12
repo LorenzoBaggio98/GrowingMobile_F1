@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout7"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/rectangle_bottom_border">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/rectangle_shadow"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,39 +20,46 @@
         <TextView
             android:id="@+id/txt_race_result_position"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="4dp"
             android:layout_weight="1"
+            android:gravity="center_vertical"
             android:text="--"
             android:textColor="@color/colorBlack"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/txt_race_result_driver"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
             android:layout_weight="4"
+            android:fontFamily="@font/formula_one_regular"
             android:text="--"
             android:textColor="@color/colorBlack"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/txt_race_result_time"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="3"
+            android:gravity="center"
             android:text="--"
             android:textColor="@color/colorBlack"
-            android:textSize="16sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/txt_race_result_time_sep"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="3"
+            android:gravity="center"
             android:text="--"
             android:textColor="@color/colorBlack"
-            android:textSize="16sp" />
+            android:textSize="12sp" />
 
     </LinearLayout>
 

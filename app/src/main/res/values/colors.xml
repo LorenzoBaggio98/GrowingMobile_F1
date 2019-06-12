@@ -9,5 +9,5 @@
     <color name="colorSecondaryLight">#868580</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorBlack">#000000</color>
-
+    <color name="colorBackground">#FAF9F4</color>
 </resources>

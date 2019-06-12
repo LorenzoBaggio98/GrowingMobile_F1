@@ -15,6 +15,15 @@ import com.example.growingmobilef1.Utils.NotificationUtil;
 import java.util.Calendar;
 import java.util.Date;
 
+/*
+
+
+
+    DEPRECATED
+
+
+
+*/
 /**
  * Fragment Container - DEPRECATO - USARE SOLO PER VEDERE COME HA FATTO CORVAGLIA IL SEND NOTIFICATION
  * Contains the fragment with the Image and the fragment with the Result List

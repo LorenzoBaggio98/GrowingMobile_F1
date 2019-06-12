@@ -11,6 +11,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -172,6 +173,43 @@ public class Races implements Serializable, IListableObject {
 
     public void setNotificationScheduled(Boolean notificationScheduled) {
         isNotificationScheduled = notificationScheduled;
+    }
+
+    public Date getDateType(){
+
+
+        SimpleDateFormat tempFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        tempFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+        Date tempDate = new Date();
+
+        try {
+            tempDate = tempFormat.parse(getmDate() + " " + getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return tempDate;
+    }
+
+    public Calendar getCalendarDate(){
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(getDateType());
+        return calendar;
+    }
+
+    public Calendar getCalendarTime() {
+        Calendar vCalendar = Calendar.getInstance();
+        SimpleDateFormat vDateFormat = new SimpleDateFormat("HH:mm:ss'Z'");
+        vDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+        try {
+            vCalendar.setTime(vDateFormat.parse(getTime()));
+        } catch (ParseException e){
+            e.printStackTrace();
+        }
+        return vCalendar;
     }
 
     public Date getDate(){

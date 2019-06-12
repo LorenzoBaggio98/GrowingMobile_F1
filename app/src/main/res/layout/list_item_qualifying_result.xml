@@ -1,35 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout8"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:background="@drawable/rectangle_bottom_border">
 
-    <TextView
-        android:id="@+id/txt_qual_result_position"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
 
-    <TextView
-        android:id="@+id/txt_qual_result_driver"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/txt_qual_result_q1_time"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/txt_qual_result_position"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="--"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            tools:layout_conversion_absoluteHeight="16dp"
+            tools:layout_conversion_absoluteWidth="37dp" />
 
-    <TextView
-        android:id="@+id/txt_qual_result_q2_time"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/txt_qual_result_driver"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:layout_weight="4"
+            android:gravity="center_vertical"
+            android:text="--"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:layout_conversion_absoluteHeight="16dp"
+            tools:layout_conversion_absoluteWidth="149dp" />
 
-    <TextView
-        android:id="@+id/txt_qual_result_q3_time"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/txt_qual_result_q1_time"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@color/colorPrimaryDarkSemitransparent"
+            android:gravity="center"
+            android:text="--"
+            android:textColor="@color/colorBlack"
+            android:textSize="12sp"
+            tools:layout_conversion_absoluteHeight="16dp"
+            tools:layout_conversion_absoluteWidth="75dp" />
+
+        <TextView
+            android:id="@+id/txt_qual_result_q2_time"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="--"
+            android:textColor="@color/colorBlack"
+            android:textSize="12sp"
+            tools:layout_conversion_absoluteHeight="16dp"
+            tools:layout_conversion_absoluteWidth="75dp" />
+
+        <TextView
+            android:id="@+id/txt_qual_result_q3_time"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@color/colorPrimaryDarkSemitransparent"
+            android:gravity="center"
+            android:text="--"
+            android:textColor="@color/colorBlack"
+            android:textSize="12sp"
+            tools:layout_conversion_absoluteHeight="16dp"
+            tools:layout_conversion_absoluteWidth="75dp" />
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

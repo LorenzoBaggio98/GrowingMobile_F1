@@ -12,14 +12,16 @@ public class AverageSpeed {
 
         AverageSpeed tempAS = new AverageSpeed();
 
-        if(json.length() != 0){
-            try{
+        if(json == null) {
+            if (json.length() != 0) {
+                try {
 
-                tempAS.setUnits(json.getString("units"));
-                tempAS.setSpeed(json.getDouble("speed"));
+                    tempAS.setUnits(json.getString("units"));
+                    tempAS.setSpeed(json.getDouble("speed"));
 
-            }catch (JSONException e){
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

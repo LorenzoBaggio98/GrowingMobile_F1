@@ -16,34 +16,38 @@ public class DriversRankingHelper {
 
         ArrayList<DriverStandings> arrayListPilotsPoints = new ArrayList<>();
 
-        try {
-            JSONObject vMdataObject = aJsonsToParse.getJSONObject("MRData");
-            JSONObject vStandingTable=vMdataObject.getJSONObject("StandingsTable");
+        if(aJsonsToParse != null) {
+            if (aJsonsToParse.length() != 0) {
+                try {
+                    JSONObject vMdataObject = aJsonsToParse.getJSONObject("MRData");
+                    JSONObject vStandingTable = vMdataObject.getJSONObject("StandingsTable");
 
-            JSONArray vStandingsLists = vStandingTable.getJSONArray("StandingsLists");
+                    JSONArray vStandingsLists = vStandingTable.getJSONArray("StandingsLists");
 
-            for(int j = 0; j < vStandingsLists.length(); j++){
-                JSONObject vResultRaces =  vStandingsLists.getJSONObject(j);
+                    for (int j = 0; j < vStandingsLists.length(); j++) {
+                        JSONObject vResultRaces = vStandingsLists.getJSONObject(j);
 
-                JSONArray vDriverStandings = vResultRaces.getJSONArray("DriverStandings");
+                        JSONArray vDriverStandings = vResultRaces.getJSONArray("DriverStandings");
 
-                for (int i = 0; i < vDriverStandings.length(); i++) {
+                        for (int i = 0; i < vDriverStandings.length(); i++) {
 
-                    // Get DriverStanding object
-                    JSONObject vDriverStanding = vDriverStandings.getJSONObject(i);
+                            // Get DriverStanding object
+                            JSONObject vDriverStanding = vDriverStandings.getJSONObject(i);
 
-                    JSONArray vJSONArrayConstructor = vDriverStanding.getJSONArray("Constructors");
-                    JSONObject vJSONObjectConstructor = vJSONArrayConstructor.getJSONObject(0);
-                    DriverStandings vTempDriverS = DriverStandings.fromJson(vDriverStanding);
-                    Constructor vConstructor = Constructor.fromJson(vJSONObjectConstructor);
+                            JSONArray vJSONArrayConstructor = vDriverStanding.getJSONArray("Constructors");
+                            JSONObject vJSONObjectConstructor = vJSONArrayConstructor.getJSONObject(0);
+                            DriverStandings vTempDriverS = DriverStandings.fromJson(vDriverStanding);
+                            Constructor vConstructor = Constructor.fromJson(vJSONObjectConstructor);
 
-                    vTempDriverS.setConstructor(vConstructor);
-                    arrayListPilotsPoints.add(vTempDriverS);
+                            vTempDriverS.setConstructor(vConstructor);
+                            arrayListPilotsPoints.add(vTempDriverS);
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
 
         return arrayListPilotsPoints;

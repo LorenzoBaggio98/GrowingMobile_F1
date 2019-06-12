@@ -139,9 +139,11 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
 
     @Override
     public void onNotificationScheduled(int aPosition) {
-        mNotificationUtil = new NotificationUtil(mCalendarRaceItemArraylist.get(aPosition).getmDate(),
+        mNotificationUtil = new NotificationUtil(
+                mCalendarRaceItemArraylist.get(aPosition).getCalendarDate(),
                 getContext(),
-                mCalendarRaceItemArraylist.get(aPosition));
+                mCalendarRaceItemArraylist.get(aPosition)
+        );
         mNotificationUtil.sendNotification();
     }
 
@@ -159,7 +161,6 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
             mCalendarRaceDataHelper = new CalendarRaceDataHelper();
             mRaceResultsMap = new HashMap<>();
 
-            RaceResultsDataHelper vRaceResultsDataHelper = new RaceResultsDataHelper();
             mJsonCalendarToParse = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current.json");
             if (mJsonCalendarToParse != null) {
                 mCalendarRaceItemArraylist =  mCalendarRaceDataHelper.getArraylist(mJsonCalendarToParse);
@@ -182,17 +183,21 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         protected String doInBackground(String... params) {
 
             ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
-            RaceResultsDataHelper vRaceResultsDataHelper = new RaceResultsDataHelper();
 
             mRaceResultsMap = new HashMap<>();
 
             JSONObject vResultsObject = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current/results.json?limit=10000");
-            ArrayList<Races> vRacesArrayList = vCalendarRaceDataHelper.getArraylist(vResultsObject);
 
-            for (Races vRaceResult: vRacesArrayList) {
-                for (Races vRace: mCalendarRaceItemArraylist) {
-                    if (vRaceResult.getRaceName().equals(vRace.getRaceName())) {
-                        mRaceResultsMap.put(vRace.getRaceName(), vRaceResult.getResults());
+            if(vResultsObject != null) {
+                ArrayList<Races> vRacesArrayList = vCalendarRaceDataHelper.getArraylist(vResultsObject);
+
+                if (vRacesArrayList != null) {
+                    for (Races vRaceResult : vRacesArrayList) {
+                        for (Races vRace : mCalendarRaceItemArraylist) {
+                            if (vRaceResult.getRaceName().equals(vRace.getRaceName())) {
+                                mRaceResultsMap.put(vRace.getRaceName(), vRaceResult.getResults());
+                            }
+                        }
                     }
                 }
             }

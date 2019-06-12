@@ -13,17 +13,18 @@ import com.example.growingmobilef1.Model.Races;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.Calendar;
 import java.util.Date;
 
 public class NotificationUtil {
 
     public static final String RACE_ALERT = "Tag to send the race item to the AlertReceiver";
 
-    private Date mDate;
+    private Calendar mDate;
     private Context mContext;
     private Races mRace;
 
-    public NotificationUtil(Date aDate, Context context, Races race){
+    public NotificationUtil(Calendar aDate, Context context, Races race){
         this.mDate = aDate;
         this.mContext = context;
         this.mRace = race;

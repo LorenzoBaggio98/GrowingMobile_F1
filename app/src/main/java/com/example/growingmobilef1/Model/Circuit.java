@@ -19,18 +19,20 @@ public class Circuit implements Serializable {
         Circuit tempCircuit = new Circuit();
         Location tempL = new Location();
 
-        if(json.length() != 0){
-            try{
+        if(json != null) {
+            if (json.length() != 0) {
+                try {
 
-                tempCircuit.setCircuitId(json.getString("circuitId"));
-                tempCircuit.setUrl(new URL(json.getString("url")));
-                tempCircuit.setCircuitName(json.getString("circuitName"));
-                tempCircuit.setLocation(tempL.fromJson(json.getJSONObject("Location")));
+                    tempCircuit.setCircuitId(json.getString("circuitId"));
+                    tempCircuit.setUrl(new URL(json.getString("url")));
+                    tempCircuit.setCircuitName(json.getString("circuitName"));
+                    tempCircuit.setLocation(tempL.fromJson(json.getJSONObject("Location")));
 
-            }catch (JSONException e){
-                e.printStackTrace();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

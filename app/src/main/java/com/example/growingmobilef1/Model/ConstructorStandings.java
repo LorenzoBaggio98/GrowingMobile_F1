@@ -19,20 +19,21 @@ public class ConstructorStandings implements IListableObject {
 
         Constructor tempCons = new Constructor();
 
-        if(json.length() != 0){
-            try{
+        if(json != null){
+            if(json.length() != 0) {
+                try {
 
-                tempConsStand.setPosition(json.getInt("position"));
-                tempConsStand.setPositionText(json.getString("positionText"));
-                tempConsStand.setPoints(json.getInt("points"));
-                tempConsStand.setWins(json.getInt("wins"));
+                    tempConsStand.setPosition(json.getInt("position"));
+                    tempConsStand.setPositionText(json.getString("positionText"));
+                    tempConsStand.setPoints(json.getInt("points"));
+                    tempConsStand.setWins(json.getInt("wins"));
 
-                tempConsStand.setConstructor(tempCons.fromJson(json.getJSONObject("Constructor")));
+                    tempConsStand.setConstructor(tempCons.fromJson(json.getJSONObject("Constructor")));
 
-            }catch (JSONException e){
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-
         }
 
         return tempConsStand;

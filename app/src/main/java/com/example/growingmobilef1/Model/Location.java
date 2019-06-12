@@ -16,16 +16,18 @@ public class Location implements Serializable {
 
         Location tempLoc = new Location();
 
-        if(json.length() != 0){
-            try{
+        if(json != null) {
+            if (json.length() != 0) {
+                try {
 
-                tempLoc.setLatitude(json.getDouble("lat"));
-                tempLoc.setLongitude(json.getDouble("long"));
-                tempLoc.setLocality(json.getString("locality"));
-                tempLoc.setCountry(json.getString("country"));
+                    tempLoc.setLatitude(json.getDouble("lat"));
+                    tempLoc.setLongitude(json.getDouble("long"));
+                    tempLoc.setLocality(json.getString("locality"));
+                    tempLoc.setCountry(json.getString("country"));
 
-            }catch (JSONException e){
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

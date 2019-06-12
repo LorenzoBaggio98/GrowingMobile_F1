@@ -53,6 +53,7 @@ public class DriversRankingFragment extends Fragment {
                 Driver vdriver = mArrayListPilots.get(position).getDriver();
 
                 Intent vIntent = new Intent(getContext(), DriverDetailActivity.class);
+                vIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 Bundle vBundle = new Bundle();
                 vBundle.putSerializable("SAVE_ID", vdriver);
                 vIntent.putExtras(vBundle);

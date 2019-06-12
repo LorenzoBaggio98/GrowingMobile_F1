@@ -4,6 +4,7 @@ package com.example.growingmobilef1.Fragment_Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +21,7 @@ import com.example.growingmobilef1.Model.ConstructorStandings;
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
+import com.example.growingmobilef1.Utils.LayoutAnimations;
 
 import org.json.JSONObject;
 
@@ -36,6 +38,7 @@ public class RaceResultsFragment extends Fragment {
     // Array containing the race's results
     private ArrayList<RaceResults> mRaceResultsArrayList;
     private Races mCalendarRace;
+    private LayoutAnimations mLayoutAnimation;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -60,13 +63,15 @@ public class RaceResultsFragment extends Fragment {
 
         mRecyclerView = vView.findViewById(R.id.list_race_results);
 
+        mLayoutAnimation = new LayoutAnimations();
+
         Bundle vStartingBundle = getArguments();
         if (vStartingBundle != null) {
             // Item passed on CalendarList's click
             mCalendarRace = (Races)vStartingBundle.getSerializable(RACE_ITEM);
         }
 
-        RaceResultsApiAsynCaller vLongOperation = new RaceResultsApiAsynCaller();
+        RaceResultsApiAsyncCaller vLongOperation = new RaceResultsApiAsyncCaller();
         vLongOperation.execute();
 
         mRecyclerView.setHasFixedSize(true);
@@ -79,7 +84,12 @@ public class RaceResultsFragment extends Fragment {
         return vView;
     }
 
-    private class RaceResultsApiAsynCaller extends AsyncTask<String, Void, String> {
+    public void refreshList(){
+        RaceResultsApiAsyncCaller vResultAsync = new RaceResultsApiAsyncCaller();
+        vResultAsync.execute();
+    }
+
+    private class RaceResultsApiAsyncCaller extends AsyncTask<String, Void, String> {
 
         private JSONObject vJsonToParse;
         private RaceResultsDataHelper vRaceDetailDataHelper;
@@ -101,6 +111,7 @@ public class RaceResultsFragment extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             mAdapter.updateData(mRaceResultsArrayList);
+            mLayoutAnimation.runLayoutAnimation(mRecyclerView);
             mRecyclerView.getAdapter().notifyDataSetChanged();
         }
     }

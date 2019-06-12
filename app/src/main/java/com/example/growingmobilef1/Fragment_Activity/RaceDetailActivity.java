@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.ImageViewCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.Toolbar;
@@ -25,8 +26,10 @@ import android.widget.ImageView;
 import com.example.growingmobilef1.Adapter.ViewPagerAdapter;
 import com.example.growingmobilef1.AlertReceiver;
 import com.example.growingmobilef1.MainActivity;
+import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
+import com.example.growingmobilef1.Utils.LayoutAnimations;
 import com.example.growingmobilef1.Utils.NotificationUtil;
 
 /**
@@ -45,6 +48,7 @@ public class RaceDetailActivity extends AppCompatActivity {
     private TabLayout mTabLayout;
     private ImageView mImageView;
     private Toolbar mToolbar;
+    private SwipeRefreshLayout mSwipeRefresh;
     private Races mRace;
     private NotificationUtil mNotificationUtil;
 
@@ -54,13 +58,13 @@ public class RaceDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_race_detail);
-
         mRace = new Races();
 
         mViewPager = findViewById(R.id.viewPager);
         mTabLayout = findViewById(R.id.tabLayout);
         mImageView = findViewById(R.id.circuit_img);
         mToolbar = findViewById(R.id.toolbar);
+        mSwipeRefresh = findViewById(R.id.race_results_act_swipe);
 
         Intent intent = getIntent();
         Bundle startBundle = intent.getExtras();
@@ -69,10 +73,11 @@ public class RaceDetailActivity extends AppCompatActivity {
         }
 
         ViewGroup.LayoutParams layoutParams = mToolbar.getLayoutParams();
-        layoutParams.height = 135;
+        layoutParams.height = (int)getApplicationContext().getResources().getDimension(R.dimen.TabLayout_height);
         mToolbar.setLayoutParams(layoutParams);
 
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+
         // Set the tabBar with ViewPageAdapter and TabLayout
         mPageAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
@@ -87,7 +92,6 @@ public class RaceDetailActivity extends AppCompatActivity {
         // Set the Action Bar back button and the title
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(mRace.getRaceName());
-
 
         // Set the image circuit
         try {
@@ -105,6 +109,18 @@ public class RaceDetailActivity extends AppCompatActivity {
         } catch (IOException ex) {
             Log.e(ERROR_TAG, "Error on circuit image reading");
         }
+
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshRaceResultList();
+            }
+        });
+    }
+
+    private void refreshRaceResultList(){
+        RaceResultsFragment vFragment = (RaceResultsFragment)mPageAdapter.getItem(mViewPager.getCurrentItem());
+        vFragment.refreshList();
     }
 
     // Load the notification icon only if the race hasn't happened yet
@@ -120,7 +136,6 @@ public class RaceDetailActivity extends AppCompatActivity {
         }
         return super.onCreateOptionsMenu(menu);
     }
-
 
     /**
      * Back to Main Activity

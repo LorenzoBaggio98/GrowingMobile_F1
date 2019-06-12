@@ -81,7 +81,6 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
         long raceMilliSecondDate = vCalendarConvertRaceDate.getTimeInMillis();
         Calendar vCalendar = Calendar.getInstance();
         vCalendar.setTime(vCalendar.getTime());
-
         if (raceMilliSecondDate > vCalendar.getTimeInMillis()) {
             return RACE_NOT_OCCURRED;
         } else {

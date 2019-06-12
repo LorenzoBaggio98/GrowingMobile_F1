@@ -1,26 +1,17 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
-import android.app.Notification;
 import android.support.v4.app.Fragment;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 import com.example.growingmobilef1.Model.Races;
-import com.example.growingmobilef1.AlertReceiver;
 import com.example.growingmobilef1.R;
 import com.example.growingmobilef1.Utils.NotificationUtil;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -34,10 +25,10 @@ import java.util.Date;
 
 */
 /**
- * Fragment Container -
+ * Fragment Container - DEPRECATO - USARE SOLO PER VEDERE COME HA FATTO CORVAGLIA IL SEND NOTIFICATION
  * Contains the fragment with the Image and the fragment with the Result List
  */
-public class RaceDetailFragment extends Fragment {
+/*public class RaceDetailFragment extends Fragment {
 
     public interface OnFragmentLoad{
         void onFragmentLoaded();
@@ -116,7 +107,7 @@ public class RaceDetailFragment extends Fragment {
 
         NotificationUtil notification = new NotificationUtil(aDate, getContext(), mCalendarRace);
         notification.sendNotification();
-        /*
+
         AlarmManager vAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         Intent vNotificationIntent = new Intent(getContext(), AlertReceiver.class);
 
@@ -153,7 +144,7 @@ public class RaceDetailFragment extends Fragment {
             vAlarmManager.cancel(vBroadcast);
             Toast.makeText(getContext(), "Notification cancelled", Toast.LENGTH_LONG).show();
         }
-        */
+
     }
 
     // Disable the notification button if the race already occured
@@ -188,5 +179,5 @@ public class RaceDetailFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-}
+}*/
 

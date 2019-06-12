@@ -90,13 +90,13 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
      *
      * @param aRaceItem
      */
-    private void launchRaceDetailFragment(Races aRaceItem){
+    private void launchRaceDetailActivity(Races aRaceItem){
 
         Intent intent = new Intent(getContext(), RaceDetailActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         Bundle bundle = new Bundle();
 
-        bundle.putSerializable(RaceDetailFragment.RACE_ITEM, aRaceItem);
+        bundle.putSerializable(RaceDetailActivity.RACE_ITEM, aRaceItem);
 
         intent.putExtras(bundle);
         startActivity(intent);
@@ -112,7 +112,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
                 vRaceItem = (Races)mCalendarRaceItemArraylist.get(aPosition);
             }
         }
-        launchRaceDetailFragment(vRaceItem);
+        launchRaceDetailActivity(vRaceItem);
     }
 
     @Override

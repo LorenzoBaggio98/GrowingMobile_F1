@@ -3,7 +3,9 @@ package com.example.growingmobilef1.Model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class DriverStandings {
+import java.io.Serializable;
+
+public class DriverStandings implements Serializable {
 
     private int position;
     private String positionText;

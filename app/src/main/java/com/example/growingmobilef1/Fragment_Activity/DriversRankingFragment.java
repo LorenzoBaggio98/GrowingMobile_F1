@@ -1,6 +1,7 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -8,8 +9,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.growingmobilef1.Adapter.DriversAdapter;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
@@ -25,6 +28,7 @@ import java.util.ArrayList;
 public class DriversRankingFragment extends Fragment {
 
     private static final String SAVE_LISTPILOTS = "SAVE_LISTPILOTS";
+
     private ArrayList<DriverStandings> mArrayListPilots;
     private ListView mListView;
     private ProgressBar mProgressBar;
@@ -40,17 +44,33 @@ public class DriversRankingFragment extends Fragment {
         View vView = inflater.inflate(R.layout.fragment_pilots_ranking, container, false);
 
         mListView = vView.findViewById(R.id.listViewPilots);
-        mProgressBar=vView.findViewById(R.id.frag_calendar_progress_bar);
-if(savedInstanceState !=null){
 
-    mArrayListPilots = (ArrayList<DriverStandings>) savedInstanceState.getSerializable(SAVE_LISTPILOTS);
-    DriversAdapter vDriversAdapter = new DriversAdapter(mArrayListPilots);
-    mListView.setAdapter(vDriversAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-}else{
-    vPilotsApiAsync.execute();
 
-}
+                Driver vdriver = mArrayListPilots.get(position).getDriver();
+
+                Intent vIntent = new Intent(getContext(), DriverDetailActivity.class);
+                Bundle vBundle = new Bundle();
+                vBundle.putSerializable("SAVE_ID", vdriver);
+                vIntent.putExtras(vBundle);
+                startActivity(vIntent);
+
+            }
+        });
+        mProgressBar = vView.findViewById(R.id.frag_calendar_progress_bar);
+        if (savedInstanceState != null) {
+
+            mArrayListPilots = (ArrayList<DriverStandings>) savedInstanceState.getSerializable(SAVE_LISTPILOTS);
+            DriversAdapter vDriversAdapter = new DriversAdapter(mArrayListPilots);
+            mListView.setAdapter(vDriversAdapter);
+
+        } else {
+            vPilotsApiAsync.execute();
+
+        }
 
 
         return vView;
@@ -59,7 +79,7 @@ if(savedInstanceState !=null){
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(SAVE_LISTPILOTS,mArrayListPilots);
+        outState.putSerializable(SAVE_LISTPILOTS, mArrayListPilots);
     }
 
     private class PilotsApiAsync extends AsyncTask<String, Void, String> {

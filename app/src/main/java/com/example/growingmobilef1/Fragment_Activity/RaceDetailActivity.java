@@ -39,6 +39,7 @@ import java.util.Date;
 
 public class RaceDetailActivity extends AppCompatActivity {
 
+    public static final String RACE_ITEM = "Tag to pass the calendar race item to the fragment";
     private static final String ERROR_TAG = "ERROR_TAG";
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
@@ -64,7 +65,7 @@ public class RaceDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle startBundle = intent.getExtras();
         if (startBundle != null) {
-            mRace = (Races) startBundle.getSerializable(RaceDetailFragment.RACE_ITEM);
+            mRace = (Races) startBundle.getSerializable(RaceDetailActivity.RACE_ITEM);
         }
 
         ViewGroup.LayoutParams layoutParams = mToolbar.getLayoutParams();
@@ -128,7 +129,6 @@ public class RaceDetailActivity extends AppCompatActivity {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case android.R.id.home:
 

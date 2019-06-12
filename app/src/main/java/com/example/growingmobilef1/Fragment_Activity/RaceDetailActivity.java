@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.ImageViewCompat;
@@ -40,7 +41,6 @@ public class RaceDetailActivity extends AppCompatActivity {
     private TabLayout mTabLayout;
     private ImageView mImageView;
     private Toolbar mToolbar;
-    private SwipeRefreshLayout mSwipeRefresh;
     private Races mRace;
     private NotificationUtil mNotificationUtil;
 
@@ -56,7 +56,6 @@ public class RaceDetailActivity extends AppCompatActivity {
         mTabLayout = findViewById(R.id.tabLayout);
         mImageView = findViewById(R.id.circuit_img);
         mToolbar = findViewById(R.id.toolbar);
-        mSwipeRefresh = findViewById(R.id.race_results_act_swipe);
 
         Intent intent = getIntent();
         Bundle startBundle = intent.getExtras();
@@ -101,18 +100,6 @@ public class RaceDetailActivity extends AppCompatActivity {
         } catch (IOException ex) {
             Log.e(ERROR_TAG, "Error on circuit image reading");
         }
-
-        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshRaceResultList();
-            }
-        });
-    }
-
-    private void refreshRaceResultList(){
-        RaceResultsFragment vFragment = (RaceResultsFragment)mPageAdapter.getItem(mViewPager.getCurrentItem());
-        vFragment.refreshList();
     }
 
     // Load the notification icon only if the race hasn't happened yet
@@ -169,5 +156,4 @@ public class RaceDetailActivity extends AppCompatActivity {
         mViewPager.setAdapter(mPageAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
     }
-
 }

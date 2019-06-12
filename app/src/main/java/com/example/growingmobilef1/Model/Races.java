@@ -177,7 +177,8 @@ public class Races implements Serializable, IListableObject {
     public Date getDate(){
 
         SimpleDateFormat tempFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        tempFormat.setTimeZone(TimeZone.getDefault());
+        tempFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        //tempFormat.setTimeZone(TimeZone.getDefault());
 
         Date tempDate = new Date();
 

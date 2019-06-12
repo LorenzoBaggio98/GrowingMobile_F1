@@ -16,7 +16,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-// Ua
 public class Races implements Serializable, IListableObject {
 
     private int season;

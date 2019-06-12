@@ -44,6 +44,7 @@ public class DriversRankingFragment extends Fragment {
         View vView = inflater.inflate(R.layout.fragment_pilots_ranking, container, false);
 
         mListView = vView.findViewById(R.id.listViewPilots);
+<<<<<<< HEAD
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -70,6 +71,18 @@ public class DriversRankingFragment extends Fragment {
         } else {
             vPilotsApiAsync.execute();
 
+=======
+        mProgressBar = vView.findViewById(R.id.frag_calendar_progress_bar);
+
+        if(savedInstanceState !=null){
+
+            mArrayListPilots = (ArrayList<DriverStandings>) savedInstanceState.getSerializable(SAVE_LISTPILOTS);
+            DriversAdapter vDriversAdapter = new DriversAdapter(mArrayListPilots);
+            mListView.setAdapter(vDriversAdapter);
+
+        }else{
+            vPilotsApiAsync.execute();
+>>>>>>> fixTimeZone
         }
 
 

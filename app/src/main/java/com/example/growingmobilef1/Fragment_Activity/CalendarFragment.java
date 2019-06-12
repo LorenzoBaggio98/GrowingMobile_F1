@@ -14,7 +14,6 @@ import android.widget.ProgressBar;
 import com.example.growingmobilef1.Adapter.RacesAdapter;
 import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
-import com.example.growingmobilef1.Helper.RaceResultsDataHelper;
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
@@ -24,13 +23,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
-
 public class CalendarFragment extends Fragment {
 
     private ArrayList<Races> mCalendarRaceItemArraylist;
     private HashMap<String, ArrayList<RaceResults>> mRaceResultsMap;
-    private ArrayList<RaceResults> mRaceResultsArrayList;
 
     private ListView mListView;
     private ProgressBar mPgsBar;
@@ -60,7 +56,7 @@ public class CalendarFragment extends Fragment {
                 // Looks for the clicked item in the ArrayList, then pass it to the detail fragment
                 for (int i = 0; i < mCalendarRaceItemArraylist.size(); i++) {
                     if (mCalendarRaceItemArraylist.get(i).getmId() == id){
-                        vRaceItem = (Races)mCalendarRaceItemArraylist.get(position);
+                        vRaceItem = mCalendarRaceItemArraylist.get(position);
                     }
                 }
                 launchRaceDetailActivity(vRaceItem);
@@ -104,7 +100,6 @@ public class CalendarFragment extends Fragment {
             mCalendarRaceDataHelper = new CalendarRaceDataHelper();
             mRaceResultsMap = new HashMap<>();
 
-            RaceResultsDataHelper vRaceResultsDataHelper = new RaceResultsDataHelper();
             mJsonCalendarToParse = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current.json");
             if (mJsonCalendarToParse != null) {
                 mCalendarRaceItemArraylist =  mCalendarRaceDataHelper.getArraylist(mJsonCalendarToParse);
@@ -129,17 +124,21 @@ public class CalendarFragment extends Fragment {
         protected String doInBackground(String... params) {
 
             ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
-            RaceResultsDataHelper vRaceResultsDataHelper = new RaceResultsDataHelper();
 
             mRaceResultsMap = new HashMap<>();
 
             JSONObject vResultsObject = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current/results.json?limit=10000");
-            ArrayList<Races> vRacesArrayList = vCalendarRaceDataHelper.getArraylist(vResultsObject);
 
-            for (Races vRaceResult: vRacesArrayList) {
-                for (Races vRace: mCalendarRaceItemArraylist) {
-                    if (vRaceResult.getRaceName().equals(vRace.getRaceName())) {
-                        mRaceResultsMap.put(vRace.getRaceName(), vRaceResult.getResults());
+            if(vResultsObject != null) {
+                ArrayList<Races> vRacesArrayList = vCalendarRaceDataHelper.getArraylist(vResultsObject);
+
+                if (vRacesArrayList != null) {
+                    for (Races vRaceResult : vRacesArrayList) {
+                        for (Races vRace : mCalendarRaceItemArraylist) {
+                            if (vRaceResult.getRaceName().equals(vRace.getRaceName())) {
+                                mRaceResultsMap.put(vRace.getRaceName(), vRaceResult.getResults());
+                            }
+                        }
                     }
                 }
             }

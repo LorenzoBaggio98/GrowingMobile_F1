@@ -26,7 +26,7 @@ public class Races implements Serializable, IListableObject {
     private String raceName;
     private Circuit Circuit;
 
-    private Date mDate;
+    private String mDate;
     private String time;
 
     private Boolean isNotificationScheduled = false;
@@ -47,7 +47,8 @@ public class Races implements Serializable, IListableObject {
                 tempRaces.setUrl(new URL(json.getString("url")));
                 tempRaces.setRaceName(json.getString("raceName"));
                 tempRaces.setCircuit(tempC.fromJson(json.getJSONObject("Circuit")));
-                tempRaces.setmDate(sDF.parse(json.getString("date")));
+                //tempRaces.setmDate(sDF.parse(json.getString("date")));
+                tempRaces.setmDate(json.getString("date"));
                 tempRaces.setTime(json.getString("time"));
 
                 ArrayList<RaceResults> vRaceResultsArrayList = new ArrayList<>();
@@ -65,9 +66,9 @@ public class Races implements Serializable, IListableObject {
                 e.printStackTrace();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
-            } catch (ParseException e) {
+            } /*catch (ParseException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
 
         return tempRaces;
@@ -113,11 +114,11 @@ public class Races implements Serializable, IListableObject {
         Circuit = circuit;
     }
 
-    public Date getmDate() {
+    public String getmDate() {
         return mDate;
     }
 
-    public void setmDate(Date date) {
+    public void setmDate(String date) {
         this.mDate = date;
     }
 
@@ -171,24 +172,18 @@ public class Races implements Serializable, IListableObject {
         isNotificationScheduled = notificationScheduled;
     }
 
-    public Calendar getCalendarDate(){
-        Calendar vCalendar = Calendar.getInstance();
-        vCalendar.setTime(getmDate());
-        return vCalendar;
-    }
+    public Date getDate(){
 
-    public Calendar getCalendarTime() {
-        Calendar vCalendar = Calendar.getInstance();
-
-        SimpleDateFormat vDateFormat = new SimpleDateFormat("HH:mm:ss");
-        vDateFormat.setTimeZone(TimeZone.getTimeZone("Europe"));
+        SimpleDateFormat tempFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date tempDate = new Date();
 
         try {
-            vCalendar.setTime(vDateFormat.parse(getTime()));
-        } catch (ParseException e){
+            tempDate = tempFormat.parse(getmDate() + " " + getTime());
+        } catch (ParseException e) {
             e.printStackTrace();
         }
-        return vCalendar;
+
+        return tempDate;
     }
 
 }

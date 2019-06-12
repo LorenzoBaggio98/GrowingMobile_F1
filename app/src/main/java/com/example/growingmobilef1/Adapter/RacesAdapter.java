@@ -18,6 +18,9 @@ import com.example.growingmobilef1.R;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -25,6 +28,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+import java.time.Instant;
 
 public class RacesAdapter extends BaseAdapter {
 
@@ -73,15 +77,65 @@ public class RacesAdapter extends BaseAdapter {
 
         ViewHolder vHolder = (ViewHolder)vView.getTag();
 
+        // ----------------CORVAGLIA
         // Change list item layout if race has already happened
-        Calendar vCalendarConvertRaceDate = Calendar.getInstance(TimeZone.getDefault());
-        vCalendarConvertRaceDate.setTime(mRacesArrayList.get(position).getmDate());
+        /*Calendar vCalendarConvertRaceDate = Calendar.getInstance(TimeZone.getTimeZone("Europe/Rome"));
+
+        vCalendarConvertRaceDate.setTime(mRacesArrayList.get(position).getTimezoneDate());
 
         long raceMilliSecondDate = vCalendarConvertRaceDate.getTimeInMillis();
-        Calendar vCalendar = Calendar.getInstance();
+        Calendar vCalendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Rome"));
         vCalendar.setTime(vCalendar.getTime());
 
+        // CONTROL IF PAST
         if (raceMilliSecondDate > vCalendar.getTimeInMillis()) {
+            vHolder.mPodiumLabel.setTextColor(Color.BLACK);
+            vHolder.mRaceLabel.setTextColor(Color.BLACK);
+            vHolder.mDateLabel.setTextColor(Color.BLACK);
+            vHolder.mTimeLabel.setTextColor(Color.BLACK);
+            vHolder.mContainerLayout.setBackgroundResource(R.drawable.rectangle_shadow);
+        } else {
+            vHolder.mPodiumLabel.setTextColor(Color.WHITE);
+            vHolder.mRaceLabel.setTextColor(Color.WHITE);
+            vHolder.mDateLabel.setTextColor(Color.WHITE);
+            vHolder.mTimeLabel.setTextColor(Color.WHITE);
+            vHolder.mContainerLayout.setBackgroundResource(R.drawable.last_race_rectangle);
+        }*/
+
+        // PODIUM
+        // Set the podium results (if the race has already occurred)
+        //String vPositionLabelString = "";
+        /*if (mRaceResultsMap.containsKey(getItem(position).getRaceName())) {
+            for (int i = 0; i < 3; i++){
+                String vPosition = mRaceResultsMap.get(getItem(position).getRaceName()).get(i).getDriver().getCode();
+                if (i < 2)
+                    vPositionLabelString += vPosition + " / ";
+                else
+                    vPositionLabelString += vPosition;
+            }
+        }*/
+        //vHolder.mPodiumLabel.setText(vPositionLabelString);
+        /// --- DATE ---
+
+        //Calendar vCalendarDate = getItem(position).getCalendarDate();
+
+        // Set date and time of the race
+        //vHolder.mDateLabel.setText(vCalendarConvertRaceDate.get(Calendar.DAY_OF_MONTH) + " " + vCalendarConvertRaceDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
+
+        /// --- TIME ---
+        //Calendar vCalendarTime = getItem(position).getCalendarTime();
+        //vHolder.mTimeLabel.setText(vCalendarConvertRaceDate.get(Calendar.HOUR_OF_DAY) + ":" + vCalendarConvertRaceDate.get(Calendar.MINUTE));
+
+
+        // --------------- MIO
+
+        Date raceDate = mRacesArrayList.get(position).getDate();
+        LocalDateTime localDate = raceDate.toInstant().atZone(ZoneId.of("Europe/Rome")).toLocalDateTime();
+
+        long raceMilliSecondDate = raceDate.getTime();
+
+        // CONTROL IF PAST
+        if (raceMilliSecondDate > new Date().getTime()) {
             vHolder.mPodiumLabel.setTextColor(Color.BLACK);
             vHolder.mRaceLabel.setTextColor(Color.BLACK);
             vHolder.mDateLabel.setTextColor(Color.BLACK);
@@ -95,10 +149,9 @@ public class RacesAdapter extends BaseAdapter {
             vHolder.mContainerLayout.setBackgroundResource(R.drawable.last_race_rectangle);
         }
 
-        /// --- DATE ---
-        Calendar vCalendarDate = getItem(position).getCalendarDate();
         vHolder.mRaceLabel.setText("" + getItem(position).getmMainInformation());
 
+        // PODIUM
         // Set the podium results (if the race has already occurred)
         String vPositionLabelString = "";
         if (mRaceResultsMap.containsKey(getItem(position).getRaceName())) {
@@ -112,13 +165,15 @@ public class RacesAdapter extends BaseAdapter {
         }
         vHolder.mPodiumLabel.setText(vPositionLabelString);
 
+        /// --- DATE ---
         // Set date and time of the race
-        vHolder.mDateLabel.setText(vCalendarDate.get(Calendar.DAY_OF_MONTH) + " " + vCalendarDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
+        vHolder.mDateLabel.setText(""+localDate.getDayOfMonth());
+
 
         /// --- TIME ---
-        Calendar vCalendarTime = getItem(position).getCalendarTime();
+        vHolder.mTimeLabel.setText(localDate.getHour()+ ":" + localDate.getMinute());
 
-        vHolder.mTimeLabel.setText(vCalendarTime.get(Calendar.HOUR_OF_DAY) + ":" + vCalendarTime.get(Calendar.MINUTE));
+
         return vView;
     }
 

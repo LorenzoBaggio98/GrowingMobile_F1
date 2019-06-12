@@ -24,6 +24,15 @@ import java.io.ObjectOutputStream;
 import java.util.Calendar;
 import java.util.Date;
 
+/*
+
+
+
+    DEPRECATED
+
+
+
+*/
 /**
  * Fragment Container -
  * Contains the fragment with the Image and the fragment with the Result List

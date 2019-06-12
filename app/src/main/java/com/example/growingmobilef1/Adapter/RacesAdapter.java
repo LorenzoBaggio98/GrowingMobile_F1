@@ -1,79 +1,81 @@
 package com.example.growingmobilef1.Adapter;
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.ImageViewCompat;
+import android.support.v7.content.res.AppCompatResources;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-
-import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
-public class RacesAdapter extends BaseAdapter {
+public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> {
 
     private ArrayList<Races> mRacesArrayList;
     private Map<String, ArrayList<RaceResults>> mRaceResultsMap;
 
-    public RacesAdapter(ArrayList<Races> aRacesArrayList, Map<String, ArrayList<RaceResults>> aRaceResultsMap) {
-        mRacesArrayList = aRacesArrayList;
+    private Context mContext;
+
+    // For loading different layouts
+    private final int RACE_OCCURED = 0;
+    private final int RACE_NOT_OCCURRED = 1;
+
+    // For click handling
+    private IOnRaceClicked mItemListener;
+    private IOnNotificationIconClicked mNotificationListener;
+
+    public RacesAdapter(Context aContext,
+                        ArrayList<Races> aData,
+                        Map<String, ArrayList<RaceResults>> aRaceResultsMap,
+                        IOnRaceClicked aListener,
+                        IOnNotificationIconClicked aNotificationListener){
+        mContext = aContext;
+        mRacesArrayList = aData;
         mRaceResultsMap = aRaceResultsMap;
+        mItemListener = aListener;
+        mNotificationListener = aNotificationListener;
     }
 
-    @Override
-    public int getCount() {
-        return mRacesArrayList.size();
+    public void updateData(ArrayList<Races> aData, Map<String, ArrayList<RaceResults>> aRaceResultsMap) {
+        mRacesArrayList.clear();
+        mRacesArrayList.addAll(aData);
+        mRaceResultsMap.clear();
+        mRaceResultsMap.putAll(aRaceResultsMap);
     }
 
-    @Override
-    public Races getItem(int position) {
-        return mRacesArrayList.get(position);
+    // Clean all elements of the recycler
+    public void clear() {
+        mRacesArrayList.clear();
+        mRaceResultsMap.clear();
+        notifyDataSetChanged();
     }
 
-    @Override
-    public long getItemId(int position) {
-        return mRacesArrayList.get(position).getmId();
+    // Add a list of items -- change to type used
+    public void addAll(ArrayList<Races> aData, Map<String, ArrayList<RaceResults>> aRaceResultsMap) {
+        mRacesArrayList.addAll(aData);
+        mRaceResultsMap.putAll(aRaceResultsMap);
+        notifyDataSetChanged();
     }
 
+    // Used to assign different layouts to viewholder
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View vView;
-        if (convertView == null){
-            LayoutInflater vInflater = LayoutInflater.from(parent.getContext());
+    public int getItemViewType(int position) {
 
-            ViewHolder vViewHolder = new ViewHolder();
-            vView = vInflater.inflate(R.layout.list_item_calendar, parent, false);
-
-            vViewHolder.mRaceLabel = vView.findViewById(R.id.list_item_calendar_label_race_name);
-            vViewHolder.mPodiumLabel = vView.findViewById(R.id.list_item_calendar_label_podium);
-            vViewHolder.mDateLabel = vView.findViewById(R.id.list_item_calendar_label_date);
-            vViewHolder.mTimeLabel = vView.findViewById(R.id.list_item_calendar_label_hour);
-            vViewHolder.mContainerLayout = vView.findViewById(R.id.list_item_calendar_container);
-
-            vView.setTag(vViewHolder);
-
-        } else
-            vView = convertView;
-
-        ViewHolder vHolder = (ViewHolder)vView.getTag();
-
-        // Change list item layout if race has already happened
         Calendar vCalendarConvertRaceDate = Calendar.getInstance();
         vCalendarConvertRaceDate.setTime(mRacesArrayList.get(position).getmDate());
         long raceMilliSecondDate = vCalendarConvertRaceDate.getTimeInMillis();
@@ -81,31 +83,46 @@ public class RacesAdapter extends BaseAdapter {
         vCalendar.setTime(vCalendar.getTime());
 
         if (raceMilliSecondDate > vCalendar.getTimeInMillis()) {
-            vHolder.mPodiumLabel.setTextColor(Color.BLACK);
-            vHolder.mRaceLabel.setTextColor(Color.BLACK);
-            vHolder.mDateLabel.setTextColor(Color.BLACK);
-            vHolder.mTimeLabel.setTextColor(Color.BLACK);
-            vHolder.mContainerLayout.setBackgroundResource(R.drawable.rectangle_shadow);
+            return RACE_NOT_OCCURRED;
         } else {
-            vHolder.mPodiumLabel.setTextColor(Color.WHITE);
-            vHolder.mRaceLabel.setTextColor(Color.WHITE);
-            vHolder.mDateLabel.setTextColor(Color.WHITE);
-            vHolder.mTimeLabel.setTextColor(Color.WHITE);
-            vHolder.mContainerLayout.setBackgroundResource(R.drawable.last_race_rectangle);
+            return RACE_OCCURED;
         }
+    }
 
-        Calendar vCalendarDate = getItem(position).getCalendarDate();
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+
+        View vView;
+        switch (viewType) {
+            case RACE_OCCURED:
+                vView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_calendar_last_race,
+                        viewGroup,
+                        false);
+                break;
+
+            default:
+                vView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_calendar,
+                        viewGroup,
+                        false);
+        }
+        return new ViewHolder(mContext, vView, mItemListener, mNotificationListener);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder vHolder, int position) {
+        Calendar vCalendarDate = mRacesArrayList.get(position).getCalendarDate();
         int vCalendarMonth = vCalendarDate.get(Calendar.MONTH);
 
-        Calendar vCalendarTime = getItem(position).getCalendarTime();
+        Calendar vCalendarTime = mRacesArrayList.get(position).getCalendarTime();
 
-        vHolder.mRaceLabel.setText("" + getItem(position).getmMainInformation());
+        vHolder.mRaceLabel.setText("" + mRacesArrayList.get(position).getmMainInformation());
 
         // Set the podium results (if the race has already occurred)
         String vPositionLabelString = "";
-        if (mRaceResultsMap.containsKey(getItem(position).getRaceName())) {
+        if (mRaceResultsMap.containsKey(mRacesArrayList.get(position).getRaceName())) {
             for (int i = 0; i < 3; i++){
-                String vPosition = mRaceResultsMap.get(getItem(position).getRaceName()).get(i).getDriver().getCode();
+                String vPosition = mRaceResultsMap.get(mRacesArrayList.get(position).getRaceName()).get(i).getDriver().getCode();
                 if (i < 2)
                     vPositionLabelString += vPosition + " / ";
                 else
@@ -116,17 +133,81 @@ public class RacesAdapter extends BaseAdapter {
 
         // Set date and time of the race
         if (vCalendarMonth != 10 && vCalendarMonth != 11 && vCalendarMonth != 12){
-            vHolder.mDateLabel.setText(vCalendarDate.get(Calendar.DAY_OF_MONTH) + " " + vCalendarDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
+            vHolder.mDateLabel.setText(vCalendarDate.get(Calendar.DAY_OF_MONTH) + " " +
+                    vCalendarDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
         } else {
-            vHolder.mDateLabel.setText(vCalendarDate.get(Calendar.DAY_OF_MONTH) + " " + vCalendarDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
+            vHolder.mDateLabel.setText(vCalendarDate.get(Calendar.DAY_OF_MONTH) + " " +
+                    vCalendarDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
         }
-        //vHolder.mTimeLabel.setText(vCalendarTime.get(Calendar.HOUR_OF_DAY) + ":" + vCalendarTime.get(Calendar.MINUTE));
         vHolder.mTimeLabel.setText(vCalendarTime.get(Calendar.HOUR_OF_DAY) + ":" + vCalendarTime.get(Calendar.MINUTE));
-        return vView;
+
+        // Change notification icon if notification is scheduled
+        if (mRacesArrayList.get(position).getNotificationScheduled()) {
+            ColorStateList vPrimaryColor = AppCompatResources.getColorStateList(mContext, R.color.colorPrimary);
+            ImageViewCompat.setImageTintList(vHolder.mNotificationIcon, vPrimaryColor);
+        }
     }
 
-    private class ViewHolder {
+    @Override
+    public int getItemCount() {
+        return mRacesArrayList.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
         TextView mRaceLabel, mPodiumLabel, mDateLabel, mTimeLabel;
         LinearLayout mContainerLayout;
+        IOnRaceClicked mItemListener;
+        IOnNotificationIconClicked mNotificationListener;
+        ImageView mNotificationIcon;
+
+        private ViewHolder(final Context aContext, final View vView, IOnRaceClicked aListener, IOnNotificationIconClicked aNotificationListener) {
+            super(vView);
+
+            mRaceLabel = vView.findViewById(R.id.list_item_calendar_label_race_name);
+            mPodiumLabel = vView.findViewById(R.id.list_item_calendar_label_podium);
+            mDateLabel = vView.findViewById(R.id.list_item_calendar_label_date);
+            mTimeLabel = vView.findViewById(R.id.list_item_calendar_label_hour);
+            mContainerLayout = vView.findViewById(R.id.list_item_calendar_container);
+            mNotificationIcon = vView.findViewById(R.id.list_item_calendar_notification_icon);
+            mItemListener = aListener;
+            mNotificationListener = aNotificationListener;
+
+            vView.setOnClickListener(this);
+            if (mNotificationIcon != null) {
+                mNotificationIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mNotificationListener.onNotificationScheduled(getAdapterPosition());
+                        manageNotificationIconColor(aContext, mNotificationIcon);
+                    }
+                });
+            }
+        }
+
+        @Override
+        public void onClick(View v) {
+            mItemListener.onRaceClicked(getAdapterPosition());
+        }
+
+        // Change the notifiation color
+        private void manageNotificationIconColor(Context aContext, ImageView aNotificationIcon){
+            ColorStateList vPrimaryColor = AppCompatResources.getColorStateList(aContext, R.color.colorPrimary);
+            ColorStateList vUnselectedColor = AppCompatResources.getColorStateList(aContext, R.color.colorSecondaryLight);
+
+            if (aNotificationIcon.getImageTintList() == vUnselectedColor)
+                ImageViewCompat.setImageTintList(aNotificationIcon, vPrimaryColor);
+            else
+                ImageViewCompat.setImageTintList(aNotificationIcon, vUnselectedColor);
+        }
+    }
+
+    // For click handling
+    public interface IOnRaceClicked{
+        void onRaceClicked(int aPosition);
+    }
+
+    public interface IOnNotificationIconClicked{
+        void onNotificationScheduled(int aPosition);
     }
 }

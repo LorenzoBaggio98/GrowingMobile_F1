@@ -1,23 +1,31 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.example.growingmobilef1.Adapter.QualifyingResultsAdapter;
 import com.example.growingmobilef1.Adapter.RacesAdapter;
 import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.RaceResultsDataHelper;
+import com.example.growingmobilef1.Model.QualifyingResults;
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
+import com.example.growingmobilef1.Utils.NotificationUtil;
 
 import org.json.JSONObject;
 
@@ -26,14 +34,18 @@ import java.util.HashMap;
 
 
 
-public class CalendarFragment extends Fragment {
+public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceClicked, RacesAdapter.IOnNotificationIconClicked{
 
     private ArrayList<Races> mCalendarRaceItemArraylist;
     private HashMap<String, ArrayList<RaceResults>> mRaceResultsMap;
-    private ArrayList<RaceResults> mRaceResultsArrayList;
 
-    private ListView mListView;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private RacesAdapter mAdapter;
     private ProgressBar mPgsBar;
+
+    // Notification
+    NotificationUtil mNotificationUtil;
 
     public static CalendarFragment newInstance() {
         return new CalendarFragment();
@@ -43,7 +55,7 @@ public class CalendarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vView = inflater.inflate(R.layout.fragment_calendar, container, false);
 
-        mListView = vView.findViewById(R.id.frag_calendar_listview);
+        mRecyclerView = vView.findViewById(R.id.frag_calendar_listview);
         mPgsBar = vView.findViewById(R.id.frag_calendar_progress_bar);
 
         // Call the async class to perform the api call
@@ -52,26 +64,26 @@ public class CalendarFragment extends Fragment {
         CalendarPodiumApiAsyncCaller vPodiumAsyncCaller = new CalendarPodiumApiAsyncCaller();
         vPodiumAsyncCaller.execute();
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Races vRaceItem = new Races();
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(container.getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mAdapter = new RacesAdapter(getContext(),
+                new ArrayList<Races>(),
+                new HashMap<String, ArrayList<RaceResults>>(),
+                this,
+                this);
+        mRecyclerView.setAdapter(mAdapter);
 
-                // Looks for the clicked item in the ArrayList, then pass it to the detail fragment
-                for (int i = 0; i < mCalendarRaceItemArraylist.size(); i++) {
-                    if (mCalendarRaceItemArraylist.get(i).getmId() == id){
-                        vRaceItem = (Races)mCalendarRaceItemArraylist.get(position);
-                    }
-                }
-                launchRaceDetailFragment(vRaceItem);
-            }
-        });
        return vView;
     }
 
     private void setListAdapter(){
-        RacesAdapter vCalendarListAdapter = new RacesAdapter(mCalendarRaceItemArraylist, mRaceResultsMap);
-        mListView.setAdapter(vCalendarListAdapter);
+        RacesAdapter vCalendarListAdapter = new RacesAdapter(getContext(),
+                mCalendarRaceItemArraylist,
+                mRaceResultsMap,
+                this,
+                this);
+        mRecyclerView.setAdapter(vCalendarListAdapter);
     }
 
     /**
@@ -88,6 +100,27 @@ public class CalendarFragment extends Fragment {
 
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @Override
+    public void onRaceClicked(int aPosition) {
+        Races vRaceItem = new Races();
+        long vId = mCalendarRaceItemArraylist.get(aPosition).getmId();
+        // Looks for the clicked item in the ArrayList, then pass it to the detail fragment
+        for (int i = 0; i < mCalendarRaceItemArraylist.size(); i++) {
+            if (mCalendarRaceItemArraylist.get(i).getmId() == vId){
+                vRaceItem = (Races)mCalendarRaceItemArraylist.get(aPosition);
+            }
+        }
+        launchRaceDetailFragment(vRaceItem);
+    }
+
+    @Override
+    public void onNotificationScheduled(int aPosition) {
+        mNotificationUtil = new NotificationUtil(mCalendarRaceItemArraylist.get(aPosition).getmDate(),
+                getContext(),
+                mCalendarRaceItemArraylist.get(aPosition));
+        mNotificationUtil.sendNotification();
     }
 
     // Private class needed to perform the API call asynchronously
@@ -117,9 +150,7 @@ public class CalendarFragment extends Fragment {
             if (!mRaceResultsMap.isEmpty()){
                 setListAdapter();
             }
-            mPgsBar.setVisibility(View.GONE);
         }
-
     }
 
     private class CalendarPodiumApiAsyncCaller extends AsyncTask<String, Void, String> {
@@ -150,6 +181,8 @@ public class CalendarFragment extends Fragment {
         protected void onPostExecute(String result) {
             setListAdapter();
             mPgsBar.setVisibility(View.GONE);
+            mAdapter.updateData(mCalendarRaceItemArraylist, mRaceResultsMap);
+            mRecyclerView.getAdapter().notifyDataSetChanged();
         }
     }
 }

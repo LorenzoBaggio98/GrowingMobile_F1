@@ -1,20 +1,16 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.example.growingmobilef1.Adapter.DriversAdapter;
+import android.widget.ProgressBar;
+import com.example.growingmobilef1.Adapter.DriverAdapterRECycler;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.DriversRankingHelper;
 import com.example.growingmobilef1.Model.Driver;
@@ -25,46 +21,45 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class DriversRankingFragment extends Fragment {
-
+public class DriversRankingFragmentRECYcler extends Fragment {
     private static final String SAVE_LISTPILOTS = "SAVE_LISTPILOTS";
 
     private ArrayList<DriverStandings> mArrayListPilots;
-    private ListView mListView;
+    private RecyclerView mRecyclerViewList;
     private ProgressBar mProgressBar;
 
-    PilotsApiAsync vPilotsApiAsync = new PilotsApiAsync();
+    DriversRankingFragmentRECYcler.PilotsApiAsync vPilotsApiAsync = new DriversRankingFragmentRECYcler.PilotsApiAsync();
 
-    public static DriversRankingFragment newInstance() {
-        return new DriversRankingFragment();
+    public static DriversRankingFragmentRECYcler newInstance() {
+        return new DriversRankingFragmentRECYcler();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vView = inflater.inflate(R.layout.fragment_pilots_ranking, container, false);
 
-       // mListView = vView.findViewById(R.id.listViewPilots);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        mRecyclerViewList = (RecyclerView)vView.findViewById(R.id.recyclerViewPiloti);
+//        mRecyclerViewList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                Driver vdriver = mArrayListPilots.get(position).getDriver();
+//
+//                Intent vIntent = new Intent(getContext(), DriverDetailActivity.class);
+//                vIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                Bundle vBundle = new Bundle();
+//                vBundle.putSerializable("SAVE_ID", vdriver);
+//                vIntent.putExtras(vBundle);
+//                startActivity(vIntent);
 
-                Driver vdriver = mArrayListPilots.get(position).getDriver();
-
-                Intent vIntent = new Intent(getContext(), DriverDetailActivity.class);
-                vIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                Bundle vBundle = new Bundle();
-                vBundle.putSerializable("SAVE_ID", vdriver);
-                vIntent.putExtras(vBundle);
-                startActivity(vIntent);
-
-            }
-        });
+           // }
+     //   });
         mProgressBar = vView.findViewById(R.id.frag_calendar_progress_bar);
         if (savedInstanceState != null) {
 
             mArrayListPilots = (ArrayList<DriverStandings>) savedInstanceState.getSerializable(SAVE_LISTPILOTS);
-            DriversAdapter vDriversAdapter = new DriversAdapter(mArrayListPilots);
-            mListView.setAdapter(vDriversAdapter);
+            DriverAdapterRECycler vDriversAdapter = new DriverAdapterRECycler(mArrayListPilots);
+            mRecyclerViewList.setAdapter(vDriversAdapter);
 
         } else {
             vPilotsApiAsync.execute();
@@ -97,12 +92,11 @@ public class DriversRankingFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String result) {
-            DriversAdapter vDriversAdapter = new DriversAdapter(mArrayListPilots);
-            mListView.setAdapter(vDriversAdapter);
+            DriverAdapterRECycler vDriversAdapter = new DriverAdapterRECycler(mArrayListPilots);
+            mRecyclerViewList.setAdapter(vDriversAdapter);
             mProgressBar.setVisibility(View.INVISIBLE);
         }
     }
 
 
 }
-

@@ -30,6 +30,12 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyWiewHold
 
         mArrayListDrivers = mArrayList;
     }
+    public void updateData(ArrayList<DriverStandings> viewModels) {
+        mArrayListDrivers.clear();
+        mArrayListDrivers.addAll(viewModels);
+        notifyDataSetChanged();
+
+    }
 
     public static class MyWiewHolder extends RecyclerView.ViewHolder {
         public TextView mPositionLabel, mSurnameLabel, mNameLabel, mTeamLabel, mPointsLabel;
@@ -99,11 +105,7 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyWiewHold
     public int getItemCount() {
         return mArrayListDrivers.size();
     }
-    public void updateData(ArrayList<DriverStandings> viewModels) {
-        mArrayListDrivers.clear();
-        mArrayListDrivers.addAll(viewModels);
 
-    }
 
 
 }

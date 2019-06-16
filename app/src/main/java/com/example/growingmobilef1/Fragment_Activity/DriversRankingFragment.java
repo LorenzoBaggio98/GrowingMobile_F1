@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.growingmobilef1.Adapter.DriverAdapter;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
@@ -32,9 +33,10 @@ public class DriversRankingFragment extends Fragment {
     private ProgressBar mProgressBar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private LayoutAnimations mLayoutAnimation;
-    private boolean stateProgresBar=true;
+    private boolean stateProgresBar = true;
+    private DriverAdapter vDriversAdapter;
 
-    DriversRankingFragment.PilotsApiAsync vPilotsApiAsync = new DriversRankingFragment.PilotsApiAsync();
+    DriversRankingFragment.PilotsApiAsync vPilotsApiAsync;
 
     public static DriversRankingFragment newInstance() {
         return new DriversRankingFragment();
@@ -43,23 +45,29 @@ public class DriversRankingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vView = inflater.inflate(R.layout.fragment_pilots_ranking, container, false);
+        vPilotsApiAsync = new PilotsApiAsync();
         mArrayListPilots=new ArrayList<>();
 
         mRecyclerViewList = vView.findViewById(R.id.recyclerViewPiloti);
         mProgressBar = vView.findViewById(R.id.frag_calendar_progress_bar);
-        mSwipeRefreshLayout=vView.findViewById(R.id.swipeRefreshPilots);
+        mSwipeRefreshLayout = vView.findViewById(R.id.swipeRefreshPilots);
 
         mLayoutAnimation = new LayoutAnimations();
 
 
         mRecyclerViewList.setHasFixedSize(true);
-        linearLayoutManager=new LinearLayoutManager(getContext());
+        linearLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerViewList.setLayoutManager(linearLayoutManager);
-       makeListRecyclerView(mArrayListPilots);
+        vDriversAdapter = new DriverAdapter(mArrayListPilots, getContext());
+        mRecyclerViewList.setAdapter(vDriversAdapter);
+
 
         if (savedInstanceState != null) {
             mArrayListPilots = (ArrayList<DriverStandings>) savedInstanceState.getSerializable(SAVE_LISTPILOTS);
-            makeListRecyclerView(mArrayListPilots);
+
+            makeNewRecycleWiev();
+
+            mProgressBar.setVisibility(View.INVISIBLE);
 
         } else {
             vPilotsApiAsync.execute();
@@ -69,18 +77,15 @@ public class DriversRankingFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-if(vPilotsApiAsync !=null){
-    vPilotsApiAsync.isCancelled();
-}
-                  vPilotsApiAsync = new DriversRankingFragment.PilotsApiAsync();
-                  vPilotsApiAsync.execute();
-stateProgresBar=false;
+                if (vPilotsApiAsync != null) {
+                    vPilotsApiAsync.isCancelled();
+                }
+                vPilotsApiAsync = new DriversRankingFragment.PilotsApiAsync();
+                vPilotsApiAsync.execute();
+                stateProgresBar = false;
 
             }
         });
-
-
-
 
         return vView;
     }
@@ -99,36 +104,32 @@ stateProgresBar=false;
         @Override
         protected String doInBackground(String... params) {
             if (stateProgresBar)
-           mProgressBar.setVisibility(View.VISIBLE);
+                mProgressBar.setVisibility(View.VISIBLE);
 
             vJsonObjectToParse = vApiRequestHelper.getContentFromUrl("https://ergast.com/api/f1/current/driverStandings.json");
 
             mArrayListPilots = DriversRankingHelper.getArrayListPilotsPoints(vJsonObjectToParse);
+
             return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
+            makeNewRecycleWiev();
 
-            if(stateProgresBar){
+            if (stateProgresBar) {
                 mProgressBar.setVisibility(View.INVISIBLE);
-            }else{
+            } else {
                 mSwipeRefreshLayout.setRefreshing(false);
-                stateProgresBar=true;
+                stateProgresBar = true;
             }
-
-           makeListRecyclerView(mArrayListPilots);
 
 
         }
     }
-
-    private void makeListRecyclerView(ArrayList<DriverStandings> mArrayListPilots){
-
-        DriverAdapter vDriversAdapter = new DriverAdapter(mArrayListPilots,getContext());
-        mRecyclerViewList.setAdapter(vDriversAdapter);
+    private  void makeNewRecycleWiev(){
+        vDriversAdapter.updateData(mArrayListPilots);
         mLayoutAnimation.runLayoutAnimation(mRecyclerViewList);
-
     }
 
 

@@ -19,13 +19,13 @@ import com.example.growingmobilef1.R;
 
 import java.util.ArrayList;
 
-public class DriverAdapterRECycler extends RecyclerView.Adapter<DriverAdapterRECycler.MyWiewHolder> {
+public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyWiewHolder> {
 
 
     ArrayList<DriverStandings> mArrayListDrivers;
     private Context context;
 
-    public DriverAdapterRECycler(ArrayList<DriverStandings> mArrayList, Context context) {
+    public DriverAdapter(ArrayList<DriverStandings> mArrayList, Context context) {
         this.context=context;
 
         mArrayListDrivers = mArrayList;

@@ -1,39 +1,40 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
-
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.example.growingmobilef1.Adapter.DriversAdapter;
+import android.widget.ProgressBar;
+
+import com.example.growingmobilef1.Adapter.DriverAdapter;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.DriversRankingHelper;
-import com.example.growingmobilef1.Model.Driver;
 import com.example.growingmobilef1.Model.DriverStandings;
 import com.example.growingmobilef1.R;
+import com.example.growingmobilef1.Utils.LayoutAnimations;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 public class DriversRankingFragment extends Fragment {
-
     private static final String SAVE_LISTPILOTS = "SAVE_LISTPILOTS";
 
     private ArrayList<DriverStandings> mArrayListPilots;
-    private ListView mListView;
+    private RecyclerView mRecyclerViewList;
+    private LinearLayoutManager linearLayoutManager;
     private ProgressBar mProgressBar;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private LayoutAnimations mLayoutAnimation;
+    private boolean stateProgresBar=true;
 
-    PilotsApiAsync vPilotsApiAsync = new PilotsApiAsync();
+    DriversRankingFragment.PilotsApiAsync vPilotsApiAsync = new DriversRankingFragment.PilotsApiAsync();
 
     public static DriversRankingFragment newInstance() {
         return new DriversRankingFragment();
@@ -42,33 +43,43 @@ public class DriversRankingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vView = inflater.inflate(R.layout.fragment_pilots_ranking, container, false);
+        mArrayListPilots=new ArrayList<>();
 
-       // mListView = vView.findViewById(R.id.listViewPilots);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Driver vdriver = mArrayListPilots.get(position).getDriver();
-
-                Intent vIntent = new Intent(getContext(), DriverDetailActivity.class);
-                vIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                Bundle vBundle = new Bundle();
-                vBundle.putSerializable("SAVE_ID", vdriver);
-                vIntent.putExtras(vBundle);
-                startActivity(vIntent);
-
-            }
-        });
+        mRecyclerViewList = vView.findViewById(R.id.recyclerViewPiloti);
         mProgressBar = vView.findViewById(R.id.frag_calendar_progress_bar);
-        if (savedInstanceState != null) {
+        mSwipeRefreshLayout=vView.findViewById(R.id.swipeRefreshPilots);
 
+        mLayoutAnimation = new LayoutAnimations();
+
+
+        mRecyclerViewList.setHasFixedSize(true);
+        linearLayoutManager=new LinearLayoutManager(getContext());
+        mRecyclerViewList.setLayoutManager(linearLayoutManager);
+       makeListRecyclerView(mArrayListPilots);
+
+        if (savedInstanceState != null) {
             mArrayListPilots = (ArrayList<DriverStandings>) savedInstanceState.getSerializable(SAVE_LISTPILOTS);
-            DriversAdapter vDriversAdapter = new DriversAdapter(mArrayListPilots);
-            mListView.setAdapter(vDriversAdapter);
+            makeListRecyclerView(mArrayListPilots);
 
         } else {
             vPilotsApiAsync.execute();
         }
+
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+if(vPilotsApiAsync !=null){
+    vPilotsApiAsync.isCancelled();
+}
+                  vPilotsApiAsync = new DriversRankingFragment.PilotsApiAsync();
+                  vPilotsApiAsync.execute();
+stateProgresBar=false;
+
+            }
+        });
+
+
 
 
         return vView;
@@ -83,11 +94,12 @@ public class DriversRankingFragment extends Fragment {
     private class PilotsApiAsync extends AsyncTask<String, Void, String> {
         private JSONObject vJsonObjectToParse;
         private ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
-        private Driver pilotRaceItem = new Driver();
+
 
         @Override
         protected String doInBackground(String... params) {
-            mProgressBar.setVisibility(View.VISIBLE);
+            if (stateProgresBar)
+           mProgressBar.setVisibility(View.VISIBLE);
 
             vJsonObjectToParse = vApiRequestHelper.getContentFromUrl("https://ergast.com/api/f1/current/driverStandings.json");
 
@@ -97,12 +109,27 @@ public class DriversRankingFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String result) {
-            DriversAdapter vDriversAdapter = new DriversAdapter(mArrayListPilots);
-            mListView.setAdapter(vDriversAdapter);
-            mProgressBar.setVisibility(View.INVISIBLE);
+
+            if(stateProgresBar){
+                mProgressBar.setVisibility(View.INVISIBLE);
+            }else{
+                mSwipeRefreshLayout.setRefreshing(false);
+                stateProgresBar=true;
+            }
+
+           makeListRecyclerView(mArrayListPilots);
+
+
         }
+    }
+
+    private void makeListRecyclerView(ArrayList<DriverStandings> mArrayListPilots){
+
+        DriverAdapter vDriversAdapter = new DriverAdapter(mArrayListPilots,getContext());
+        mRecyclerViewList.setAdapter(vDriversAdapter);
+        mLayoutAnimation.runLayoutAnimation(mRecyclerViewList);
+
     }
 
 
 }
-

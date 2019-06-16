@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import com.example.growingmobilef1.Fragment_Activity.CalendarFragment;
 import com.example.growingmobilef1.Fragment_Activity.ConstructorsRankingFragment;
 import com.example.growingmobilef1.Fragment_Activity.DriversRankingFragment;
-import com.example.growingmobilef1.Fragment_Activity.DriversRankingFragmentRECYcler;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
                     launchFragment(CALENDAR_FRAGMENT, CalendarFragment.newInstance());
                     return true;
                 case R.id.tab_bar_pilots_ranking:
-                    launchFragment(PILOTS_RANKING_FRAGMENT, DriversRankingFragmentRECYcler.newInstance());
+                    launchFragment(PILOTS_RANKING_FRAGMENT, DriversRankingFragment.newInstance());
                     return true;
                 case R.id.tab_bar_constructors_ranking:
                     launchFragment(CONSTRUCTORS_RANKING_FRAGMENT, ConstructorsRankingFragment.newInstance());

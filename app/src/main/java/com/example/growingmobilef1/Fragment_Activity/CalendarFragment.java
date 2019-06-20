@@ -140,7 +140,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
     @Override
     public void onNotificationScheduled(int aPosition) {
         mNotificationUtil = new NotificationUtil(
-                mCalendarRaceItemArraylist.get(aPosition).getCalendarDate(),
+                mCalendarRaceItemArraylist.get(aPosition).getDateTime(),
                 getContext(),
                 mCalendarRaceItemArraylist.get(aPosition)
         );

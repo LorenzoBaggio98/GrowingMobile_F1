@@ -1,7 +1,5 @@
 package com.example.growingmobilef1.Model;
 
-import com.example.growingmobilef1.Interface.IListableObject;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 

@@ -2,8 +2,6 @@ package com.example.growingmobilef1.Fragment_Activity;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,20 +9,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.example.growingmobilef1.Adapter.QualifyingResultsAdapter;
-import com.example.growingmobilef1.Adapter.RaceResultsAdapter;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.QualifyingResultsDataHelper;
 import com.example.growingmobilef1.Model.QualifyingResults;
-import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
 import com.example.growingmobilef1.Utils.LayoutAnimations;
 
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 public class QualifyingResultsFragment extends Fragment {

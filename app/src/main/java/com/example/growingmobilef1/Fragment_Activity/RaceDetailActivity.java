@@ -108,7 +108,7 @@ public class RaceDetailActivity extends AppCompatActivity {
         Calendar vDate =  Calendar.getInstance();
         vDate.setTime(Calendar.getInstance().getTime());
 
-        if (mRace.getCalendarDate().after(vDate)) {
+        if (mRace.getDateTime().after(vDate)) {
             getMenuInflater().inflate(R.menu.race_detail_notification, menu);
             Drawable drawable = menu.getItem(0).getIcon();
             drawable.mutate();
@@ -134,7 +134,7 @@ public class RaceDetailActivity extends AppCompatActivity {
                 return true;
 
             case R.id.race_detail_notification:
-                mNotificationUtil = new NotificationUtil(mRace.getCalendarDate(), this, mRace);
+                mNotificationUtil = new NotificationUtil(mRace.getDateTime(), this, mRace);
                 manageNotificationIconColor(item);
                 return true;
             default:

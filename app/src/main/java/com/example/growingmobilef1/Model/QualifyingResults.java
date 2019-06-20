@@ -29,20 +29,22 @@ public class QualifyingResults implements Serializable {
         Driver tempDriver = new Driver();
         Constructor tempConst = new Constructor();
 
-        if(json.length() != 0){
-            try{
+        if(json != null) {
+            if (json.length() != 0) {
+                try {
 
-                temp.setNumber(json.getInt("number"));
-                temp.setPosition(json.getInt("position"));
-                temp.setDriver(tempDriver.fromJson(json.getJSONObject("Driver")));
-                temp.setConstructor(tempConst.fromJson(json.getJSONObject("Constructor")));
+                    temp.setNumber(json.getInt("number"));
+                    temp.setPosition(json.getInt("position"));
+                    temp.setDriver(tempDriver.fromJson(json.getJSONObject("Driver")));
+                    temp.setConstructor(tempConst.fromJson(json.getJSONObject("Constructor")));
 
-                temp.setQ1(json.optString("Q1"));
-                temp.setQ2(json.optString("Q2"));
-                temp.setQ3(json.optString("Q3"));
+                    temp.setQ1(json.optString("Q1"));
+                    temp.setQ2(json.optString("Q2"));
+                    temp.setQ3(json.optString("Q3"));
 
-            }catch (JSONException e){
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

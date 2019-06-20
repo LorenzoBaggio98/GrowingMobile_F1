@@ -1,16 +1,20 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -25,6 +29,7 @@ import com.example.growingmobilef1.Model.QualifyingResults;
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
+import com.example.growingmobilef1.Utils.LayoutAnimations;
 import com.example.growingmobilef1.Utils.NotificationUtil;
 
 import org.json.JSONObject;
@@ -40,12 +45,14 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
     private HashMap<String, ArrayList<RaceResults>> mRaceResultsMap;
 
     private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeRefresh;
     private RecyclerView.LayoutManager mLayoutManager;
     private RacesAdapter mAdapter;
     private ProgressBar mPgsBar;
 
     // Notification
     NotificationUtil mNotificationUtil;
+    private LayoutAnimations mLayoutAnimations;
 
     public static CalendarFragment newInstance() {
         return new CalendarFragment();
@@ -57,6 +64,8 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
 
         mRecyclerView = vView.findViewById(R.id.frag_calendar_listview);
         mPgsBar = vView.findViewById(R.id.frag_calendar_progress_bar);
+        mSwipeRefresh = vView.findViewById(R.id.frag_calendar_refresh_layout);
+        mLayoutAnimations = new LayoutAnimations();
 
         // Call the async class to perform the api call
         CalendarApiAsyncCaller vCalendarAsyncCaller = new CalendarApiAsyncCaller();
@@ -74,7 +83,13 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
                 this);
         mRecyclerView.setAdapter(mAdapter);
 
-       return vView;
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshList();
+            }
+        });
+        return vView;
     }
 
     private void setListAdapter(){
@@ -84,6 +99,13 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
                 this,
                 this);
         mRecyclerView.setAdapter(vCalendarListAdapter);
+    }
+
+    private void refreshList(){
+        CalendarApiAsyncCaller vCalendarAsync = new CalendarApiAsyncCaller();
+        CalendarPodiumApiAsyncCaller vPodiumAsync = new CalendarPodiumApiAsyncCaller();
+        vCalendarAsync.execute();
+        vPodiumAsync.execute();
     }
 
     /**
@@ -117,9 +139,11 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
 
     @Override
     public void onNotificationScheduled(int aPosition) {
-        mNotificationUtil = new NotificationUtil(mCalendarRaceItemArraylist.get(aPosition).getmDate(),
+        mNotificationUtil = new NotificationUtil(
+                mCalendarRaceItemArraylist.get(aPosition).getCalendarDate(),
                 getContext(),
-                mCalendarRaceItemArraylist.get(aPosition));
+                mCalendarRaceItemArraylist.get(aPosition)
+        );
         mNotificationUtil.sendNotification();
     }
 
@@ -137,7 +161,6 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
             mCalendarRaceDataHelper = new CalendarRaceDataHelper();
             mRaceResultsMap = new HashMap<>();
 
-            RaceResultsDataHelper vRaceResultsDataHelper = new RaceResultsDataHelper();
             mJsonCalendarToParse = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current.json");
             if (mJsonCalendarToParse != null) {
                 mCalendarRaceItemArraylist =  mCalendarRaceDataHelper.getArraylist(mJsonCalendarToParse);
@@ -160,17 +183,21 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         protected String doInBackground(String... params) {
 
             ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
-            RaceResultsDataHelper vRaceResultsDataHelper = new RaceResultsDataHelper();
 
             mRaceResultsMap = new HashMap<>();
 
             JSONObject vResultsObject = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current/results.json?limit=10000");
-            ArrayList<Races> vRacesArrayList = vCalendarRaceDataHelper.getArraylist(vResultsObject);
 
-            for (Races vRaceResult: vRacesArrayList) {
-                for (Races vRace: mCalendarRaceItemArraylist) {
-                    if (vRaceResult.getRaceName().equals(vRace.getRaceName())) {
-                        mRaceResultsMap.put(vRace.getRaceName(), vRaceResult.getResults());
+            if(vResultsObject != null) {
+                ArrayList<Races> vRacesArrayList = vCalendarRaceDataHelper.getArraylist(vResultsObject);
+
+                if (vRacesArrayList != null) {
+                    for (Races vRaceResult : vRacesArrayList) {
+                        for (Races vRace : mCalendarRaceItemArraylist) {
+                            if (vRaceResult.getRaceName().equals(vRace.getRaceName())) {
+                                mRaceResultsMap.put(vRace.getRaceName(), vRaceResult.getResults());
+                            }
+                        }
                     }
                 }
             }
@@ -181,6 +208,8 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         protected void onPostExecute(String result) {
             setListAdapter();
             mPgsBar.setVisibility(View.GONE);
+            mLayoutAnimations.runLayoutAnimation(mRecyclerView);
+            mSwipeRefresh.setRefreshing(false);
             mAdapter.updateData(mCalendarRaceItemArraylist, mRaceResultsMap);
             mRecyclerView.getAdapter().notifyDataSetChanged();
         }

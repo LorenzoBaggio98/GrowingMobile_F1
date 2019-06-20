@@ -23,6 +23,7 @@ import com.example.growingmobilef1.Helper.ConstructorsDataHelper;
 
 import com.example.growingmobilef1.Model.ConstructorStandings;
 import com.example.growingmobilef1.R;
+import com.example.growingmobilef1.Utils.LayoutAnimations;
 
 import org.json.JSONObject;
 
@@ -38,6 +39,7 @@ public class ConstructorsRankingFragment extends Fragment {
     private ProgressBar mPgsBar;
     private View vView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private LayoutAnimations mLayoutAnimation;
 
     public static ConstructorsRankingFragment newInstance() {
         return new ConstructorsRankingFragment();
@@ -55,6 +57,7 @@ public class ConstructorsRankingFragment extends Fragment {
         mRecyclerView = (RecyclerView) vView.findViewById(R.id.list); // list
         mPgsBar = (ProgressBar)vView.findViewById(R.id.progress_loaderC); // progressbar
         mSwipeRefreshLayout = (SwipeRefreshLayout) vView.findViewById(R.id.swipeRefreshConstructos);
+        mLayoutAnimation = new LayoutAnimations();
 
         // start loading progress bar
         mPgsBar.setVisibility(vView.VISIBLE);
@@ -106,7 +109,7 @@ public class ConstructorsRankingFragment extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             ((ConstructorsAdapter)mAdapter).updateData(mConstructorsItemArraylist);
-            runLayoutAnimation(mRecyclerView);
+            mLayoutAnimation.runLayoutAnimation(mRecyclerView);
 
             if(vJsonToParse == null) {
                 Toast.makeText(getActivity(), "Can't fetch ranking, check internet connection", Toast.LENGTH_LONG);
@@ -132,19 +135,6 @@ public class ConstructorsRankingFragment extends Fragment {
         // Call the async class to perform the api call
         CalendarApiAsyncCaller vLongOperation = new CalendarApiAsyncCaller();
         vLongOperation.execute();
-
-    }
-
-    private void runLayoutAnimation(final RecyclerView recyclerView) {
-
-        final Context context = recyclerView.getContext();
-        final LayoutAnimationController controller =
-                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_slide_right);
-
-        recyclerView.setLayoutAnimation(controller);
-        // update view
-        recyclerView.getAdapter().notifyDataSetChanged();
-        recyclerView.scheduleLayoutAnimation();
 
     }
 }

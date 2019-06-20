@@ -14,26 +14,28 @@ public class QualifyingResultsDataHelper {
 
         ArrayList<QualifyingResults> vQualResultsArray = new ArrayList<>();
 
-        if(aJson.length() != 0){
-            try{
+        if(aJson != null) {
+            if (aJson.length() != 0) {
+                try {
 
-                JSONArray vRaces = aJson.getJSONObject("MRData")
-                        .getJSONObject("RaceTable").getJSONArray("Races");
+                    JSONArray vRaces = aJson.getJSONObject("MRData")
+                            .getJSONObject("RaceTable").getJSONArray("Races");
 
-                for(int i = 0; i < vRaces.length(); i++){
+                    for (int i = 0; i < vRaces.length(); i++) {
 
-                    // Qual Result
-                    JSONArray vQResults = vRaces.getJSONObject(i).getJSONArray("QualifyingResults");
+                        // Qual Result
+                        JSONArray vQResults = vRaces.getJSONObject(i).getJSONArray("QualifyingResults");
 
-                    for(int j = 0; j < vQResults.length(); j++){
+                        for (int j = 0; j < vQResults.length(); j++) {
 
-                        QualifyingResults vQRes = QualifyingResults.fromJson(vQResults.getJSONObject(j));
-                        vQualResultsArray.add(vQRes);
+                            QualifyingResults vQRes = QualifyingResults.fromJson(vQResults.getJSONObject(j));
+                            vQualResultsArray.add(vQRes);
+                        }
                     }
-                }
 
-            }catch (JSONException e){
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

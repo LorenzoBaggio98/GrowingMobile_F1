@@ -2,25 +2,24 @@ package com.example.growingmobilef1.Adapter;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+
 import java.util.Locale;
 import java.util.Map;
 
@@ -43,7 +42,7 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
                         ArrayList<Races> aData,
                         Map<String, ArrayList<RaceResults>> aRaceResultsMap,
                         IOnRaceClicked aListener,
-                        IOnNotificationIconClicked aNotificationListener){
+                        IOnNotificationIconClicked aNotificationListener) {
         mContext = aContext;
         mRacesArrayList = aData;
         mRaceResultsMap = aRaceResultsMap;
@@ -76,12 +75,11 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
     @Override
     public int getItemViewType(int position) {
 
-        Calendar vCalendarConvertRaceDate = Calendar.getInstance();
-        vCalendarConvertRaceDate.setTime(mRacesArrayList.get(position).getmDate());
+        Calendar vCalendarConvertRaceDate = mRacesArrayList.get(position).getCalendarDate();
         long raceMilliSecondDate = vCalendarConvertRaceDate.getTimeInMillis();
+
         Calendar vCalendar = Calendar.getInstance();
         vCalendar.setTime(vCalendar.getTime());
-
         if (raceMilliSecondDate > vCalendar.getTimeInMillis()) {
             return RACE_NOT_OCCURRED;
         } else {
@@ -110,18 +108,19 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder vHolder, int position) {
-        Calendar vCalendarDate = mRacesArrayList.get(position).getCalendarDate();
-        int vCalendarMonth = vCalendarDate.get(Calendar.MONTH);
+    public void onBindViewHolder (@NonNull ViewHolder vHolder,int position){
 
-        Calendar vCalendarTime = mRacesArrayList.get(position).getCalendarTime();
+
+        Calendar vCalendarDate = mRacesArrayList.get(position).getCalendarDate();
+
+        int vCalendarMonth = vCalendarDate.get(Calendar.MONTH);
 
         vHolder.mRaceLabel.setText("" + mRacesArrayList.get(position).getmMainInformation());
 
         // Set the podium results (if the race has already occurred)
         String vPositionLabelString = "";
         if (mRaceResultsMap.containsKey(mRacesArrayList.get(position).getRaceName())) {
-            for (int i = 0; i < 3; i++){
+            for (int i = 0; i < 3; i++) {
                 String vPosition = mRaceResultsMap.get(mRacesArrayList.get(position).getRaceName()).get(i).getDriver().getCode();
                 if (i < 2)
                     vPositionLabelString += vPosition + " / ";
@@ -139,7 +138,7 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
             vHolder.mDateLabel.setText(vCalendarDate.get(Calendar.DAY_OF_MONTH) + " " +
                     vCalendarDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
         }
-        vHolder.mTimeLabel.setText(vCalendarTime.get(Calendar.HOUR_OF_DAY) + ":" + vCalendarTime.get(Calendar.MINUTE));
+        vHolder.mTimeLabel.setText(vCalendarDate.get(Calendar.HOUR_OF_DAY) + ":" + vCalendarDate.get(Calendar.MINUTE));
 
         // Change notification icon if notification is scheduled
         if (mRacesArrayList.get(position).getNotificationScheduled()) {
@@ -149,11 +148,11 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount () {
         return mRacesArrayList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView mRaceLabel, mPodiumLabel, mDateLabel, mTimeLabel;
         LinearLayout mContainerLayout;
@@ -191,7 +190,7 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
         }
 
         // Change the notifiation color
-        private void manageNotificationIconColor(Context aContext, ImageView aNotificationIcon){
+        private void manageNotificationIconColor(Context aContext, ImageView aNotificationIcon) {
             ColorStateList vPrimaryColor = AppCompatResources.getColorStateList(aContext, R.color.colorPrimary);
             ColorStateList vUnselectedColor = AppCompatResources.getColorStateList(aContext, R.color.colorSecondaryLight);
 
@@ -203,11 +202,11 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
     }
 
     // For click handling
-    public interface IOnRaceClicked{
+    public interface IOnRaceClicked {
         void onRaceClicked(int aPosition);
     }
 
-    public interface IOnNotificationIconClicked{
+    public interface IOnNotificationIconClicked {
         void onNotificationScheduled(int aPosition);
     }
 }

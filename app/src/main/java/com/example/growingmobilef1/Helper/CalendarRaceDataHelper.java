@@ -17,8 +17,8 @@ public class CalendarRaceDataHelper {
 
         ArrayList<Races> vCalendarRaceItemArraylist = new ArrayList<>();
 
-        if(aJsonToParse != null) {
-            if (aJsonToParse.length() != 0) {
+        if(aJsonToParse != null){
+            if(aJsonToParse.length() != 0){
 
                 try {
                     JSONObject vMRDataObject = aJsonToParse.getJSONObject("MRData");
@@ -30,13 +30,13 @@ public class CalendarRaceDataHelper {
                     // Create a JSONObject for each race
                     for (int i = 0; i < vRacesArray.length(); i++) {
 
-                        JSONObject vRace = vRacesArray.getJSONObject(i);
+                        JSONObject vRace  = vRacesArray.getJSONObject(i);
                         Races vTempRace = Races.fromJson(vRace);
 
                         vCalendarRaceItemArraylist.add(vTempRace);
                     }
 
-                } catch (JSONException e) {
+                } catch (JSONException e){
                     e.printStackTrace();
                 }
             }

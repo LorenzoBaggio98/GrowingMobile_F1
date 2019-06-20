@@ -13,17 +13,18 @@ import com.example.growingmobilef1.Model.Races;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.Calendar;
 import java.util.Date;
 
 public class NotificationUtil {
 
     public static final String RACE_ALERT = "Tag to send the race item to the AlertReceiver";
 
-    private Date mDate;
+    private Calendar mDate;
     private Context mContext;
     private Races mRace;
 
-    public NotificationUtil(Date aDate, Context context, Races race){
+    public NotificationUtil(Calendar aDate, Context context, Races race){
         this.mDate = aDate;
         this.mContext = context;
         this.mRace = race;
@@ -67,7 +68,8 @@ public class NotificationUtil {
            // mDate.setMinutes(mDate.getMinutes() - 10);
             vAlarmManager.setExact(AlarmManager.RTC_WAKEUP, vDate.getTime(), vBroadcast);
             mRace.setNotificationScheduled(true);
-            Toast.makeText(mContext, "Notification scheduled for " + mDate, Toast.LENGTH_LONG).show();
+            String vToastText = mDate.get(Calendar.DAY_OF_MONTH) + " / " + mDate.get(Calendar.MONTH) + " at " + mDate.get(Calendar.HOUR_OF_DAY) + ":" + mDate.get(Calendar.MINUTE);
+            Toast.makeText(mContext, "Notification scheduled for " + vToastText, Toast.LENGTH_LONG).show();
 
         } else {
             vAlarmManager.cancel(vBroadcast);

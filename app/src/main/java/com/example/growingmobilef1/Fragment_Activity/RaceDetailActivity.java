@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.ImageViewCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,8 +21,10 @@ import android.widget.Toast;
 
 import com.example.growingmobilef1.Adapter.ViewPagerAdapter;
 import com.example.growingmobilef1.MainActivity;
+import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
+import com.example.growingmobilef1.Utils.LayoutAnimations;
 import com.example.growingmobilef1.Utils.NotificationUtil;
 
 /**
@@ -28,6 +33,7 @@ import com.example.growingmobilef1.Utils.NotificationUtil;
  */
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
 import java.util.Date;
 
 public class RaceDetailActivity extends AppCompatActivity {
@@ -48,7 +54,6 @@ public class RaceDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_race_detail);
-
         mRace = new Races();
 
         mViewPager = findViewById(R.id.viewPager);
@@ -63,10 +68,11 @@ public class RaceDetailActivity extends AppCompatActivity {
         }
 
         ViewGroup.LayoutParams layoutParams = mToolbar.getLayoutParams();
-        layoutParams.height = 135;
+        layoutParams.height = (int)getApplicationContext().getResources().getDimension(R.dimen.TabLayout_height);
         mToolbar.setLayoutParams(layoutParams);
 
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+
         // Set the tabBar with ViewPageAdapter and TabLayout
         mPageAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
@@ -81,7 +87,6 @@ public class RaceDetailActivity extends AppCompatActivity {
         // Set the Action Bar back button and the title
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(mRace.getRaceName());
-
 
         // Set the image circuit
         try {
@@ -104,9 +109,10 @@ public class RaceDetailActivity extends AppCompatActivity {
     // Load the notification icon only if the race hasn't happened yet
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Date vDate =  new Date();
-        vDate.setTime(new Date().getTime());
-        if (mRace.getmDate().after(vDate)) {
+        Calendar vDate =  Calendar.getInstance();
+        vDate.setTime(Calendar.getInstance().getTime());
+
+        if (mRace.getCalendarDate().after(vDate)) {
             getMenuInflater().inflate(R.menu.race_detail_notification, menu);
             Drawable drawable = menu.getItem(0).getIcon();
             drawable.mutate();
@@ -115,7 +121,6 @@ public class RaceDetailActivity extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
-
 
     /**
      * Back to Main Activity
@@ -134,10 +139,9 @@ public class RaceDetailActivity extends AppCompatActivity {
                 return true;
 
             case R.id.race_detail_notification:
-                mNotificationUtil = new NotificationUtil(mRace.getmDate(), this, mRace);
+                mNotificationUtil = new NotificationUtil(mRace.getCalendarDate(), this, mRace);
                 manageNotificationIconColor(item);
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -157,5 +161,4 @@ public class RaceDetailActivity extends AppCompatActivity {
         mViewPager.setAdapter(mPageAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
     }
-
 }

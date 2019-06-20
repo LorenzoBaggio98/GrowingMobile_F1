@@ -1,29 +1,22 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
-import android.app.AlarmManager;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
+
 import com.example.growingmobilef1.Adapter.ViewPagerAdapter;
-import com.example.growingmobilef1.AlertReceiver;
 import com.example.growingmobilef1.MainActivity;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
@@ -47,6 +40,7 @@ public class RaceDetailActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private Races mRace;
     private NotificationUtil mNotificationUtil;
+    private Button mLogOutButton;
 
     ViewPagerAdapter mPageAdapter;
 
@@ -118,6 +112,7 @@ public class RaceDetailActivity extends AppCompatActivity {
             drawable.mutate();
             drawable.setColorFilter(getResources().getColor(R.color.colorSecondaryLight), PorterDuff.Mode.SRC_ATOP);
         }
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -142,6 +137,7 @@ public class RaceDetailActivity extends AppCompatActivity {
                 mNotificationUtil = new NotificationUtil(mRace.getmDate(), this, mRace);
                 manageNotificationIconColor(item);
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }

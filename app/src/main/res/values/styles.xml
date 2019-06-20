@@ -22,4 +22,10 @@
         parent="Widget.Design.BottomNavigationView">
         <item name="fontFamily">@font/formula_one_regular</item>
     </style>
+
+    <style name="EditTextTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+    </style>
 </resources>

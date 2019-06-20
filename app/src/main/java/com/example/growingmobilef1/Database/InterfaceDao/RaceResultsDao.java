@@ -14,11 +14,14 @@ import java.util.List;
 public interface RaceResultsDao {
 
     @Insert
-    void insert(RoomRaceResult raceResults);
+    long insert(RoomRaceResult raceResults);
 
     @Query("SELECT * FROM race_results WHERE id = :id")
     RoomRaceResult findRaceResults(int id);
 
-    @Query("SELECT * FROM race")
+    @Query("SELECT * FROM race_results")
     LiveData<List<RoomRaceResult>> getAllRaceResults();
+
+    @Query("SELECT * FROM race_results WHERE raceId = :raceId")
+    LiveData<List<RoomRaceResult>> getRaceResultsByRaceId(int raceId);
 }

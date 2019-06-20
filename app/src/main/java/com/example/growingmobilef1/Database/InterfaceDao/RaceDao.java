@@ -10,10 +10,10 @@ import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import java.util.List;
 
 @Dao
-public interface RaceDao {
+public interface RaceDao{
 
     @Insert
-    void insert(RoomRace race);
+    long insert(RoomRace race);
 
     @Query("SELECT * FROM race WHERE id = :id")
     RoomRace findRace(int id);

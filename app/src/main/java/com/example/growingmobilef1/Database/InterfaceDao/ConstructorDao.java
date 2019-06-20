@@ -13,11 +13,11 @@ import java.util.List;
 public interface ConstructorDao {
 
     @Insert
-    void insert(RoomConstructor constructor);
+    long insert(RoomConstructor constructor);
 
     @Query("SELECT * FROM constructor WHERE id = :id")
     RoomConstructor findDriver(int id);
 
     @Query("SELECT * FROM constructor")
-    LiveData<List<RoomConstructor>> getAllConstructor();
+    LiveData<List<RoomConstructor>> getAllConstructors();
 }

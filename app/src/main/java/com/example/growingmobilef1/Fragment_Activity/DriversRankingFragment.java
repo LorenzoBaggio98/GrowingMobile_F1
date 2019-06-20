@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,17 +48,24 @@ public class DriversRankingFragment extends Fragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 Driver vdriver = mArrayListPilots.get(position).getDriver();
-
                 Intent vIntent = new Intent(getContext(), DriverDetailActivity.class);
                 Bundle vBundle = new Bundle();
                 vBundle.putSerializable("SAVE_ID", vdriver);
                 vIntent.putExtras(vBundle);
                 startActivity(vIntent);
-
             }
         });
+
+        /*
+        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                launchPilotDetailDialog(position);
+                return false;
+            }
+        });
+        */
         mProgressBar = vView.findViewById(R.id.frag_calendar_progress_bar);
         if (savedInstanceState != null) {
 
@@ -71,6 +79,13 @@ public class DriversRankingFragment extends Fragment {
 
 
         return vView;
+    }
+
+    private void launchPilotDetailDialog(int aPosition){
+        Driver vDriver = mArrayListPilots.get(aPosition).getDriver();
+        FragmentTransaction vFT = getActivity().getSupportFragmentManager().beginTransaction();
+        vFT.add(DriverDetailDialog.getInstance(vDriver), "PILOT_DIALOG");
+        vFT.commit();
     }
 
     @Override

@@ -9,12 +9,13 @@ import com.example.growingmobilef1.Model.Races;
 @Entity(tableName = "race")
 public class RoomRace {
 
-    @PrimaryKey(autoGenerate = true)
-    @NonNull
+
     public int id;
 
     public String name;
 
+    @PrimaryKey(autoGenerate = false)
+    @NonNull
     public String circuitId;
 
     public String dateTime;

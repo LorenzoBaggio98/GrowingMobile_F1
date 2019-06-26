@@ -195,7 +195,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
                 mCalendarRaceItemArraylist =  mCalendarRaceDataHelper.getArraylist(mJsonCalendarToParse);
 
                 // Inserire su db
-                //populateDb();
+                populateDb();
             }
             return null;
         }
@@ -249,11 +249,20 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
 
     void populateDb(){
 
-         racesViewModel.getAllRaces();
+        racesViewModel.getAllRaces();
 
         for(int i=0; i< mCalendarRaceItemArraylist.size(); i++){
 
-            racesViewModel.insert(mCalendarRaceItemArraylist.get(i).toRoomRace());
+             RoomRace vRoomRace = mCalendarRaceItemArraylist.get(i).toRoomRace();
+             boolean isRaceSaved = false;
+
+             for (Races vRace: mCalendarRaceItemArraylist) {
+                 if (vRace.getCircuit().getCircuitId() == vRoomRace.circuitId)
+                     isRaceSaved = true;
+             }
+
+             if (!isRaceSaved)
+                racesViewModel.insert(mCalendarRaceItemArraylist.get(i).toRoomRace());
         }
 
     }

@@ -7,19 +7,19 @@ import android.support.annotation.NonNull;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
-@Entity(tableName = "driver",
+@Entity(tableName = "driver"/*,
         foreignKeys = @ForeignKey(
                 entity = RoomConstructor.class,
                 parentColumns = "id",
                 childColumns = "constructorId",
                 onDelete = CASCADE
-        )
+        )*/
 )
 public class RoomDriver {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     @NonNull
-    public int id;
+    public String id;
 
     public String name;
     public String surname;

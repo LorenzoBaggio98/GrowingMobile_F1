@@ -21,6 +21,6 @@ public interface QualifyingResultDao {
     @Query("SELECT * FROM qualifying_results")
     LiveData<List<RoomQualifyingResult>> getAllQualResults();
 
-    @Query("SELECT * FROM qualifying_results WHERE raceId = :raceId")
+    @Query("SELECT * FROM qualifying_results WHERE circuitId = :raceId")
     LiveData<List<RoomQualifyingResult>> getQualResultsByRaceId(int raceId);
 }

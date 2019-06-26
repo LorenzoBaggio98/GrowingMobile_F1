@@ -10,7 +10,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 @Entity(tableName = "race_results",
         foreignKeys = {@ForeignKey(
                 entity = RoomRace.class,
-                parentColumns = "id",
+                parentColumns = "circuitId",
                 childColumns = "raceId",
                 onDelete = CASCADE
         ),
@@ -31,7 +31,7 @@ public class RoomRaceResult {
 
     public String time;
 
-    public int raceId;
+    public String raceId;
 
     public int driverId;
 

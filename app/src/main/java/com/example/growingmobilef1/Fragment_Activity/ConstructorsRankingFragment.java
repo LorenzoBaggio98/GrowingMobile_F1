@@ -7,6 +7,7 @@ import android.content.Context;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,9 +30,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ConstructorsRankingFragment extends Fragment {
+public class ConstructorsRankingFragment extends Fragment //implements ApiAsyncCallerFragment.IOnConstructorCalled
+ {
 
     public final static String CONSTRUCTORS_RANKING_FRAGMENT_TAG = "CONSTRUCTORS_RANKING_FRAGMENT";
+    public final static String CONSTRUCTORS_API_CALLER = "Constructor api caller tag";
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -40,6 +43,7 @@ public class ConstructorsRankingFragment extends Fragment {
     private View vView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private LayoutAnimations mLayoutAnimation;
+    private ApiAsyncCallerFragment mApiCallerFragment;
 
     public static ConstructorsRankingFragment newInstance() {
         return new ConstructorsRankingFragment();
@@ -49,6 +53,10 @@ public class ConstructorsRankingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         vView = inflater.inflate(R.layout.fragment_constructors_ranking, container, false);
 
+      /*  mApiCallerFragment = (ApiAsyncCallerFragment) getFragmentManager().findFragmentByTag(CONSTRUCTORS_API_CALLER);
+        if (mApiCallerFragment == null){
+            launchApiCallerFragment();
+        }*/
         // Call the async class to perform the api call
         CalendarApiAsyncCaller vLongOperation = new CalendarApiAsyncCaller();
         vLongOperation.execute();
@@ -86,6 +94,37 @@ public class ConstructorsRankingFragment extends Fragment {
         return vView;
     }
 
+    private void launchApiCallerFragment(){
+        FragmentTransaction vFT = getFragmentManager().beginTransaction();
+        mApiCallerFragment = ApiAsyncCallerFragment.getInstance();
+        vFT.add(mApiCallerFragment, CONSTRUCTORS_API_CALLER);
+        vFT.commit();
+        mApiCallerFragment.startConstructorsCall();
+    }
+/*
+    @Override
+    public void onConstructorCalled(ArrayList<ConstructorStandings> aConstructorList) {
+        ((ConstructorsAdapter)mAdapter).updateData(aConstructorList);
+        mLayoutAnimation.runLayoutAnimation(mRecyclerView);
+
+        if(aConstructorList.isEmpty()) {
+            Toast.makeText(getActivity(), "Can't fetch ranking, check internet connection", Toast.LENGTH_LONG);
+        } else {
+
+            switch (mPgsBar.getVisibility())
+            {
+                case View.GONE:
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    break;
+                case View.VISIBLE:
+
+                    mPgsBar.setVisibility(vView.GONE);
+                    break;
+            }
+
+        }
+    }
+*/
     // Private class needed to perform the API call asynchronously
     private class CalendarApiAsyncCaller extends AsyncTask<String, Void, String> {
 
@@ -133,8 +172,7 @@ public class ConstructorsRankingFragment extends Fragment {
     void refreshItems() {
         // Load items
         // Call the async class to perform the api call
-        CalendarApiAsyncCaller vLongOperation = new CalendarApiAsyncCaller();
-        vLongOperation.execute();
+        mApiCallerFragment.startConstructorsCall();
 
     }
 }

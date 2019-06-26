@@ -1,9 +1,11 @@
 package com.example.growingmobilef1.Database;
 
+import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.example.growingmobilef1.Database.InterfaceDao.ConstructorDao;
 import com.example.growingmobilef1.Database.InterfaceDao.DriverDao;
@@ -16,6 +18,8 @@ import com.example.growingmobilef1.Database.ModelRoom.RoomQualifyingResult;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
 
+import java.util.concurrent.Executors;
+
 @Database(
         entities = {
                 RoomRace.class,
@@ -23,7 +27,7 @@ import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
                 RoomQualifyingResult.class,
                 RoomDriver.class,
                 RoomConstructor.class
-        }, version = 1
+        }, version = 5
 )
 public abstract class FormulaDatabase extends RoomDatabase {
 
@@ -57,5 +61,4 @@ public abstract class FormulaDatabase extends RoomDatabase {
 
         return INSTANCE;
     }
-
 }

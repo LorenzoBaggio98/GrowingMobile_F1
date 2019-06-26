@@ -1,7 +1,11 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -22,6 +26,8 @@ import android.widget.Toast;
 
 import com.example.growingmobilef1.Adapter.QualifyingResultsAdapter;
 import com.example.growingmobilef1.Adapter.RacesAdapter;
+import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
+import com.example.growingmobilef1.Database.RacesViewModel;
 import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.RaceResultsDataHelper;
@@ -36,7 +42,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.util.List;
 
 
 public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceClicked, RacesAdapter.IOnNotificationIconClicked{
@@ -54,6 +60,32 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
     NotificationUtil mNotificationUtil;
     private LayoutAnimations mLayoutAnimations;
 
+    // Database
+    private RacesViewModel racesViewModel;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // ViewModel creato da Provider
+        racesViewModel = ViewModelProviders.of(this).get(RacesViewModel.class);
+
+        //todo vedere se serve e fare il wrapper tra model db e model rest
+        /*racesViewModel.getAllRaces().observe(this, new Observer<List<RoomRace>>() {
+            @Override
+            public void onChanged(List<RoomRace> roomRaces) {
+
+                ArrayList<Races> temp = new ArrayList<>();
+
+                for(int i = 0; i< roomRaces.size(); i++){
+                    temp.add(roomRaces.get(i).toRace());
+                }
+
+                mAdapter.updateData(temp);
+            }
+        });*/
+    }
+
     public static CalendarFragment newInstance() {
         return new CalendarFragment();
     }
@@ -70,6 +102,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         // Call the async class to perform the api call
         CalendarApiAsyncCaller vCalendarAsyncCaller = new CalendarApiAsyncCaller();
         vCalendarAsyncCaller.execute();
+
         CalendarPodiumApiAsyncCaller vPodiumAsyncCaller = new CalendarPodiumApiAsyncCaller();
         vPodiumAsyncCaller.execute();
 
@@ -108,10 +141,6 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         vPodiumAsync.execute();
     }
 
-    /**
-     *
-     * @param aRaceItem
-     */
     private void launchRaceDetailActivity(Races aRaceItem){
 
         Intent intent = new Intent(getContext(), RaceDetailActivity.class);
@@ -164,6 +193,9 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
             mJsonCalendarToParse = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current.json");
             if (mJsonCalendarToParse != null) {
                 mCalendarRaceItemArraylist =  mCalendarRaceDataHelper.getArraylist(mJsonCalendarToParse);
+
+                // Inserire su db
+                //populateDb();
             }
             return null;
         }
@@ -213,5 +245,16 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
             mAdapter.updateData(mCalendarRaceItemArraylist, mRaceResultsMap);
             mRecyclerView.getAdapter().notifyDataSetChanged();
         }
+    }
+
+    void populateDb(){
+
+         racesViewModel.getAllRaces();
+
+        for(int i=0; i< mCalendarRaceItemArraylist.size(); i++){
+
+            racesViewModel.insert(mCalendarRaceItemArraylist.get(i).toRoomRace());
+        }
+
     }
 }

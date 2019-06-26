@@ -1,5 +1,6 @@
 package com.example.growingmobilef1.Model;
 
+import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Interface.IListableObject;
 
 import org.json.JSONArray;
@@ -49,7 +50,7 @@ public class Races implements Serializable, IListableObject {
                     tempRaces.setRaceName(json.getString("raceName"));
                     tempRaces.setCircuit(tempC.fromJson(json.getJSONObject("Circuit")));
 
-                    tempRaces.setDateTime(getCalendarDate(json.getString("date"), json.getString("time")));
+                    tempRaces.setDateTime(getCalendarDate(json.getString("date") + " " + json.getString("time")));
 
 
                     ArrayList<RaceResults> vRaceResultsArrayList = new ArrayList<>();
@@ -183,7 +184,7 @@ public class Races implements Serializable, IListableObject {
 
 
     // DateTime dell'elemento nel tipo Calendar
-    static public Calendar getCalendarDate(String date, String time){
+    static public Calendar getCalendarDate(String dateTime){
 
         // Istanza di Calendar
         Calendar calendar = Calendar.getInstance();
@@ -197,7 +198,7 @@ public class Races implements Serializable, IListableObject {
 
         // Parsing della data in Date
         try {
-            tempDate = tempFormat.parse(date + " " + time);
+            tempDate = tempFormat.parse(dateTime);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -214,5 +215,20 @@ public class Races implements Serializable, IListableObject {
 
     public void setDateTime(Calendar dateTime) {
         this.dateTime = dateTime;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public RoomRace toRoomRace(){
+
+        RoomRace temp = new RoomRace();
+        temp.name = this.raceName;
+        temp.dateTime = this.dateTime.toString();
+        temp.circuitId = this.getCircuit().getCircuitId();
+        temp.notification = this.isNotificationScheduled ? 1 : 0;
+
+        return temp;
     }
 }

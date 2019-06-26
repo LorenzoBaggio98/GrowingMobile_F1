@@ -4,17 +4,41 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import com.example.growingmobilef1.Model.Constructor;
+import com.example.growingmobilef1.Model.ConstructorStandings;
+
 @Entity(tableName = "constructor")
 public class RoomConstructor {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @NonNull
-    public int id;
+    public String id;
+
 
     public String name;
+
     public String nationality;
 
     public int rankPosition;
     public int rankPoints;
+
+    public ConstructorStandings toConstructorStanding(){
+
+        // build constructor
+        Constructor constructor = new Constructor();
+        constructor.setName(name);
+        constructor.setNationality(nationality);
+        constructor.setConstructorId(id);
+
+        // build ConstructorStandings
+        ConstructorStandings temp = new ConstructorStandings();
+
+        temp.setPoints(rankPoints);
+        temp.setPosition(rankPosition);
+        temp.setConstructor(constructor);
+
+
+        return temp;
+    }
 
 }

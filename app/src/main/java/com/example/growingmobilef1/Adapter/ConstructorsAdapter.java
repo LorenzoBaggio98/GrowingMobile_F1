@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.growingmobilef1.Database.ModelRoom.RoomConstructor;
 import com.example.growingmobilef1.Model.ConstructorStandings;
 import com.example.growingmobilef1.R;
 
@@ -16,7 +17,7 @@ import java.util.List;
 // must be paramitized to access to viewHolder and use custom layout widjet
 public class ConstructorsAdapter extends RecyclerView.Adapter<ConstructorsAdapter.ViewHolder> {
 
-    List<ConstructorStandings> mValues;
+    List<RoomConstructor> mValues;
 
     // class used to protect from the calling findViewById on each bind
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -33,7 +34,7 @@ public class ConstructorsAdapter extends RecyclerView.Adapter<ConstructorsAdapte
         }
     }
 
-    public ConstructorsAdapter(List<ConstructorStandings> vValues) {
+    public ConstructorsAdapter(List<RoomConstructor> vValues) {
         mValues = vValues;
     }
 
@@ -41,7 +42,7 @@ public class ConstructorsAdapter extends RecyclerView.Adapter<ConstructorsAdapte
         mValues = new ArrayList<>();
     }
 
-    public void updateData(List<ConstructorStandings> viewModels) {
+    public void updateData(List<RoomConstructor> viewModels) {
         mValues.clear();
         mValues.addAll(viewModels);
         //notifyDataSetChanged();
@@ -54,7 +55,7 @@ public class ConstructorsAdapter extends RecyclerView.Adapter<ConstructorsAdapte
     }
 
     // Add a list of items -- change to type used
-    public void addAll(List<ConstructorStandings> list) {
+    public void addAll(List<RoomConstructor> list) {
         mValues.addAll(list);
         notifyDataSetChanged();
     }
@@ -74,9 +75,9 @@ public class ConstructorsAdapter extends RecyclerView.Adapter<ConstructorsAdapte
     // Sets the data for each row
     @Override
     public void onBindViewHolder(@NonNull ViewHolder vViewHolder, int i) {
-        vViewHolder.mConstructorPosition.setText(mValues.get(i).getPosition() + "");
-        vViewHolder.mConstructorName.setText(mValues.get(i).getConstructor().getName());
-        vViewHolder.mConstructorScore.setText(mValues.get(i).getPoints() + " Pts");
+        vViewHolder.mConstructorPosition.setText(mValues.get(i).rankPosition + "");
+        vViewHolder.mConstructorName.setText(mValues.get(i).name);
+        vViewHolder.mConstructorScore.setText(mValues.get(i).rankPoints + " Pts");
     }
 
 

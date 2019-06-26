@@ -30,6 +30,6 @@ public class RoomDriver {
     public int rankPosition;
     public int rankPoints;
 
-    public int constructorId;
+    public String constructorId;
 
 }

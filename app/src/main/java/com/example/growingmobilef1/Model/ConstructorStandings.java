@@ -1,5 +1,8 @@
 package com.example.growingmobilef1.Model;
 
+import android.arch.persistence.room.Room;
+
+import com.example.growingmobilef1.Database.ModelRoom.RoomConstructor;
 import com.example.growingmobilef1.Interface.IListableObject;
 
 import org.json.JSONException;
@@ -102,5 +105,19 @@ public class ConstructorStandings implements IListableObject {
     @Override
     public Boolean isButtonRequired() {
         return false;
+    }
+
+    public RoomConstructor toRoomRace(){
+
+        RoomConstructor temp = new RoomConstructor();
+        Constructor constructor = getConstructor();
+
+        temp.name = constructor.getName();
+        temp.nationality = constructor.getNationality();
+
+        temp.rankPoints = getPoints();
+        temp.rankPosition = getPosition();
+
+        return temp;
     }
 }

@@ -2,7 +2,9 @@ package com.example.growingmobilef1.Database;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
+import android.database.sqlite.SQLiteConstraintException;
 import android.os.AsyncTask;
+import android.widget.ListView;
 
 import com.example.growingmobilef1.Database.InterfaceDao.ConstructorDao;
 import com.example.growingmobilef1.Database.InterfaceDao.DriverDao;
@@ -96,6 +98,16 @@ public class FormulaRepository {
         }
     }
 
+/*
+    public void populate(List<RoomConstructor> vConstructors) {
+        new PopulateDbAsync(constructorDao, vConstructors).execute();
+    }
+*/
+
+    public void deleteAll() {
+        new DeleteConstructorAsyncTask(constructorDao).execute();
+    }
+
 
     /**
      * ASYNC TASK
@@ -170,9 +182,34 @@ public class FormulaRepository {
 
         @Override
         protected Void doInBackground(RoomConstructor... ts) {
-            asyncTaskDao.insert(ts[0]);
+
+            try {
+                asyncTaskDao.insert(ts[0]);
+
+            } catch (SQLiteConstraintException exception) {
+                asyncTaskDao.update(ts[0]);
+            }
+
             return null;
         }
     }
+
+    private static class DeleteConstructorAsyncTask extends AsyncTask<RoomConstructor, Void, Void>{
+
+        private ConstructorDao asyncTaskDao;
+
+        public DeleteConstructorAsyncTask(ConstructorDao dao) {
+            asyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(RoomConstructor... ts) {
+            asyncTaskDao.deleteAll();
+            return null;
+        }
+    }
+
+
+
 
 }

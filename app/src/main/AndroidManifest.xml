@@ -17,13 +17,31 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".Fragment_Activity.DriverDetailActivity"></activity>
         <activity android:name=".Fragment_Activity.RaceDetailActivity" />
+        <activity android:name=".Fragment_Activity.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Fragment_Activity.NewPasswordActivity" />
+        <activity android:name=".Fragment_Activity.RegisterActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustResize|stateHidden" > <!--android:theme="@style/AppTheme.NoActionBar">-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <activity android:name="com.facebook.FacebookActivity" android:configChanges= "keyboard|keyboardHidden|screenLayout|screenSize|orientation" android:label="@string/app_name" />
+        <activity android:name="com.facebook.CustomTabActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
 
@@ -32,6 +50,7 @@
                 <action android:name="com.andrea.action.DISPLAY_NOTIFICATION" />
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

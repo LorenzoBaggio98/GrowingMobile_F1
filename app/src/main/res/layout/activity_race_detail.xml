@@ -7,7 +7,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:layout_scrollFlags="scroll">
+            app:layout_scrollFlags="scroll"
+    app:theme="@style/AppTheme.NoActionBar"
+    >
 
             <android.support.design.widget.AppBarLayout
                 android:id="@+id/appBar"

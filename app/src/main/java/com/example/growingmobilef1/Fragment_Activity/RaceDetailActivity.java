@@ -15,7 +15,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
+
 import com.example.growingmobilef1.Adapter.ViewPagerAdapter;
 import com.example.growingmobilef1.MainActivity;
 import com.example.growingmobilef1.Model.RaceResults;
@@ -43,6 +46,7 @@ public class RaceDetailActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private Races mRace;
     private NotificationUtil mNotificationUtil;
+    private Button mLogOutButton;
 
     ViewPagerAdapter mPageAdapter;
 
@@ -114,6 +118,7 @@ public class RaceDetailActivity extends AppCompatActivity {
             drawable.mutate();
             drawable.setColorFilter(getResources().getColor(R.color.colorSecondaryLight), PorterDuff.Mode.SRC_ATOP);
         }
+
         return super.onCreateOptionsMenu(menu);
     }
 

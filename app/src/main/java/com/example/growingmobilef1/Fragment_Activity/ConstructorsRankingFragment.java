@@ -54,9 +54,9 @@ public class ConstructorsRankingFragment extends Fragment {
         vLongOperation.execute();
 
         // get objects
-        mRecyclerView = (RecyclerView) vView.findViewById(R.id.list); // list
-        mPgsBar = (ProgressBar)vView.findViewById(R.id.progress_loaderC); // progressbar
-        mSwipeRefreshLayout = (SwipeRefreshLayout) vView.findViewById(R.id.swipeRefreshConstructos);
+        mRecyclerView = vView.findViewById(R.id.list); // list
+        mPgsBar = vView.findViewById(R.id.progress_loaderC); // progressbar
+        mSwipeRefreshLayout = vView.findViewById(R.id.swipeRefreshConstructos);
         mLayoutAnimation = new LayoutAnimations();
 
         // start loading progress bar

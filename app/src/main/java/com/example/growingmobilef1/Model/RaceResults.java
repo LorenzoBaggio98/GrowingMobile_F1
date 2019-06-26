@@ -159,7 +159,7 @@ public class RaceResults implements Serializable {
         RoomRaceResult temp = new RoomRaceResult();
         temp.position = result.position;
         temp.time = result.getTime().getTime();
-        temp.raceId = race.id;
+        temp.raceId = race.circuitId;
 
         return temp;
     }

@@ -1,5 +1,8 @@
 package com.example.growingmobilef1.Helper;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +26,7 @@ public class ApiRequestHelper{
         StringBuilder vStringBuilder = new StringBuilder();
         JSONObject vResponseJsonObject = new JSONObject();
         boolean vHasErrors = false;
+
 
         try {
 
@@ -60,4 +64,5 @@ public class ApiRequestHelper{
 
         return (vHasErrors) ? null : vResponseJsonObject;
     }
+
 }

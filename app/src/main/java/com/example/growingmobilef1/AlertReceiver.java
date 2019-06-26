@@ -69,7 +69,7 @@ public class AlertReceiver extends BroadcastReceiver {
         Notification.Builder builder = new Notification.Builder(context);
 
         Notification notification = builder.setContentTitle("GrowingMobile F1")
-                .setContentText("Race starting in 10 minutes!")
+                .setContentText(mRaceItem.getRaceName() + " starting in 10 minutes!")
                 .setTicker("New Growing Mobile F1 Alert!")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(vPendingIntent)

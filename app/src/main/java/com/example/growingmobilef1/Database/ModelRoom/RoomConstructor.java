@@ -7,9 +7,9 @@ import android.support.annotation.NonNull;
 @Entity(tableName = "constructor")
 public class RoomConstructor {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @NonNull
-    public int id;
+    public String constructorId;
 
     public String name;
     public String nationality;

@@ -11,12 +11,12 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 @Entity(tableName = "qualifying_results",
         foreignKeys = {@ForeignKey(
                 entity = RoomRace.class,
-                parentColumns = "id",
+                parentColumns = "circuitId",
                 childColumns = "raceId",
                 onDelete = CASCADE
         ), @ForeignKey(
                 entity = RoomDriver.class,
-                parentColumns = "id",
+                parentColumns = "driverId",
                 childColumns = "driverId",
                 onDelete = CASCADE
         )}
@@ -29,12 +29,8 @@ public class RoomQualifyingResult {
 
     public int position;
 
-    public String time;
-
-
-    public int raceId;
-
-    public int driverId;
+    public String raceId;
+    public String driverId;
 
     public String temp1;
     public String temp2;

@@ -19,6 +19,7 @@ import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Database.RacesViewModel;
 import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
+import com.example.growingmobilef1.Helper.ConnectionStatusHelper;
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
@@ -85,49 +86,45 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         mLayoutAnimations = new LayoutAnimations();
 
         // Call the async class to perform the api call
-        CalendarApiAsyncCaller vCalendarAsyncCaller = new CalendarApiAsyncCaller();
-        vCalendarAsyncCaller.execute();
-
-        CalendarPodiumApiAsyncCaller vPodiumAsyncCaller = new CalendarPodiumApiAsyncCaller();
-        vPodiumAsyncCaller.execute();
+        operateAsyncOperation();
 
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(container.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
+
         mAdapter = new RacesAdapter(getContext(),
                 new ArrayList<Races>(),
                 new HashMap<String, ArrayList<RaceResults>>(),
                 this,
-                this);
+                this
+        );
 
+        if(mCalendarRaceItemArraylist != null){
+            mAdapter.updateData(mCalendarRaceItemArraylist, null);
+        }
         mRecyclerView.setAdapter(mAdapter);
 
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshList();
+                operateAsyncOperation();
             }
         });
         return vView;
     }
 
-    private void setListAdapter(){
-        RacesAdapter vCalendarListAdapter = new RacesAdapter(getContext(),
-                mCalendarRaceItemArraylist,
-                mRaceResultsMap,
-                this,
-                this);
-        mRecyclerView.setAdapter(vCalendarListAdapter);
-    }
-
     /**
-     * Refresh della lista
+     * Operazioni asincrone
      */
-    private void refreshList(){
-        CalendarApiAsyncCaller vCalendarAsync = new CalendarApiAsyncCaller();
-        CalendarPodiumApiAsyncCaller vPodiumAsync = new CalendarPodiumApiAsyncCaller();
-        vCalendarAsync.execute();
-        vPodiumAsync.execute();
+    private void operateAsyncOperation(){
+
+        if(ConnectionStatusHelper.statusConnection(getContext())){
+            CalendarApiAsyncCaller vCalendarAsyncCaller = new CalendarApiAsyncCaller();
+            vCalendarAsyncCaller.execute();
+
+            CalendarPodiumApiAsyncCaller vPodiumAsyncCaller = new CalendarPodiumApiAsyncCaller();
+            vPodiumAsyncCaller.execute();
+        }
     }
 
     /**
@@ -142,7 +139,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         // Looks for the clicked item in the ArrayList, then pass it to the detail fragment
         for (int i = 0; i < mCalendarRaceItemArraylist.size(); i++) {
             if (mCalendarRaceItemArraylist.get(i).getRound() == vId){
-                vRaceItem = (Races)mCalendarRaceItemArraylist.get(aPosition);
+                vRaceItem = mCalendarRaceItemArraylist.get(aPosition);
             }
         }
         launchRaceDetailActivity(vRaceItem);
@@ -164,7 +161,6 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         startActivity(intent);
     }
 
-
     /**
      * Override metodo RecycleView
      * @param aPosition
@@ -179,7 +175,9 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         mNotificationUtil.sendNotification();
     }
 
-    // Private class needed to perform the API call asynchronously
+    /**
+     * Private class needed to perform the API call asynchronously
+     */
     private class CalendarApiAsyncCaller extends AsyncTask<String, Void, String> {
 
         // Races calendar variables
@@ -191,23 +189,20 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
 
             ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
             mCalendarRaceDataHelper = new CalendarRaceDataHelper();
-            mRaceResultsMap = new HashMap<>();
 
             mJsonCalendarToParse = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current.json");
             if (mJsonCalendarToParse != null) {
                 mCalendarRaceItemArraylist =  mCalendarRaceDataHelper.getArraylist(mJsonCalendarToParse);
 
                 // Inserire su db
-                //populateDb();
+                populateDb();
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
-            if (!mRaceResultsMap.isEmpty()){
-                //setListAdapter();
-            }
+            mAdapter.updateData(mCalendarRaceItemArraylist, mRaceResultsMap);
         }
     }
 
@@ -218,7 +213,6 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         protected String doInBackground(String... params) {
 
             ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
-
             mRaceResultsMap = new HashMap<>();
 
             JSONObject vResultsObject = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current/results.json?limit=10000");
@@ -241,19 +235,17 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
 
         @Override
         protected void onPostExecute(String result) {
-            //setListAdapter();
             mPgsBar.setVisibility(View.GONE);
             mLayoutAnimations.runLayoutAnimation(mRecyclerView);
             mSwipeRefresh.setRefreshing(false);
             mAdapter.updateData(mCalendarRaceItemArraylist, mRaceResultsMap);
-            mRecyclerView.getAdapter().notifyDataSetChanged();
         }
     }
 
     void populateDb(){
 
         for(int i=0; i< mCalendarRaceItemArraylist.size(); i++){
-            racesViewModel.insert(mCalendarRaceItemArraylist.get(i).toRoomRace());
+            racesViewModel.insertRace(mCalendarRaceItemArraylist.get(i).toRoomRace());
         }
     }
 }

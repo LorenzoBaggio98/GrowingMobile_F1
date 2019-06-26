@@ -59,6 +59,8 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
         if(aRaceResultsMap != null) {
             mRaceResultsMap.putAll(aRaceResultsMap);
         }
+
+        notifyDataSetChanged();
     }
 
     // Clean all elements of the recycler

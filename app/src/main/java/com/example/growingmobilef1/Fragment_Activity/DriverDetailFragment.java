@@ -50,7 +50,6 @@ public class DriverDetailFragment extends Fragment {
             txtOtherInformation.setText("" + driver.getUrl());
             txtOtherInformation.setLinksClickable(true);
             setImageDriver(driver.getDriverId());
-
         }
 
 

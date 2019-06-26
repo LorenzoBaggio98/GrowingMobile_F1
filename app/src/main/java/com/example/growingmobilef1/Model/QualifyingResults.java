@@ -1,9 +1,7 @@
 package com.example.growingmobilef1.Model;
 
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.Serializable;
 
 public class QualifyingResults implements Serializable {

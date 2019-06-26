@@ -75,7 +75,7 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
     @Override
     public int getItemViewType(int position) {
 
-        Calendar vCalendarConvertRaceDate = mRacesArrayList.get(position).getCalendarDate();
+        Calendar vCalendarConvertRaceDate = mRacesArrayList.get(position).getDateTime();
         long raceMilliSecondDate = vCalendarConvertRaceDate.getTimeInMillis();
 
         Calendar vCalendar = Calendar.getInstance();
@@ -111,7 +111,7 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
     public void onBindViewHolder (@NonNull ViewHolder vHolder,int position){
 
 
-        Calendar vCalendarDate = mRacesArrayList.get(position).getCalendarDate();
+        Calendar vCalendarDate = mRacesArrayList.get(position).getDateTime();
 
         int vCalendarMonth = vCalendarDate.get(Calendar.MONTH);
 

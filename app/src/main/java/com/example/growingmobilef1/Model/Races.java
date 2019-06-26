@@ -16,17 +16,20 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-// Ua
 public class Races implements Serializable, IListableObject {
 
     private int season;
     private int round;
     private URL url;
+
     private String raceName;
+
     private Circuit Circuit;
 
     private String mDate;
     private String time;
+
+    private Calendar dateTime;
 
     private Boolean isNotificationScheduled = false;
     private ArrayList<RaceResults> Results;
@@ -35,8 +38,6 @@ public class Races implements Serializable, IListableObject {
 
         Races tempRaces = new Races();
         Circuit tempC = new Circuit();
-
-        SimpleDateFormat sDF = new SimpleDateFormat("yyyy-MM-dd");
 
         if(json != null) {
             if (json.length() != 0) {
@@ -47,9 +48,9 @@ public class Races implements Serializable, IListableObject {
                     tempRaces.setUrl(new URL(json.getString("url")));
                     tempRaces.setRaceName(json.getString("raceName"));
                     tempRaces.setCircuit(tempC.fromJson(json.getJSONObject("Circuit")));
-                    //tempRaces.setmDate(sDF.parse(json.getString("date")));
-                    tempRaces.setmDate(json.getString("date"));
-                    tempRaces.setTime(json.getString("time"));
+
+                    tempRaces.setDateTime(getCalendarDate(json.getString("date"), json.getString("time")));
+
 
                     ArrayList<RaceResults> vRaceResultsArrayList = new ArrayList<>();
 
@@ -66,9 +67,7 @@ public class Races implements Serializable, IListableObject {
                     e.printStackTrace();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
-                } /*catch (ParseException e) {
-                e.printStackTrace();
-            }*/
+                }
             }
         }
 
@@ -119,16 +118,8 @@ public class Races implements Serializable, IListableObject {
         return mDate;
     }
 
-    public void setmDate(String date) {
-        this.mDate = date;
-    }
-
     public String getTime() {
         return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
     }
 
     public ArrayList<RaceResults> getResults() {
@@ -174,7 +165,7 @@ public class Races implements Serializable, IListableObject {
     }
 
     // DateTime dell'elemento nel tipo Date
-    public Date getDate(){
+   /*public Date getDate(){
 
         SimpleDateFormat tempFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         tempFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -188,11 +179,11 @@ public class Races implements Serializable, IListableObject {
         }
 
         return tempDate;
-    }
+    }*/
 
 
     // DateTime dell'elemento nel tipo Calendar
-    public Calendar getCalendarDate(){
+    static public Calendar getCalendarDate(String date, String time){
 
         // Istanza di Calendar
         Calendar calendar = Calendar.getInstance();
@@ -206,7 +197,7 @@ public class Races implements Serializable, IListableObject {
 
         // Parsing della data in Date
         try {
-            tempDate = tempFormat.parse(getmDate() + " " + getTime());
+            tempDate = tempFormat.parse(date + " " + time);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -217,4 +208,11 @@ public class Races implements Serializable, IListableObject {
         return calendar;
     }
 
+    public Calendar getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(Calendar dateTime) {
+        this.dateTime = dateTime;
+    }
 }

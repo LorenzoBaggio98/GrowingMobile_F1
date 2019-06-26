@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.growingmobilef1.AlertReceiver;
@@ -62,13 +63,20 @@ public class NotificationUtil {
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         if (!mRace.getNotificationScheduled()){
-            Date vDate = new Date();
+           /* Date vDate = new Date();
             vDate.setTime(new Date().getTime());
-            vDate.setMinutes(vDate.getMinutes() + 1);
-           // mDate.setMinutes(mDate.getMinutes() - 10);
-            vAlarmManager.setExact(AlarmManager.RTC_WAKEUP, vDate.getTime(), vBroadcast);
+            vDate.setMinutes(vDate.getMinutes() + 1); */
+
+            Calendar vCalendar = Calendar.getInstance();
+            vCalendar.set(Calendar.MINUTE, vCalendar.get(Calendar.MINUTE) + 1);
+            vAlarmManager.setExact(AlarmManager.RTC_WAKEUP, vCalendar.getTimeInMillis(), vBroadcast);
+           /* mDate = mRace.getCalendarDate();
+            mDate.set(Calendar.MINUTE, mDate.get(Calendar.MINUTE) - 10);
+            vAlarmManager.setExact(AlarmManager.RTC_WAKEUP, mDate.getTimeInMillis(), vBroadcast);*/
+            Log.d("DATE_MILLIS", "Time in milliseconds: " + mDate.getTimeInMillis());
             mRace.setNotificationScheduled(true);
-            Toast.makeText(mContext, "Notification scheduled for " + mDate, Toast.LENGTH_LONG).show();
+            String vToastText = mDate.get(Calendar.DAY_OF_MONTH) + " / " + mDate.get(Calendar.MONTH) + " at " + mDate.get(Calendar.HOUR_OF_DAY) + ":" + mDate.get(Calendar.MINUTE);
+            Toast.makeText(mContext, "Notification scheduled for " + vToastText, Toast.LENGTH_LONG).show();
 
         } else {
             vAlarmManager.cancel(vBroadcast);

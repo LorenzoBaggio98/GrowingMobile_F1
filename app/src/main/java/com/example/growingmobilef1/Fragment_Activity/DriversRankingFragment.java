@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.example.growingmobilef1.Adapter.DriverAdapter;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.DriversRankingHelper;
+import com.example.growingmobilef1.Model.Driver;
 import com.example.growingmobilef1.Model.DriverStandings;
 import com.example.growingmobilef1.R;
 import com.example.growingmobilef1.Utils.LayoutAnimations;
@@ -88,6 +90,13 @@ public class DriversRankingFragment extends Fragment {
         });
 
         return vView;
+    }
+
+    private void launchPilotDetailDialog(int aPosition){
+        Driver vDriver = mArrayListPilots.get(aPosition).getDriver();
+        FragmentTransaction vFT = getActivity().getSupportFragmentManager().beginTransaction();
+        vFT.add(DriverDetailDialog.getInstance(vDriver), "PILOT_DIALOG");
+        vFT.commit();
     }
 
     @Override

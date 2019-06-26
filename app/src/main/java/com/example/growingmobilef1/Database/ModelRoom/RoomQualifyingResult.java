@@ -2,6 +2,7 @@ package com.example.growingmobilef1.Database.ModelRoom;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -29,6 +30,7 @@ public class RoomQualifyingResult {
     public int position;
 
     public String time;
+
 
     public int raceId;
 

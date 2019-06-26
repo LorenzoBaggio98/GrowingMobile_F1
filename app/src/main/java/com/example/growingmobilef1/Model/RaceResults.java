@@ -1,5 +1,8 @@
 package com.example.growingmobilef1.Model;
 
+import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
+import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -148,5 +151,16 @@ public class RaceResults implements Serializable {
 
     public void setFastestLap(com.example.growingmobilef1.Model.FastestLap fastestLap) {
         FastestLap = fastestLap;
+    }
+
+
+    public RoomRaceResult toRoomRaceResults(RaceResults result, RoomRace race){
+
+        RoomRaceResult temp = new RoomRaceResult();
+        temp.position = result.position;
+        temp.time = result.getTime().getTime();
+        temp.raceId = race.id;
+
+        return temp;
     }
 }

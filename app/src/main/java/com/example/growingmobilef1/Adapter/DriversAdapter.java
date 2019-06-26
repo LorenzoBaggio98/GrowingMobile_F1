@@ -7,8 +7,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
-import com.example.growingmobilef1.Model.Driver;
 import com.example.growingmobilef1.Model.DriverStandings;
 import com.example.growingmobilef1.R;
 

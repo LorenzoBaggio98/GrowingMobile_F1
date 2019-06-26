@@ -1,11 +1,7 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -14,24 +10,15 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.example.growingmobilef1.Adapter.QualifyingResultsAdapter;
 import com.example.growingmobilef1.Adapter.RacesAdapter;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Database.RacesViewModel;
 import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
-import com.example.growingmobilef1.Helper.RaceResultsDataHelper;
-import com.example.growingmobilef1.Model.QualifyingResults;
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
@@ -43,7 +30,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 
 public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceClicked, RacesAdapter.IOnNotificationIconClicked{
 
@@ -70,20 +56,19 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         // ViewModel creato da Provider
         racesViewModel = ViewModelProviders.of(this).get(RacesViewModel.class);
 
-        //todo vedere se serve e fare il wrapper tra model db e model rest
-        /*racesViewModel.getAllRaces().observe(this, new Observer<List<RoomRace>>() {
+        racesViewModel.getAllRaces().observe(this, new Observer<List<RoomRace>>() {
             @Override
             public void onChanged(List<RoomRace> roomRaces) {
 
+                // Race list
                 ArrayList<Races> temp = new ArrayList<>();
-
                 for(int i = 0; i< roomRaces.size(); i++){
                     temp.add(roomRaces.get(i).toRace());
                 }
 
-                mAdapter.updateData(temp);
+                mAdapter.updateData(temp, null);
             }
-        });*/
+        });
     }
 
     public static CalendarFragment newInstance() {
@@ -114,6 +99,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
                 new HashMap<String, ArrayList<RaceResults>>(),
                 this,
                 this);
+
         mRecyclerView.setAdapter(mAdapter);
 
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -134,6 +120,9 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         mRecyclerView.setAdapter(vCalendarListAdapter);
     }
 
+    /**
+     * Refresh della lista
+     */
     private void refreshList(){
         CalendarApiAsyncCaller vCalendarAsync = new CalendarApiAsyncCaller();
         CalendarPodiumApiAsyncCaller vPodiumAsync = new CalendarPodiumApiAsyncCaller();
@@ -141,6 +130,28 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         vPodiumAsync.execute();
     }
 
+    /**
+     * Override metodo RecycleView
+     * @param aPosition
+     */
+    @Override
+    public void onRaceClicked(int aPosition) {
+        Races vRaceItem = new Races();
+        long vId = mCalendarRaceItemArraylist.get(aPosition).getRound();
+
+        // Looks for the clicked item in the ArrayList, then pass it to the detail fragment
+        for (int i = 0; i < mCalendarRaceItemArraylist.size(); i++) {
+            if (mCalendarRaceItemArraylist.get(i).getRound() == vId){
+                vRaceItem = (Races)mCalendarRaceItemArraylist.get(aPosition);
+            }
+        }
+        launchRaceDetailActivity(vRaceItem);
+    }
+
+    /**
+     * Avvio del dettaglio race
+     * @param aRaceItem
+     */
     private void launchRaceDetailActivity(Races aRaceItem){
 
         Intent intent = new Intent(getContext(), RaceDetailActivity.class);
@@ -153,19 +164,11 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         startActivity(intent);
     }
 
-    @Override
-    public void onRaceClicked(int aPosition) {
-        Races vRaceItem = new Races();
-        long vId = mCalendarRaceItemArraylist.get(aPosition).getmId();
-        // Looks for the clicked item in the ArrayList, then pass it to the detail fragment
-        for (int i = 0; i < mCalendarRaceItemArraylist.size(); i++) {
-            if (mCalendarRaceItemArraylist.get(i).getmId() == vId){
-                vRaceItem = (Races)mCalendarRaceItemArraylist.get(aPosition);
-            }
-        }
-        launchRaceDetailActivity(vRaceItem);
-    }
 
+    /**
+     * Override metodo RecycleView
+     * @param aPosition
+     */
     @Override
     public void onNotificationScheduled(int aPosition) {
         mNotificationUtil = new NotificationUtil(
@@ -203,7 +206,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         @Override
         protected void onPostExecute(String result) {
             if (!mRaceResultsMap.isEmpty()){
-                setListAdapter();
+                //setListAdapter();
             }
         }
     }
@@ -238,7 +241,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
 
         @Override
         protected void onPostExecute(String result) {
-            setListAdapter();
+            //setListAdapter();
             mPgsBar.setVisibility(View.GONE);
             mLayoutAnimations.runLayoutAnimation(mRecyclerView);
             mSwipeRefresh.setRefreshing(false);
@@ -249,12 +252,8 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
 
     void populateDb(){
 
-         racesViewModel.getAllRaces();
-
         for(int i=0; i< mCalendarRaceItemArraylist.size(); i++){
-
             racesViewModel.insert(mCalendarRaceItemArraylist.get(i).toRoomRace());
         }
-
     }
 }

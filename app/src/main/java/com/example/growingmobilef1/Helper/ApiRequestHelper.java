@@ -1,10 +1,6 @@
 package com.example.growingmobilef1.Helper;
 
 import android.util.Log;
-import android.widget.Toast;
-
-import com.example.growingmobilef1.MainActivity;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.BufferedReader;
@@ -26,7 +22,7 @@ public class ApiRequestHelper{
     public JSONObject getContentFromUrl(String aUrl) {
         StringBuilder vStringBuilder = new StringBuilder();
         JSONObject vResponseJsonObject = new JSONObject();
-        Boolean vHasErrors = false;
+        boolean vHasErrors = false;
 
         try {
 

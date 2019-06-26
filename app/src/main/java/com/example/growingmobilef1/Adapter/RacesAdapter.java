@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
@@ -20,6 +19,7 @@ import com.example.growingmobilef1.R;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -43,6 +43,7 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
                         Map<String, ArrayList<RaceResults>> aRaceResultsMap,
                         IOnRaceClicked aListener,
                         IOnNotificationIconClicked aNotificationListener) {
+
         mContext = aContext;
         mRacesArrayList = aData;
         mRaceResultsMap = aRaceResultsMap;
@@ -54,7 +55,10 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
         mRacesArrayList.clear();
         mRacesArrayList.addAll(aData);
         mRaceResultsMap.clear();
-        mRaceResultsMap.putAll(aRaceResultsMap);
+
+        if(aRaceResultsMap != null) {
+            mRaceResultsMap.putAll(aRaceResultsMap);
+        }
     }
 
     // Clean all elements of the recycler
@@ -115,7 +119,7 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
 
         int vCalendarMonth = vCalendarDate.get(Calendar.MONTH);
 
-        vHolder.mRaceLabel.setText("" + mRacesArrayList.get(position).getmMainInformation());
+        vHolder.mRaceLabel.setText("" + mRacesArrayList.get(position).getRaceName());
 
         // Set the podium results (if the race has already occurred)
         String vPositionLabelString = "";
@@ -155,7 +159,6 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView mRaceLabel, mPodiumLabel, mDateLabel, mTimeLabel;
-        LinearLayout mContainerLayout;
         IOnRaceClicked mItemListener;
         IOnNotificationIconClicked mNotificationListener;
         ImageView mNotificationIcon;
@@ -167,7 +170,6 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
             mPodiumLabel = vView.findViewById(R.id.list_item_calendar_label_podium);
             mDateLabel = vView.findViewById(R.id.list_item_calendar_label_date);
             mTimeLabel = vView.findViewById(R.id.list_item_calendar_label_hour);
-            mContainerLayout = vView.findViewById(R.id.list_item_calendar_container);
             mNotificationIcon = vView.findViewById(R.id.list_item_calendar_notification_icon);
             mItemListener = aListener;
             mNotificationListener = aNotificationListener;

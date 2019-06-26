@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.growingmobilef1.Adapter.DriverAdapter;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
+import com.example.growingmobilef1.Helper.ConnectionStatusHelper;
 import com.example.growingmobilef1.Helper.DriversRankingHelper;
 import com.example.growingmobilef1.Model.Driver;
 import com.example.growingmobilef1.Model.DriverStandings;
@@ -79,7 +80,7 @@ public class DriversRankingFragment extends Fragment {
             mProgressBar.setVisibility(View.INVISIBLE);
 
         } else {
-            if (stausConnection(getContext())){
+            if (ConnectionStatusHelper.statusConnection(getContext())){
                 vPilotsApiAsync.execute();
                 Toast.makeText(getApplicationContext(),/* message*/  "Si connesione", Toast.LENGTH_SHORT).show();
             }else{
@@ -158,15 +159,7 @@ public class DriversRankingFragment extends Fragment {
         vDriversAdapter.updateData(mArrayListPilots);
         mLayoutAnimation.runLayoutAnimation(mRecyclerViewList);
     }
-    private boolean stausConnection(Context context){
-        ConnectivityManager cm =
-                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-        return isConnected;
-    }
 
 
 }

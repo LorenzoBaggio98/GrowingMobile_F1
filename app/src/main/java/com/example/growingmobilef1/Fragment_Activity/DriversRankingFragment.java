@@ -1,8 +1,13 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +30,8 @@ import com.example.growingmobilef1.Utils.LayoutAnimations;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class DriversRankingFragment extends Fragment {
     private static final String SAVE_LISTPILOTS = "SAVE_LISTPILOTS";
@@ -72,7 +79,13 @@ public class DriversRankingFragment extends Fragment {
             mProgressBar.setVisibility(View.INVISIBLE);
 
         } else {
-            vPilotsApiAsync.execute();
+            if (stausConnection(getContext())){
+                vPilotsApiAsync.execute();
+                Toast.makeText(getApplicationContext(),/* message*/  "Si connesione", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(getApplicationContext(),/* message*/  "No connexsione", Toast.LENGTH_SHORT).show();
+            }
+
         }
 
 
@@ -82,22 +95,22 @@ public class DriversRankingFragment extends Fragment {
                 if (vPilotsApiAsync != null) {
                     vPilotsApiAsync.isCancelled();
                 }
-                vPilotsApiAsync = new DriversRankingFragment.PilotsApiAsync();
-                vPilotsApiAsync.execute();
+
+                    vPilotsApiAsync = new DriversRankingFragment.PilotsApiAsync();
+
+                    vPilotsApiAsync.execute();
+
+
+
                 stateProgresBar = false;
 
             }
         });
 
+
         return vView;
     }
 
-    private void launchPilotDetailDialog(int aPosition){
-        Driver vDriver = mArrayListPilots.get(aPosition).getDriver();
-        FragmentTransaction vFT = getActivity().getSupportFragmentManager().beginTransaction();
-        vFT.add(DriverDetailDialog.getInstance(vDriver), "PILOT_DIALOG");
-        vFT.commit();
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -112,15 +125,20 @@ public class DriversRankingFragment extends Fragment {
 
         @Override
         protected String doInBackground(String... params) {
+
             if (stateProgresBar)
                 mProgressBar.setVisibility(View.VISIBLE);
 
-            vJsonObjectToParse = vApiRequestHelper.getContentFromUrl("https://ergast.com/api/f1/current/driverStandings.json");
+
+    vJsonObjectToParse = vApiRequestHelper.getContentFromUrl("https://ergast.com/api/f1/current/driverStandings.json");
+
+
 
             mArrayListPilots = DriversRankingHelper.getArrayListPilotsPoints(vJsonObjectToParse);
 
             return null;
         }
+
 
         @Override
         protected void onPostExecute(String result) {
@@ -139,6 +157,15 @@ public class DriversRankingFragment extends Fragment {
     private  void makeNewRecycleWiev(){
         vDriversAdapter.updateData(mArrayListPilots);
         mLayoutAnimation.runLayoutAnimation(mRecyclerViewList);
+    }
+    private boolean stausConnection(Context context){
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        return isConnected;
     }
 
 

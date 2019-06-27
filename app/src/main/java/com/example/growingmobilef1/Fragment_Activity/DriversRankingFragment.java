@@ -11,6 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.growingmobilef1.Adapter.DriverAdapter;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.ConnectionStatusHelper;
@@ -18,23 +24,24 @@ import com.example.growingmobilef1.Helper.DriversRankingHelper;
 import com.example.growingmobilef1.Model.DriverStandings;
 import com.example.growingmobilef1.R;
 import com.example.growingmobilef1.Utils.LayoutAnimations;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class DriversRankingFragment extends Fragment {
 
     private static final String SAVE_LISTPILOTS = "SAVE_LISTPILOTS";
+
     private ArrayList<DriverStandings> mArrayListPilots;
     private RecyclerView mRecyclerViewList;
     private LinearLayoutManager linearLayoutManager;
     private ProgressBar mProgressBar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private LayoutAnimations mLayoutAnimation;
-
-    private boolean stateProgresBar = true;
     private DriverAdapter vDriversAdapter;
-
-    PilotsApiAsync vPilotsApiAsync;
 
     public static DriversRankingFragment newInstance() {
         return new DriversRankingFragment();
@@ -44,7 +51,7 @@ public class DriversRankingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View vView = inflater.inflate(R.layout.fragment_pilots_ranking, container, false);
-        vPilotsApiAsync = new PilotsApiAsync();
+
         mArrayListPilots = new ArrayList<>();
 
         mRecyclerViewList = vView.findViewById(R.id.recyclerViewPiloti);
@@ -61,35 +68,27 @@ public class DriversRankingFragment extends Fragment {
 
         if (savedInstanceState != null) {
             mArrayListPilots = (ArrayList<DriverStandings>) savedInstanceState.getSerializable(SAVE_LISTPILOTS);
-            makeNewRecycleView();
+            makeNewRecycleWiev();
             mProgressBar.setVisibility(View.INVISIBLE);
 
         } else {
-            if (ConnectionStatusHelper.statusConnection(getContext())){
-                vPilotsApiAsync.execute();
-                Toast.makeText(getContext(),"Si connessione", Toast.LENGTH_SHORT).show();
-            }else{
-                Toast.makeText(getContext(),"No connessione", Toast.LENGTH_SHORT).show();
+
+            if (!ConnectionStatusHelper.statusConnection(getContext())) {
+                Toast.makeText(getApplicationContext(),/* message*/  "NO connesione", Toast.LENGTH_SHORT).show();
+            } else {
+
+                getJsonObjectRequest("https://ergast.com/api/f1/current/driverStandings.json");
             }
         }
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
-                if (vPilotsApiAsync != null) {
-                    vPilotsApiAsync.isCancelled();
-                }
-                vPilotsApiAsync = new DriversRankingFragment.PilotsApiAsync();
-                vPilotsApiAsync.execute();
-
-                stateProgresBar = false;
+                getJsonObjectRequest("https://ergast.com/api/f1/current/driverStandings.json");
             }
         });
-
         return vView;
     }
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -97,45 +96,36 @@ public class DriversRankingFragment extends Fragment {
         outState.putSerializable(SAVE_LISTPILOTS, mArrayListPilots);
     }
 
-    /**
-     *
-     */
-    private class PilotsApiAsync extends AsyncTask<String, Void, String> {
-        private JSONObject vJsonObjectToParse;
-        private ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
 
-        @Override
-        protected String doInBackground(String... params) {
+    private void getJsonObjectRequest(String url) {
+        final JsonObjectRequest mJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new com.android.volley.Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
 
-            if (stateProgresBar)
-                mProgressBar.setVisibility(View.VISIBLE);
+                try {
+                    JSONObject jsonObject = new JSONObject(String.valueOf(response));
+                    mArrayListPilots = DriversRankingHelper.getArrayListPilotsPoints(jsonObject);
+                    makeNewRecycleWiev();
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    mProgressBar.setVisibility(View.INVISIBLE);
 
-            vJsonObjectToParse = vApiRequestHelper.getContentFromUrl("https://ergast.com/api/f1/current/driverStandings.json");
-
-            if(mArrayListPilots != null) {
-                mArrayListPilots = DriversRankingHelper.getArrayListPilotsPoints(vJsonObjectToParse);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
-            return null;
-        }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
 
-        @Override
-        protected void onPostExecute(String result) {
-
-            makeNewRecycleView();
-
-            if (stateProgresBar) {
-                mProgressBar.setVisibility(View.INVISIBLE);
-            } else {
-                mSwipeRefreshLayout.setRefreshing(false);
-                stateProgresBar = true;
             }
-        }
+        });
+        Volley.newRequestQueue(getApplicationContext()).add(mJsonObjectRequest);
+
     }
 
-    private void makeNewRecycleView(){
+    private void makeNewRecycleWiev() {
         vDriversAdapter.updateData(mArrayListPilots);
         mLayoutAnimation.runLayoutAnimation(mRecyclerViewList);
     }
-
 }

@@ -13,7 +13,7 @@ import java.util.List;
 @Dao
 public interface RaceDao{
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insert(RoomRace race);
 
     @Query("SELECT * FROM race WHERE circuitId = :circuitId")

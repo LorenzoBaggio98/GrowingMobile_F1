@@ -16,7 +16,8 @@ import android.widget.ProgressBar;
 
 import com.example.growingmobilef1.Adapter.RacesAdapter;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
-import com.example.growingmobilef1.Database.RacesViewModel;
+import com.example.growingmobilef1.Database.ViewModel.RaceResultsViewModel;
+import com.example.growingmobilef1.Database.ViewModel.RacesViewModel;
 import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.ConnectionStatusHelper;
@@ -31,11 +32,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceClicked, RacesAdapter.IOnNotificationIconClicked{
 
-    private ArrayList<Races> mCalendarRaceItemArraylist;
-    private HashMap<String, ArrayList<RaceResults>> mRaceResultsMap;
+    private ArrayList<RoomRace> mCalendarRaceItemArraylist;
+    private HashMap<String, List<RaceResults>> mRaceResultsMap;
 
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefresh;
@@ -49,27 +51,37 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
 
     // Database
     private RacesViewModel racesViewModel;
+    private RaceResultsViewModel raceResultsViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mCalendarRaceItemArraylist = new ArrayList<>();
+
+        //
+        mAdapter = new RacesAdapter(getContext(),
+                new ArrayList<RoomRace>(),
+                new HashMap<String, List<RaceResults>>(),
+                this,
+                this
+        );
+
         // ViewModel creato da Provider
         racesViewModel = ViewModelProviders.of(this).get(RacesViewModel.class);
+        raceResultsViewModel = ViewModelProviders.of(this).get(RaceResultsViewModel.class);
 
+        // Observer lista race
         racesViewModel.getAllRaces().observe(this, new Observer<List<RoomRace>>() {
             @Override
             public void onChanged(List<RoomRace> roomRaces) {
 
                 // Race list
-                ArrayList<Races> temp = new ArrayList<>();
-                for(int i = 0; i< roomRaces.size(); i++){
-                    temp.add(roomRaces.get(i).toRace());
-                }
-
-                mAdapter.updateData(temp, null);
+                mAdapter.updateData(roomRaces, null);
             }
         });
+
+        //todo observer lista classifica
     }
 
     public static CalendarFragment newInstance() {
@@ -92,16 +104,6 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         mLayoutManager = new LinearLayoutManager(container.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new RacesAdapter(getContext(),
-                new ArrayList<Races>(),
-                new HashMap<String, ArrayList<RaceResults>>(),
-                this,
-                this
-        );
-
-        if(mCalendarRaceItemArraylist != null){
-            mAdapter.updateData(mCalendarRaceItemArraylist, null);
-        }
         mRecyclerView.setAdapter(mAdapter);
 
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -134,17 +136,17 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
     @Override
     public void onRaceClicked(int aPosition) {
         Races vRaceItem = new Races();
-        long vId = mCalendarRaceItemArraylist.get(aPosition).getRound();
+        long vId = mCalendarRaceItemArraylist.get(aPosition).round;
 
-        boolean isFound = false;
+        boolean isFound = true;
         int i = 0;
 
         /* Looks for the clicked item in the ArrayList, then pass it to the detail fragment */
         while(isFound) {
 
-            if (mCalendarRaceItemArraylist.get(i).getRound() == vId) {
-                vRaceItem = mCalendarRaceItemArraylist.get(aPosition);
-                isFound = true;
+            if (mCalendarRaceItemArraylist.get(i).round == vId) {
+                vRaceItem = mCalendarRaceItemArraylist.get(aPosition).toRace();
+                isFound = false;
             }
             i++;
         }
@@ -174,9 +176,9 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
     @Override
     public void onNotificationScheduled(int aPosition) {
         mNotificationUtil = new NotificationUtil(
-                mCalendarRaceItemArraylist.get(aPosition).getDateTime(),
+                mCalendarRaceItemArraylist.get(aPosition).dateToCalendar(),
                 getContext(),
-                mCalendarRaceItemArraylist.get(aPosition)
+                mCalendarRaceItemArraylist.get(aPosition).toRace()
         );
         mNotificationUtil.sendNotification();
     }
@@ -198,21 +200,23 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
 
             mJsonCalendarToParse = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current.json");
             if (mJsonCalendarToParse != null) {
-                mCalendarRaceItemArraylist =  mCalendarRaceDataHelper.getArraylist(mJsonCalendarToParse);
+
+                ArrayList<Races> temp = mCalendarRaceDataHelper.getArraylist(mJsonCalendarToParse);
+
+                for ( Races r: temp) {
+                    mCalendarRaceItemArraylist.add(r.toRoomRace());
+                }
 
                 // Inserire su db
-                populateDb();
+                insertRacesToDb();
             }
             return null;
         }
 
-        @Override
-        protected void onPostExecute(String result) {
-            mAdapter.updateData(mCalendarRaceItemArraylist, mRaceResultsMap);
-        }
     }
 
     private class CalendarPodiumApiAsyncCaller extends AsyncTask<String, Void, String> {
+
         CalendarRaceDataHelper vCalendarRaceDataHelper = new CalendarRaceDataHelper();
 
         @Override
@@ -227,13 +231,17 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
                 ArrayList<Races> vRacesArrayList = vCalendarRaceDataHelper.getArraylist(vResultsObject);
 
                 if (vRacesArrayList != null) {
+                    // Mi servono i risultati
                     for (Races vRaceResult : vRacesArrayList) {
-                        for (Races vRace : mCalendarRaceItemArraylist) {
-                            if (vRaceResult.getRaceName().equals(vRace.getRaceName())) {
-                                mRaceResultsMap.put(vRace.getRaceName(), vRaceResult.getResults());
+                        for (RoomRace vRace : mCalendarRaceItemArraylist) {
+                            if (vRaceResult.getRaceName().equals(vRace.name)) {
+                                mRaceResultsMap.put(vRace.circuitId, vRaceResult.getResults());
                             }
                         }
                     }
+                    //
+                    insertRaceResultsToDb();
+
                 }
             }
             return null;
@@ -244,14 +252,32 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
             mPgsBar.setVisibility(View.GONE);
             mLayoutAnimations.runLayoutAnimation(mRecyclerView);
             mSwipeRefresh.setRefreshing(false);
-            mAdapter.updateData(mCalendarRaceItemArraylist, mRaceResultsMap);
         }
     }
 
-    void populateDb(){
+    /**
+     * Database call
+     */
+    void insertRacesToDb(){
 
         for(int i=0; i< mCalendarRaceItemArraylist.size(); i++){
-            racesViewModel.insertRace(mCalendarRaceItemArraylist.get(i).toRoomRace());
+            racesViewModel.insertRace(mCalendarRaceItemArraylist.get(i));
         }
+    }
+
+    void insertRaceResultsToDb(){
+
+        for(Map.Entry<String, List<RaceResults>> entry : mRaceResultsMap.entrySet()) {
+
+            // Circuit id
+            String keyCircuitId = entry.getKey();
+            List<RaceResults> valueResults = entry.getValue();
+
+            for(RaceResults results: valueResults){
+                raceResultsViewModel.insertResults(results.toRoomRaceResults(keyCircuitId));
+            }
+
+        }
+
     }
 }

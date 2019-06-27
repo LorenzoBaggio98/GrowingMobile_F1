@@ -154,12 +154,19 @@ public class RaceResults implements Serializable {
     }
 
 
-    public RoomRaceResult toRoomRaceResults(RaceResults result, RoomRace race){
+    /**
+     *
+     * @param circuitId
+     * @return
+     */
+    public RoomRaceResult toRoomRaceResults(String circuitId){
 
         RoomRaceResult temp = new RoomRaceResult();
-        temp.position = result.position;
-        temp.time = result.getTime().getTime();
-        temp.raceId = race.circuitId;
+
+        temp.raceId = circuitId;
+        temp.position = this.position;
+        temp.time = this.getTime().getTime();
+        temp.driverId = this.getDriver().getDriverId();
 
         return temp;
     }

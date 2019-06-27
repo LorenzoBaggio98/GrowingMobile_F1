@@ -6,8 +6,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
-import android.content.Context;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,12 +19,11 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.example.growingmobilef1.Adapter.ConstructorsAdapter;
-import com.example.growingmobilef1.Database.ConstructorViewModel;
+import com.example.growingmobilef1.Database.ViewModel.ConstructorViewModel;
 import com.example.growingmobilef1.Database.ModelRoom.RoomConstructor;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.ConstructorsDataHelper;
 
-import com.example.growingmobilef1.MainActivity;
 import com.example.growingmobilef1.Model.ConstructorStandings;
 import com.example.growingmobilef1.R;
 import com.example.growingmobilef1.Utils.LayoutAnimations;
@@ -34,7 +31,6 @@ import com.example.growingmobilef1.Utils.LayoutAnimations;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class ConstructorsRankingFragment extends Fragment {
@@ -58,10 +54,23 @@ public class ConstructorsRankingFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mAdapter = new ConstructorsAdapter(new ArrayList<RoomConstructor>());
+
         // ViewModel creato da Provider
         constructorViewModel = ViewModelProviders.of(this).get(ConstructorViewModel.class);
 
+        constructorViewModel.getAllConstructors().observe(this, new Observer<List<RoomConstructor>>() {
+            @Override
+            public void onChanged(@Nullable List<RoomConstructor> vConstructors) {
 
+                if (vConstructors != null) {
+                    mPgsBar.setVisibility(vView.GONE);
+                    ((ConstructorsAdapter)mAdapter).updateData(vConstructors);
+                } else {
+                    mPgsBar.setVisibility(vView.VISIBLE);
+                }
+            }
+        });
     }
 
     @Override
@@ -69,8 +78,7 @@ public class ConstructorsRankingFragment extends Fragment {
         vView = inflater.inflate(R.layout.fragment_constructors_ranking, container, false);
 
         // Call the async class to perform the api call
-        CalendarApiAsyncCaller vLongOperation = new CalendarApiAsyncCaller();
-        vLongOperation.execute();
+        refreshItems();
 
         // get objects
         mRecyclerView = vView.findViewById(R.id.list); // list
@@ -90,21 +98,10 @@ public class ConstructorsRankingFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(container.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new ConstructorsAdapter(new ArrayList<RoomConstructor>());
+
         mRecyclerView.setAdapter(mAdapter);
 
 
-        constructorViewModel.getAllConstructors().observe(this, new Observer<List<RoomConstructor>>() {
-            @Override
-            public void onChanged(@Nullable List<RoomConstructor> vConstructors) {
-                if (vConstructors != null) {
-                    mPgsBar.setVisibility(vView.GONE);
-                    ((ConstructorsAdapter)mAdapter).updateData(vConstructors);
-                } else {
-                    mPgsBar.setVisibility(vView.VISIBLE);
-                }
-            }
-        });
 
         // create swipe refresh listener...
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -124,8 +121,6 @@ public class ConstructorsRankingFragment extends Fragment {
         private JSONObject vJsonToParse;
         private ConstructorsDataHelper vConstructorsDataHelper;
         private ArrayList<ConstructorStandings> mConstructorsItemArraylist;
-        private ArrayList<RoomConstructor> mRoomConstructorsList;
-
 
         public CalendarApiAsyncCaller() {
 
@@ -142,20 +137,15 @@ public class ConstructorsRankingFragment extends Fragment {
             // parse json to list
             mConstructorsItemArraylist =  vConstructorsDataHelper.getArraylist(vJsonToParse);
 
-            mRoomConstructorsList = new ArrayList<>();
-
             for(ConstructorStandings cs : mConstructorsItemArraylist) {
                 constructorViewModel.insert(cs.toRoomConstructor());
             }
-            //mConstructorViewModel.deleteAll();
 
             return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
-
-            ((ConstructorsAdapter)mAdapter).updateData(mRoomConstructorsList);
 
             mLayoutAnimation.runLayoutAnimation(mRecyclerView);
 
@@ -183,6 +173,6 @@ public class ConstructorsRankingFragment extends Fragment {
         // Call the async class to perform the api call
         CalendarApiAsyncCaller vLongOperation = new CalendarApiAsyncCaller();
         vLongOperation.execute();
-
     }
+
 }

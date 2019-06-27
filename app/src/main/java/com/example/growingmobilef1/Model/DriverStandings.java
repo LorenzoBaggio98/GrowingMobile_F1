@@ -1,5 +1,7 @@
 package com.example.growingmobilef1.Model;
 
+import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -76,15 +78,38 @@ public class DriverStandings implements Serializable {
         return Driver;
     }
 
-    public void setDriver(com.example.growingmobilef1.Model.Driver driver) {
+    public void setDriver(Driver driver) {
         Driver = driver;
     }
 
-    public com.example.growingmobilef1.Model.Constructor getConstructor() {
+    public Constructor getConstructor() {
         return Constructor;
     }
 
-    public void setConstructor(com.example.growingmobilef1.Model.Constructor constructor) {
+    public void setConstructor(Constructor constructor) {
         Constructor = constructor;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public RoomDriver toRoomDriver(){
+
+        Driver currentDriver = this.getDriver();
+        RoomDriver temp = new RoomDriver();
+
+        temp.driverId = currentDriver.getDriverId();
+        temp.name = currentDriver.getFamilyName();
+        temp.surname = currentDriver.getGivenName();
+        temp.nationality = currentDriver.getNationality();
+        temp.dateOfBirth = currentDriver.getDateOfBirth();
+
+        temp.rankPosition = this.position;
+        temp.rankPoints = this.points;
+
+        temp.constructorId = getConstructor().getConstructorId();
+
+        return temp;
     }
 }

@@ -6,8 +6,11 @@ import android.support.annotation.NonNull;
 
 import com.example.growingmobilef1.Model.Races;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 @Entity(tableName = "race")
 public class RoomRace {
@@ -15,6 +18,8 @@ public class RoomRace {
     @PrimaryKey
     @NonNull
     public String circuitId;
+
+    public int round;
 
     public String name;
     public String dateTime;
@@ -29,4 +34,34 @@ public class RoomRace {
 
         return temp;
     }
+
+    /**
+     *
+     * @return
+     */
+    public Calendar dateToCalendar(){
+
+        // Istanza di Calendar
+        Calendar calendar = Calendar.getInstance();
+
+        // DateFormat con la TimeZone
+        SimpleDateFormat tempFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        tempFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+        // Istanza di Date
+        Date tempDate = new Date();
+
+        // Parsing della data in Date
+        try {
+            tempDate = tempFormat.parse(dateTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        // Da Date a Calendar
+        calendar.setTime(tempDate);
+
+        return calendar;
+    }
+
 }

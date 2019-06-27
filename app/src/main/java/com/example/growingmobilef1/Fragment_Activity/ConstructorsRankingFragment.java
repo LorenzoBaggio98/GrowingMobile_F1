@@ -23,6 +23,7 @@ import com.example.growingmobilef1.Database.ViewModel.ConstructorViewModel;
 import com.example.growingmobilef1.Database.ModelRoom.RoomConstructor;
 import com.example.growingmobilef1.Helper.ConstructorsDataHelper;
 
+import com.example.growingmobilef1.Model.Constructor;
 import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.R;
 import com.example.growingmobilef1.Utils.LayoutAnimations;
@@ -35,13 +36,14 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
     public final static String CONSTRUCTORS_API_CALLER = "Constructor api caller tag";
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private ConstructorsAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ProgressBar mPgsBar;
     private View vView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private LayoutAnimations mLayoutAnimation;
     private ApiAsyncCallerFragment mApiCallerFragment;
+
     private ConstructorViewModel constructorViewModel;
 
     public static ConstructorsRankingFragment newInstance() {
@@ -63,7 +65,7 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
 
                 if (vConstructors != null) {
                     mPgsBar.setVisibility(vView.GONE);
-                    ((ConstructorsAdapter)mAdapter).updateData(vConstructors);
+                    mAdapter.updateData(vConstructors);
                 } else {
                     mPgsBar.setVisibility(vView.VISIBLE);
                 }
@@ -73,6 +75,7 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         vView = inflater.inflate(R.layout.fragment_constructors_ranking, container, false);
 
         mApiCallerFragment = (ApiAsyncCallerFragment) getFragmentManager().findFragmentByTag(CONSTRUCTORS_API_CALLER);
@@ -99,7 +102,6 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
         mLayoutManager = new LinearLayoutManager(container.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-
 
         // create swipe refresh listener...
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -130,7 +132,7 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
 
     @Override
     public void onApiCalled(ArrayList<IListableModel> aConstructorList) {
-        ((ConstructorsAdapter)mAdapter).updateData(aConstructorList);
+        mAdapter.updateData(aConstructorList);
         mLayoutAnimation.runLayoutAnimation(mRecyclerView);
 
         if(aConstructorList.isEmpty()) {
@@ -156,6 +158,5 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
         // Call the async class to perform the api call
         ConstructorsDataHelper vDataHelper = new ConstructorsDataHelper();
         mApiCallerFragment.startCall("https://ergast.com/api/f1/current/constructorStandings.json", vDataHelper);
-
     }
 }

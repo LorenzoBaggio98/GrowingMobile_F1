@@ -311,7 +311,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
     @Override
     public void onApiCalled(ArrayList<IListableModel> aConstructorList) {
 
-        ((RacesAdapter)mAdapter).updateData(aConstructorList, null);
+        mAdapter.updateData(aConstructorList, null);
 
         mPgsBar.setVisibility(View.GONE);
         mLayoutAnimations.runLayoutAnimation(mRecyclerView);

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class ApiAsyncCallerFragment extends Fragment {
 
     public interface IOnApiCalled {
-        void onApiCalled(ArrayList<IListableModel> aConstructorList);
+        void onApiCalled(ArrayList<IListableModel> aReturnList);
     }
 
     private IOnApiCalled mElementListener;

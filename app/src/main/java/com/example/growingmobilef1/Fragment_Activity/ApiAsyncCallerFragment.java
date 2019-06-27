@@ -41,6 +41,7 @@ public class ApiAsyncCallerFragment extends Fragment {
             mConstructorCaller = null;
         }
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +71,9 @@ public class ApiAsyncCallerFragment extends Fragment {
         super.onDestroy();
     }
 
+    /**
+     *
+     */
     private class ConstructorApiAsyncCaller extends AsyncTask<String, Void, String> {
 
         private JSONObject vJsonToParse;

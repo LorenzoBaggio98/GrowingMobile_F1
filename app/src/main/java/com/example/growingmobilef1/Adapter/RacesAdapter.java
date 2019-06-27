@@ -153,7 +153,7 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
         vHolder.mTimeLabel.setText(vCalendarDate.get(Calendar.HOUR_OF_DAY) + ":" + vCalendarDate.get(Calendar.MINUTE));
 
         // Change notification icon if notification is scheduled
-        if (mRacesArrayList.get(position).notification == 0) {
+        if (mRacesArrayList.get(position).notification != 0) {
             ColorStateList vPrimaryColor = AppCompatResources.getColorStateList(mContext, R.color.colorPrimary);
             ImageViewCompat.setImageTintList(vHolder.mNotificationIcon, vPrimaryColor);
         }

@@ -45,10 +45,7 @@ public class DriversRankingFragment extends Fragment {
     private ProgressBar mProgressBar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private LayoutAnimations mLayoutAnimation;
-
     private DriverAdapter vDriversAdapter;
-
-
 
     public static DriversRankingFragment newInstance() {
         return new DriversRankingFragment();
@@ -82,7 +79,7 @@ public class DriversRankingFragment extends Fragment {
 
             if (!ConnectionStatusHelper.statusConnection(getContext())) {
                 Toast.makeText(getApplicationContext(),/* message*/  "NO connesione", Toast.LENGTH_SHORT).show();
-            }else{
+            } else {
 
                 getJsonObjectRequest("https://ergast.com/api/f1/current/driverStandings.json");
             }
@@ -96,7 +93,6 @@ public class DriversRankingFragment extends Fragment {
         });
         return vView;
     }
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -122,7 +118,7 @@ public class DriversRankingFragment extends Fragment {
                 }
             }
 
-            }, new Response.ErrorListener() {
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 

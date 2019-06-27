@@ -2,7 +2,6 @@ package com.example.growingmobilef1.Adapter;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-
 import android.support.annotation.NonNull;
 import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.content.res.AppCompatResources;
@@ -15,11 +14,8 @@ import android.widget.TextView;
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
-
 import java.util.ArrayList;
 import java.util.Calendar;
-
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -51,12 +47,17 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
         mNotificationListener = aNotificationListener;
     }
 
+    /**
+     *
+     * @param aData
+     * @param aRaceResultsMap
+     */
     public void updateData(ArrayList<Races> aData, Map<String, ArrayList<RaceResults>> aRaceResultsMap) {
         mRacesArrayList.clear();
         mRacesArrayList.addAll(aData);
-        mRaceResultsMap.clear();
 
         if(aRaceResultsMap != null) {
+            mRaceResultsMap.clear();
             mRaceResultsMap.putAll(aRaceResultsMap);
         }
 
@@ -118,7 +119,6 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
 
 
         Calendar vCalendarDate = mRacesArrayList.get(position).getDateTime();
-
         int vCalendarMonth = vCalendarDate.get(Calendar.MONTH);
 
         vHolder.mRaceLabel.setText("" + mRacesArrayList.get(position).getRaceName());

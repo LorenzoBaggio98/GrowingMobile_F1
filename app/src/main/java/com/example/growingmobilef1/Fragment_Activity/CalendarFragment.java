@@ -136,11 +136,17 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         Races vRaceItem = new Races();
         long vId = mCalendarRaceItemArraylist.get(aPosition).getRound();
 
-        // Looks for the clicked item in the ArrayList, then pass it to the detail fragment
-        for (int i = 0; i < mCalendarRaceItemArraylist.size(); i++) {
-            if (mCalendarRaceItemArraylist.get(i).getRound() == vId){
+        boolean isFound = false;
+        int i = 0;
+
+        /* Looks for the clicked item in the ArrayList, then pass it to the detail fragment */
+        while(isFound) {
+
+            if (mCalendarRaceItemArraylist.get(i).getRound() == vId) {
                 vRaceItem = mCalendarRaceItemArraylist.get(aPosition);
+                isFound = true;
             }
+            i++;
         }
         launchRaceDetailActivity(vRaceItem);
     }

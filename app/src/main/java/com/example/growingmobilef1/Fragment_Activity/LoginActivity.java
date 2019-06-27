@@ -84,7 +84,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(LoginActivity.this,this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
 
@@ -106,7 +106,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
 
         // facebook login
-        // FacebookSdk.sdkInitialize(this.getApplicationContext());
         mCallbackManager = CallbackManager.Factory.create();
         //LoginManager.getInstance().setReadPermissions("email", "public_profile");
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
@@ -231,7 +230,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if(requestCode==RC_SIGN_IN){
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             boolean flag = result.isSuccess();
-            int code_error = result.getStatus().getStatusCode();
+
             if(flag){
                 GoogleSignInAccount account = result.getSignInAccount();
                 authWithGoogle(account);
@@ -267,7 +266,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            // Sign in success
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = firebaseAuth.getCurrentUser();
 

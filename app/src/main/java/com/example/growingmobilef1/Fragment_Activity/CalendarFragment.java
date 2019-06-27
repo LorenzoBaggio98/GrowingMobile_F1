@@ -136,7 +136,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
     private void launchApiCallerFragment(){
         FragmentTransaction vFT = getChildFragmentManager().beginTransaction();
         CalendarRaceDataHelper vDataHelper = new CalendarRaceDataHelper();
-        mApiCallerFragment = ApiAsyncCallerFragment.getInstance(vDataHelper);
+        mApiCallerFragment = ApiAsyncCallerFragment.getInstance();
         vFT.add(mApiCallerFragment, CALENDAR_API_CALLER);
         vFT.commit();
         mApiCallerFragment.startCall("https://ergast.com/api/f1/current.json", vDataHelper);
@@ -312,7 +312,9 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
     public void onApiCalled(ArrayList<IListableModel> aConstructorList) {
 
         ((RacesAdapter)mAdapter).updateData(aConstructorList, null);
-
+        for (IListableModel mRace: aConstructorList){
+            mCalendarRaceItemArraylist.add((RoomRace) mRace);
+        }
         mPgsBar.setVisibility(View.GONE);
         mLayoutAnimations.runLayoutAnimation(mRecyclerView);
         mSwipeRefresh.setRefreshing(false);

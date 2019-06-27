@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String CONSTRUCTORS_RANKING_FRAGMENT = "Constructors";
     private static final String SAVED_TITLE = "title of the support action bar";
 
-    FirebaseAuth mFirebaseAuth;
+    //FirebaseAuth mFirebaseAuth;
 
     private FirebaseAuth.AuthStateListener  mAuthStateListener;
     private String mSupportActionBarTitle;
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // firebase auth
-        mFirebaseAuth = FirebaseAuth.getInstance();
+    /*    mFirebaseAuth = FirebaseAuth.getInstance();
 
         // check user status
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             Intent vIntent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(vIntent);
             //finish();
-        }
+        }*/
 
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         // check auth
-        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+     //   mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
     @Override
@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         if(mAuthStateListener!=null){
             // remove auth listener
-            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+         //   mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
         }
     }
 

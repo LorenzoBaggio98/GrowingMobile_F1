@@ -286,6 +286,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void signOut() {
         FirebaseAuth.getInstance().signOut();
-        LoginManager.getInstance().logOut();
+        LoginManager.getInstance().logOut(); // facebook logout, fatto bene
     }
 }

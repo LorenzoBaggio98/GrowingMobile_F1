@@ -2,6 +2,7 @@ package com.example.growingmobilef1.Adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,17 +51,25 @@ public class QualifyingResultsAdapter extends RecyclerView.Adapter<QualifyingRes
     public void onBindViewHolder(@NonNull QualifyingResultsAdapter.ViewHolder viewHolder, int i) {
         viewHolder.mPosition.setText("" + mData.get(i).getPosition());
         viewHolder.mDriver.setText("" + mData.get(i).getDriver().getFamilyName());
-        if(!mData.get(i).getQ1().isEmpty()){
+
+        if(!TextUtils.isEmpty(mData.get(i).getQ1())){
             viewHolder.mQ1.setText(mData.get(i).getQ1());
+        } else {
+            viewHolder.mQ1.setText("");
         }
 
-        if(!mData.get(i).getQ2().isEmpty()){
+        if(!TextUtils.isEmpty(mData.get(i).getQ2())){
             viewHolder.mQ2.setText(mData.get(i).getQ2());
+        } else {
+            viewHolder.mQ2.setText("");
         }
 
-        if(!mData.get(i).getQ3().isEmpty()){
+        if(!TextUtils.isEmpty(mData.get(i).getQ3())){
             viewHolder.mQ3.setText(mData.get(i).getQ3());
+        } else {
+            viewHolder.mQ3.setText("");
         }
+
     }
 
     @Override

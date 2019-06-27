@@ -2,6 +2,7 @@ package com.example.growingmobilef1.Model;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.example.growingmobilef1.Database.ModelRoom.RoomConstructor;
 
 public class ConstructorStandings implements IListableModel {
 
@@ -75,5 +76,20 @@ public class ConstructorStandings implements IListableModel {
 
     public void setConstructor(com.example.growingmobilef1.Model.Constructor constructor) {
         Constructor = constructor;
+    }
+
+    public RoomConstructor toRoomConstructor(){
+
+        RoomConstructor temp = new RoomConstructor();
+        Constructor constructor = getConstructor();
+
+        temp.name = constructor.getName();
+        temp.nationality = constructor.getNationality();
+        temp.constructorId = constructor.getConstructorId();
+
+        temp.rankPoints = getPoints();
+        temp.rankPosition = getPosition();
+
+        return temp;
     }
 }

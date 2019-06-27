@@ -1,6 +1,9 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import android.os.Bundle;
@@ -16,13 +19,20 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.example.growingmobilef1.Adapter.ConstructorsAdapter;
-
+import com.example.growingmobilef1.Database.ConstructorViewModel;
+import com.example.growingmobilef1.Database.ModelRoom.RoomConstructor;
+import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.ConstructorsDataHelper;
+
+import com.example.growingmobilef1.MainActivity;
+import com.example.growingmobilef1.Model.ConstructorStandings;
 import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.R;
 import com.example.growingmobilef1.Utils.LayoutAnimations;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCallerFragment.IOnApiCalled {
 
@@ -36,9 +46,20 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private LayoutAnimations mLayoutAnimation;
     private ApiAsyncCallerFragment mApiCallerFragment;
+    private ConstructorViewModel constructorViewModel;
 
     public static ConstructorsRankingFragment newInstance() {
         return new ConstructorsRankingFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // ViewModel creato da Provider
+        constructorViewModel = ViewModelProviders.of(this).get(ConstructorViewModel.class);
+
+
     }
 
     @Override
@@ -70,6 +91,19 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new ConstructorsAdapter(new ArrayList<IListableModel>());
         mRecyclerView.setAdapter(mAdapter);
+
+
+        constructorViewModel.getAllConstructors().observe(this, new Observer<List<RoomConstructor>>() {
+            @Override
+            public void onChanged(@Nullable List<RoomConstructor> vConstructors) {
+                if (vConstructors != null) {
+                    mPgsBar.setVisibility(vView.GONE);
+                    ((ConstructorsAdapter)mAdapter).updateData(vConstructors);
+                } else {
+                    mPgsBar.setVisibility(vView.VISIBLE);
+                }
+            }
+        });
 
         // create swipe refresh listener...
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

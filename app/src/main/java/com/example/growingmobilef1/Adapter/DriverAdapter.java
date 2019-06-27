@@ -90,7 +90,6 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyViewHold
                 vBundle.putSerializable("SAVE_ID", vdriver);
                 vIntent.putExtras(vBundle);
                context.startActivity(vIntent);
-
             }
         });
 
@@ -101,7 +100,5 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyViewHold
     public int getItemCount() {
         return mArrayListDrivers.size();
     }
-
-
 
 }

@@ -26,6 +26,6 @@ public class QualifyingResultsViewModel extends AndroidViewModel {
         return mAllQualifyingResults;
     }
 
-    public void insert(RoomQualifyingResult race){ mRepository.insertRace(race);}
+    public void insert(RoomQualifyingResult race){ mRepository.insertItem(race);}
 
 }

@@ -22,7 +22,7 @@ import java.util.List;
 public class FormulaRepository {
 
     // DAO
-    private RaceDao raceDao;
+    static private RaceDao raceDao;
     private RaceResultsDao raceResultsDao;
     private QualifyingResultDao qualifyingResultDao;
     private DriverDao driverDao;
@@ -36,7 +36,7 @@ public class FormulaRepository {
     private LiveData<List<RoomConstructor>> allConstructors;
 
     // Constructor
-    FormulaRepository(Application application){
+    public FormulaRepository(Application application){
         FormulaDatabase db = FormulaDatabase.getDatabase(application);
 
         raceDao = db.raceDao();
@@ -78,12 +78,11 @@ public class FormulaRepository {
     }
 
     // ASYNC
-    public<T> void insertRace(T item){
+    public<T> void insertItem(T item){
 
         if(item instanceof RoomRace) {
             new InsertRaceAsyncTask(raceDao).execute((RoomRace)item);
         }
-
         else if(item instanceof RoomRaceResult) {
             new InsertRaceResultsAsyncTask(raceResultsDao).execute((RoomRaceResult)item);
         }
@@ -98,20 +97,29 @@ public class FormulaRepository {
         }
     }
 
-/*
-    public void populate(List<RoomConstructor> vConstructors) {
-        new PopulateDbAsync(constructorDao, vConstructors).execute();
-    }
-*/
 
     public void deleteAll() {
         new DeleteConstructorAsyncTask(constructorDao).execute();
     }
 
 
+
     /**
      * ASYNC TASK
      */
+
+    /* Metodo alternativo
+    static private void insertItem(RoomRace currentRace){
+        new AsyncTask<RoomRace, Void, Void>(){
+
+            @Override
+            protected Void doInBackground(RoomRace... roomRaces) {
+                raceDao.insert(roomRaces[0]);
+                return null;
+            }
+        }.execute(currentRace);
+    }*/
+
     private static class InsertRaceAsyncTask extends AsyncTask<RoomRace, Void, Void>{
 
         private RaceDao asyncTaskDao;
@@ -185,13 +193,7 @@ public class FormulaRepository {
         @Override
         protected Void doInBackground(RoomConstructor... ts) {
 
-            //try {
-                asyncTaskDao.insert(ts[0]);
-
-            /*} catch (SQLiteConstraintException exception) {
-                asyncTaskDao.update(ts[0]);
-            }*/
-
+            asyncTaskDao.insert(ts[0]);
             return null;
         }
     }
@@ -210,8 +212,4 @@ public class FormulaRepository {
             return null;
         }
     }
-
-
-
-
 }

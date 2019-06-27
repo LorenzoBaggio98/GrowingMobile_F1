@@ -175,21 +175,6 @@ public class Races implements Serializable, IListableModel {
         this.dateTime = dateTime;
     }
 
-    /**
-     *
-     * @return
-     */
-    public RoomRace toRoomRace(){
-
-        RoomRace temp = new RoomRace();
-        temp.name = this.raceName;
-        temp.dateTime = getmDate() + " " + getTime();
-        temp.circuitId = this.getCircuit().getCircuitId();
-        temp.notification = this.isNotificationScheduled ? 1 : 0;
-
-        return temp;
-    }
-
     public void setmDate(String mDate) {
         this.mDate = mDate;
     }
@@ -197,4 +182,22 @@ public class Races implements Serializable, IListableModel {
     public void setTime(String time) {
         this.time = time;
     }
+
+    /**
+     *
+     * @return
+     */
+    public RoomRace toRoomRace(){
+
+        RoomRace temp = new RoomRace();
+
+        temp.name = this.raceName;
+        temp.round = this.round;
+        temp.dateTime = getmDate() + " " + getTime();
+        temp.circuitId = this.getCircuit().getCircuitId();
+        temp.notification = this.isNotificationScheduled ? 1 : 0;
+
+        return temp;
+    }
+
 }

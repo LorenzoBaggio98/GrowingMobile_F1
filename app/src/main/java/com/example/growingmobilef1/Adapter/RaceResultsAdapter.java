@@ -26,7 +26,7 @@ public class RaceResultsAdapter extends RecyclerView.Adapter<RaceResultsAdapter.
     public void updateData(ArrayList<RaceResults> viewModels) {
         mData.clear();
         mData.addAll(viewModels);
-        //notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     // Clean all elements of the recycler

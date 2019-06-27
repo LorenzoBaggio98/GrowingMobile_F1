@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth.AuthStateListener  mAuthStateListener;
     private String mSupportActionBarTitle;
-    private Toolbar mToolbar;
     private Dialog myDialog;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -80,14 +79,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // firebase auth
-       /* mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseAuth = FirebaseAuth.getInstance();
 
-        if(mFirebaseAuth.getCurrentUser()==null){
+        // check user status
+        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+        if(user != null){
+            if(!user.isEmailVerified()) {
+                Toast.makeText(getApplicationContext(),"Email is not verified",Toast.LENGTH_SHORT).show();
+                signOut();
+                Intent vIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(vIntent);
+                //finish();
+            }
+        } else {
             Intent vIntent = new Intent(getApplicationContext(), LoginActivity.class);
-            vIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(vIntent);
-            finish();
-        }*/
+            //finish();
+        }
+
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -96,7 +105,16 @@ public class MainActivity extends AppCompatActivity {
                 if(user == null) {
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                     finish();
+                } else {
+
+                    if (!user.isEmailVerified()) {
+                        Toast.makeText(getApplicationContext(), "Email is not verified", Toast.LENGTH_SHORT).show();
+
+                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                        //finish();
+                    }
                 }
+
             }
         };
 
@@ -198,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         // check auth
-//        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
     @Override
@@ -236,6 +254,7 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
+
 
     /**
      * Back to Main Activity

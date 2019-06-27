@@ -19,7 +19,7 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.example.growingmobilef1.Adapter.ConstructorsAdapter;
-import com.example.growingmobilef1.Database.ConstructorViewModel;
+import com.example.growingmobilef1.Database.ViewModel.ConstructorViewModel;
 import com.example.growingmobilef1.Database.ModelRoom.RoomConstructor;
 import com.example.growingmobilef1.Helper.ConstructorsDataHelper;
 
@@ -52,10 +52,23 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mAdapter = new ConstructorsAdapter(new ArrayList<RoomConstructor>());
+
         // ViewModel creato da Provider
         constructorViewModel = ViewModelProviders.of(this).get(ConstructorViewModel.class);
 
+        constructorViewModel.getAllConstructors().observe(this, new Observer<List<RoomConstructor>>() {
+            @Override
+            public void onChanged(@Nullable List<RoomConstructor> vConstructors) {
 
+                if (vConstructors != null) {
+                    mPgsBar.setVisibility(vView.GONE);
+                    ((ConstructorsAdapter)mAdapter).updateData(vConstructors);
+                } else {
+                    mPgsBar.setVisibility(vView.VISIBLE);
+                }
+            }
+        });
     }
 
     @Override
@@ -85,21 +98,8 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(container.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new ConstructorsAdapter(new ArrayList<IListableModel>());
         mRecyclerView.setAdapter(mAdapter);
 
-
-        constructorViewModel.getAllConstructors().observe(this, new Observer<List<RoomConstructor>>() {
-            @Override
-            public void onChanged(@Nullable List<RoomConstructor> vConstructors) {
-                if (vConstructors != null) {
-                    mPgsBar.setVisibility(vView.GONE);
-                    ((ConstructorsAdapter)mAdapter).updateData(vConstructors);
-                } else {
-                    mPgsBar.setVisibility(vView.VISIBLE);
-                }
-            }
-        });
 
         // create swipe refresh listener...
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -119,13 +119,13 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
         mApiCallerFragment = ApiAsyncCallerFragment.getInstance(vDataHelper);
         vFT.add(mApiCallerFragment, CONSTRUCTORS_API_CALLER);
         vFT.commit();
-        mApiCallerFragment.startApiCall("https://ergast.com/api/f1/current/constructorStandings.json", vDataHelper);
+        mApiCallerFragment.startCall("https://ergast.com/api/f1/current/constructorStandings.json", vDataHelper);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mApiCallerFragment.stopConstructorsCall();
+        mApiCallerFragment.stopCall();
     }
 
     @Override
@@ -148,14 +148,14 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
                     break;
             }
         }
-        mApiCallerFragment.stopConstructorsCall();
+        mApiCallerFragment.stopCall();
     }
 
     void refreshItems() {
         // Load items
         // Call the async class to perform the api call
         ConstructorsDataHelper vDataHelper = new ConstructorsDataHelper();
-        mApiCallerFragment.startApiCall("https://ergast.com/api/f1/current/constructorStandings.json", vDataHelper);
+        mApiCallerFragment.startCall("https://ergast.com/api/f1/current/constructorStandings.json", vDataHelper);
 
     }
 }

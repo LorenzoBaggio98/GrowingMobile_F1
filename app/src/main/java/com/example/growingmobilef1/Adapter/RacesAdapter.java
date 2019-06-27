@@ -2,7 +2,6 @@ package com.example.growingmobilef1.Adapter;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-
 import android.support.annotation.NonNull;
 import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.content.res.AppCompatResources;
@@ -13,22 +12,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
+import com.example.growingmobilef1.Model.ConstructorStandings;
 import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
-
 import java.util.ArrayList;
 import java.util.Calendar;
-
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> {
 
-    private ArrayList<Races> mRacesArrayList;
-    private Map<String, ArrayList<RaceResults>> mRaceResultsMap;
+    private List<RoomRace> mRacesArrayList;
+    private Map<String, List<RaceResults>> mRaceResultsMap;
 
     private Context mContext;
 
@@ -41,24 +41,29 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
     private IOnNotificationIconClicked mNotificationListener;
 
     public RacesAdapter(Context aContext,
-                        ArrayList<Races> aData,
-                        Map<String, ArrayList<RaceResults>> aRaceResultsMap,
+                        ArrayList<? extends IListableModel> aData,
+                        Map<String, List<RaceResults>> aRaceResultsMap,
                         IOnRaceClicked aListener,
                         IOnNotificationIconClicked aNotificationListener) {
 
         mContext = aContext;
-        mRacesArrayList = aData;
+        mRacesArrayList = (ArrayList<RoomRace>) aData;
         mRaceResultsMap = aRaceResultsMap;
         mItemListener = aListener;
         mNotificationListener = aNotificationListener;
     }
 
-    public void updateData(ArrayList<Races> aData, Map<String, ArrayList<RaceResults>> aRaceResultsMap) {
+    /**
+     *
+     * @param aData
+     * @param aRaceResultsMap
+     */
+    public void updateData(List<? extends IListableModel> aData, Map<String, List<RaceResults>> aRaceResultsMap) {
         mRacesArrayList.clear();
-        mRacesArrayList.addAll(aData);
-        mRaceResultsMap.clear();
+        mRacesArrayList.addAll((Collection<? extends RoomRace>) aData);
 
         if(aRaceResultsMap != null) {
+            mRaceResultsMap.clear();
             mRaceResultsMap.putAll(aRaceResultsMap);
         }
 
@@ -73,7 +78,7 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
     }
 
     // Add a list of items -- change to type used
-    public void addAll(ArrayList<Races> aData, Map<String, ArrayList<RaceResults>> aRaceResultsMap) {
+    public void addAll(ArrayList<RoomRace> aData, Map<String, ArrayList<RaceResults>> aRaceResultsMap) {
         mRacesArrayList.addAll(aData);
         mRaceResultsMap.putAll(aRaceResultsMap);
         notifyDataSetChanged();
@@ -83,7 +88,7 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
     @Override
     public int getItemViewType(int position) {
 
-        Calendar vCalendarConvertRaceDate = mRacesArrayList.get(position).getDateTime();
+        Calendar vCalendarConvertRaceDate = mRacesArrayList.get(position).dateToCalendar();
         long raceMilliSecondDate = vCalendarConvertRaceDate.getTimeInMillis();
 
         Calendar vCalendar = Calendar.getInstance();
@@ -119,17 +124,16 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
     public void onBindViewHolder (@NonNull ViewHolder vHolder,int position){
 
 
-        Calendar vCalendarDate = mRacesArrayList.get(position).getDateTime();
-
+        Calendar vCalendarDate = mRacesArrayList.get(position).dateToCalendar();
         int vCalendarMonth = vCalendarDate.get(Calendar.MONTH);
 
-        vHolder.mRaceLabel.setText("" + mRacesArrayList.get(position).getRaceName());
+        vHolder.mRaceLabel.setText("" + mRacesArrayList.get(position).name);
 
-        // Set the podium results (if the race has already occurred)
+        // Set the podium results (if the race has already occurred) todo
         String vPositionLabelString = "";
-        if (mRaceResultsMap.containsKey(mRacesArrayList.get(position).getRaceName())) {
+        if (mRaceResultsMap.containsKey(mRacesArrayList.get(position).name)) {
             for (int i = 0; i < 3; i++) {
-                String vPosition = mRaceResultsMap.get(mRacesArrayList.get(position).getRaceName()).get(i).getDriver().getCode();
+                String vPosition = mRaceResultsMap.get(mRacesArrayList.get(position).name).get(i).getDriver().getCode();
                 if (i < 2)
                     vPositionLabelString += vPosition + " / ";
                 else
@@ -149,7 +153,7 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
         vHolder.mTimeLabel.setText(vCalendarDate.get(Calendar.HOUR_OF_DAY) + ":" + vCalendarDate.get(Calendar.MINUTE));
 
         // Change notification icon if notification is scheduled
-        if (mRacesArrayList.get(position).getNotificationScheduled()) {
+        if (mRacesArrayList.get(position).notification == 0) {
             ColorStateList vPrimaryColor = AppCompatResources.getColorStateList(mContext, R.color.colorPrimary);
             ImageViewCompat.setImageTintList(vHolder.mNotificationIcon, vPrimaryColor);
         }

@@ -80,14 +80,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // firebase auth
-        mFirebaseAuth = FirebaseAuth.getInstance();
+       /* mFirebaseAuth = FirebaseAuth.getInstance();
 
         if(mFirebaseAuth.getCurrentUser()==null){
             Intent vIntent = new Intent(getApplicationContext(), LoginActivity.class);
             vIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(vIntent);
             finish();
-        }
+        }*/
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         // check auth
-        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+//        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
     @Override
@@ -236,7 +236,6 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
-
 
     /**
      * Back to Main Activity

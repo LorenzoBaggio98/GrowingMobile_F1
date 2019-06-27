@@ -99,7 +99,12 @@ public class ApiAsyncCallerFragment extends Fragment {
             vJsonToParse = vApiRequestHelper.getContentFromUrl(params[0]);
 
             // parse json to list
-            mHelperArrayList =  mApiGenericHelper.getArrayList(vJsonToParse);
+            try {
+                mHelperArrayList =  mApiGenericHelper.getArrayList(vJsonToParse);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
             return null;
         }
 

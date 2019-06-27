@@ -4,6 +4,7 @@ import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
@@ -27,8 +28,9 @@ import java.util.concurrent.Executors;
                 RoomQualifyingResult.class,
                 RoomDriver.class,
                 RoomConstructor.class
-        }, version = 5
+        }, version = 6
 )
+@TypeConverters({Converters.class})
 public abstract class FormulaDatabase extends RoomDatabase {
 
     //DAO

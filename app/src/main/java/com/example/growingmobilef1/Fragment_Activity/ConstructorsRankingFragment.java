@@ -3,9 +3,6 @@ package com.example.growingmobilef1.Fragment_Activity;
 
 import android.support.v4.app.Fragment;
 
-import android.content.Context;
-
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -19,21 +16,16 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.example.growingmobilef1.Adapter.ConstructorsAdapter;
-import com.example.growingmobilef1.Helper.ApiRequestHelper;
-import com.example.growingmobilef1.Helper.ConstructorsDataHelper;
 
-import com.example.growingmobilef1.Model.ConstructorStandings;
+import com.example.growingmobilef1.Helper.ConstructorsDataHelper;
+import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.R;
 import com.example.growingmobilef1.Utils.LayoutAnimations;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
-public class ConstructorsRankingFragment extends Fragment //implements ApiAsyncCallerFragment.IOnConstructorCalled
- {
+public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCallerFragment.IOnApiCalled {
 
-    public final static String CONSTRUCTORS_RANKING_FRAGMENT_TAG = "CONSTRUCTORS_RANKING_FRAGMENT";
     public final static String CONSTRUCTORS_API_CALLER = "Constructor api caller tag";
 
     private RecyclerView mRecyclerView;
@@ -53,18 +45,15 @@ public class ConstructorsRankingFragment extends Fragment //implements ApiAsyncC
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         vView = inflater.inflate(R.layout.fragment_constructors_ranking, container, false);
 
-      /*  mApiCallerFragment = (ApiAsyncCallerFragment) getFragmentManager().findFragmentByTag(CONSTRUCTORS_API_CALLER);
+        mApiCallerFragment = (ApiAsyncCallerFragment) getFragmentManager().findFragmentByTag(CONSTRUCTORS_API_CALLER);
         if (mApiCallerFragment == null){
             launchApiCallerFragment();
-        }*/
-        // Call the async class to perform the api call
-        CalendarApiAsyncCaller vLongOperation = new CalendarApiAsyncCaller();
-        vLongOperation.execute();
+        }
 
         // get objects
-        mRecyclerView = (RecyclerView) vView.findViewById(R.id.list); // list
-        mPgsBar = (ProgressBar)vView.findViewById(R.id.progress_loaderC); // progressbar
-        mSwipeRefreshLayout = (SwipeRefreshLayout) vView.findViewById(R.id.swipeRefreshConstructos);
+        mRecyclerView = vView.findViewById(R.id.list); // list
+        mPgsBar = vView.findViewById(R.id.progress_loaderC); // progressbar
+        mSwipeRefreshLayout = vView.findViewById(R.id.swipeRefreshConstructos);
         mLayoutAnimation = new LayoutAnimations();
 
         // start loading progress bar
@@ -79,7 +68,7 @@ public class ConstructorsRankingFragment extends Fragment //implements ApiAsyncC
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(container.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new ConstructorsAdapter(new ArrayList<ConstructorStandings>());
+        mAdapter = new ConstructorsAdapter(new ArrayList<IListableModel>());
         mRecyclerView.setAdapter(mAdapter);
 
         // create swipe refresh listener...
@@ -95,15 +84,22 @@ public class ConstructorsRankingFragment extends Fragment //implements ApiAsyncC
     }
 
     private void launchApiCallerFragment(){
-        FragmentTransaction vFT = getFragmentManager().beginTransaction();
-        mApiCallerFragment = ApiAsyncCallerFragment.getInstance();
+        FragmentTransaction vFT = getChildFragmentManager().beginTransaction();
+        ConstructorsDataHelper vDataHelper = new ConstructorsDataHelper();
+        mApiCallerFragment = ApiAsyncCallerFragment.getInstance(vDataHelper);
         vFT.add(mApiCallerFragment, CONSTRUCTORS_API_CALLER);
         vFT.commit();
-        mApiCallerFragment.startConstructorsCall();
+        mApiCallerFragment.startConstructorsCall("https://ergast.com/api/f1/current/constructorStandings.json", vDataHelper);
     }
-/*
+
     @Override
-    public void onConstructorCalled(ArrayList<ConstructorStandings> aConstructorList) {
+    public void onDetach() {
+        super.onDetach();
+        mApiCallerFragment.stopConstructorsCall();
+    }
+
+    @Override
+    public void onApiCalled(ArrayList<IListableModel> aConstructorList) {
         ((ConstructorsAdapter)mAdapter).updateData(aConstructorList);
         mLayoutAnimation.runLayoutAnimation(mRecyclerView);
 
@@ -121,58 +117,15 @@ public class ConstructorsRankingFragment extends Fragment //implements ApiAsyncC
                     mPgsBar.setVisibility(vView.GONE);
                     break;
             }
-
         }
-    }
-*/
-    // Private class needed to perform the API call asynchronously
-    private class CalendarApiAsyncCaller extends AsyncTask<String, Void, String> {
-
-        private JSONObject vJsonToParse;
-        private ConstructorsDataHelper vConstructorsDataHelper;
-        private ArrayList<ConstructorStandings> mConstructorsItemArraylist;
-
-        @Override
-        protected String doInBackground(String... params) {
-            ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
-            vConstructorsDataHelper = new ConstructorsDataHelper();
-
-            // get json from api
-            vJsonToParse = vApiRequestHelper.getContentFromUrl("https://ergast.com/api/f1/current/constructorStandings.json");
-
-            // parse json to list
-            mConstructorsItemArraylist =  vConstructorsDataHelper.getArraylist(vJsonToParse);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            ((ConstructorsAdapter)mAdapter).updateData(mConstructorsItemArraylist);
-            mLayoutAnimation.runLayoutAnimation(mRecyclerView);
-
-            if(vJsonToParse == null) {
-                Toast.makeText(getActivity(), "Can't fetch ranking, check internet connection", Toast.LENGTH_LONG);
-            } else {
-
-                switch (mPgsBar.getVisibility())
-                {
-                    case View.GONE:
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        break;
-                    case View.VISIBLE:
-
-                        mPgsBar.setVisibility(vView.GONE);
-                        break;
-                }
-
-            }
-        }
+        mApiCallerFragment.stopConstructorsCall();
     }
 
     void refreshItems() {
         // Load items
         // Call the async class to perform the api call
-        mApiCallerFragment.startConstructorsCall();
+        ConstructorsDataHelper vDataHelper = new ConstructorsDataHelper();
+        mApiCallerFragment.startConstructorsCall("https://ergast.com/api/f1/current/constructorStandings.json", vDataHelper);
 
     }
 }

@@ -2,6 +2,7 @@ package com.example.growingmobilef1.Database.ModelRoom;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -13,10 +14,9 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
                 parentColumns = "circuitId",
                 childColumns = "raceId",
                 onDelete = CASCADE
-        ),
-        @ForeignKey(
+        ), @ForeignKey(
                 entity = RoomDriver.class,
-                parentColumns = "id",
+                parentColumns = "driverId",
                 childColumns = "driverId",
                 onDelete = CASCADE
         )}
@@ -28,11 +28,9 @@ public class RoomRaceResult {
     public int id;
 
     public int position;
-
     public String time;
 
     public String raceId;
-
-    public int driverId;
+    public String driverId;
 
 }

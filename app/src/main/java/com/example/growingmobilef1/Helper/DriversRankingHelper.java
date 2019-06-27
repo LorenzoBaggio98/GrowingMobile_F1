@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 public class DriversRankingHelper {
 
-
     public static ArrayList<DriverStandings> getArrayListPilotsPoints(JSONObject aJsonsToParse) {
 
         ArrayList<DriverStandings> arrayListPilotsPoints = new ArrayList<>();

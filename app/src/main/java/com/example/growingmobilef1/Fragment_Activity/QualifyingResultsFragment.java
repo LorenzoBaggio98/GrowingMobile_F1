@@ -127,15 +127,15 @@ public class QualifyingResultsFragment extends Fragment {
 
     private void roomInsertQualifyingResults(ArrayList<QualifyingResults> aQualResultsArrayList){
         for (QualifyingResults vQualResults: aQualResultsArrayList) {
-            RoomQualifyingResult vRoomQualResult = new RoomQualifyingResult(0,
+         /*   RoomQualifyingResult vRoomQualResult = new RoomQualifyingResult(0,
                     vQualResults.getPosition(),
+                    mRace.getCircuit().getCircuitId(),
+                    vQualResults.getDriver().getDriverId(),
                     vQualResults.getQ1(),
                     vQualResults.getQ2(),
-                    vQualResults.getQ3(),
-                    mRace.getCircuit().getCircuitId(),
-                    vQualResults.getDriver().getDriverId());
+                    vQualResults.getQ3());
 
-            mRoomQualifyingViewModel.insert(vRoomQualResult);
+            mRoomQualifyingViewModel.insert(vRoomQualResult);*/
         }
     }
 }

@@ -1,18 +1,19 @@
 package com.example.growingmobilef1.Helper;
 
-import com.example.growingmobilef1.Interface.IListableObject;
 import com.example.growingmobilef1.Model.ConstructorStandings;
+import com.example.growingmobilef1.Model.IListableModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ConstructorsDataHelper {
+public class ConstructorsDataHelper implements IGenericHelper {
 
-    public ArrayList<ConstructorStandings> getArraylist(JSONObject aJsonToParse){
-        ArrayList<ConstructorStandings> vCalendarRaceItemArraylist = new ArrayList<>();
+    public ArrayList<IListableModel> getArrayList(JSONObject aJsonToParse){
+        ArrayList<IListableModel> vCalendarRaceItemArraylist = new ArrayList<>();
 
 
         if(aJsonToParse != null) {

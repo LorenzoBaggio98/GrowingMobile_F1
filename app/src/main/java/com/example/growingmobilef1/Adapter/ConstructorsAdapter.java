@@ -8,15 +8,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.growingmobilef1.Model.ConstructorStandings;
+import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.R;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 // must be paramitized to access to viewHolder and use custom layout widjet
 public class ConstructorsAdapter extends RecyclerView.Adapter<ConstructorsAdapter.ViewHolder> {
 
-    List<ConstructorStandings> mValues;
+    ArrayList<ConstructorStandings> mValues;
 
     // class used to protect from the calling findViewById on each bind
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -33,18 +35,18 @@ public class ConstructorsAdapter extends RecyclerView.Adapter<ConstructorsAdapte
         }
     }
 
-    public ConstructorsAdapter(List<ConstructorStandings> vValues) {
-        mValues = vValues;
+    public ConstructorsAdapter(ArrayList<? extends IListableModel> vValues) {
+        mValues = (ArrayList<ConstructorStandings>) vValues;
     }
 
     public ConstructorsAdapter() {
         mValues = new ArrayList<>();
     }
 
-    public void updateData(List<ConstructorStandings> viewModels) {
+    public void updateData(List<? extends IListableModel> viewModels) {
         mValues.clear();
-        mValues.addAll(viewModels);
-        //notifyDataSetChanged();
+        mValues.addAll((Collection<? extends ConstructorStandings>) viewModels);
+        notifyDataSetChanged();
     }
 
     // Clean all elements of the recycler
@@ -67,7 +69,6 @@ public class ConstructorsAdapter extends RecyclerView.Adapter<ConstructorsAdapte
 
         // row layout
         View vItemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_constructors, viewGroup, false);
-
         return new ViewHolder(vItemView);
     }
 

@@ -5,39 +5,38 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.view.View;
-import android.widget.Toast;
 
-import com.example.growingmobilef1.Adapter.ConstructorsAdapter;
+import com.example.growingmobilef1.Helper.ApiGenericHelper;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.ConstructorsDataHelper;
-import com.example.growingmobilef1.Model.ConstructorStandings;
+import com.example.growingmobilef1.Helper.IGenericHelper;
+import com.example.growingmobilef1.Model.IListableModel;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class ApiAsyncCallerFragment extends Fragment {
 
-    public interface IOnConstructorCalled {
-        void onConstructorCalled(ArrayList<ConstructorStandings> aConstructorList);
+    public interface IOnApiCalled {
+        void onApiCalled(ArrayList<IListableModel> aConstructorList);
     }
-    private IOnConstructorCalled mConstructorListener;
+
+    private IOnApiCalled mConstructorListener;
     private ConstructorApiAsyncCaller mConstructorCaller;
+    private IGenericHelper mApiGenericHelper;
 
-    private Context mContext;
-
-    public static ApiAsyncCallerFragment getInstance(){
+    public static ApiAsyncCallerFragment getInstance(Serializable aSerializableClass){
         ApiAsyncCallerFragment vFragment = new ApiAsyncCallerFragment();
-        Bundle vBundle = new Bundle();
         return vFragment;
     }
 
-    public void startConstructorsCall(){
+    public void startConstructorsCall(String aUrl, IGenericHelper aApiGenericHelper){
         if (mConstructorCaller == null){
-            mConstructorCaller = new ConstructorApiAsyncCaller(mConstructorListener);
-            mConstructorCaller.execute();
+            mConstructorCaller = new ConstructorApiAsyncCaller(mConstructorListener, aApiGenericHelper);
+            mConstructorCaller.execute(aUrl);
         }
     }
 
@@ -53,20 +52,16 @@ public class ApiAsyncCallerFragment extends Fragment {
         setRetainInstance(true);
     }
 
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof IOnConstructorCalled){
-            mConstructorListener = (IOnConstructorCalled)context;
+        if (getParentFragment() instanceof IOnApiCalled){
+            mConstructorListener = (IOnApiCalled) getParentFragment();
             if (mConstructorCaller != null){
                 mConstructorCaller.setListener(mConstructorListener);
             }
         }
-    }
-
-    @Override
-    public void onAttachFragment(Fragment childFragment) {
-        super.onAttachFragment(childFragment);
     }
 
     @Override
@@ -78,61 +73,41 @@ public class ApiAsyncCallerFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mConstructorCaller.cancel(true);
     }
 
     private class ConstructorApiAsyncCaller extends AsyncTask<String, Void, String> {
 
         private JSONObject vJsonToParse;
-        private ConstructorsDataHelper vConstructorsDataHelper;
-        private ArrayList<ConstructorStandings> mConstructorsItemArraylist;
+        private ArrayList<IListableModel> mHelperArrayList;
+        private IGenericHelper mApiGenericHelper;
 
-        private WeakReference<IOnConstructorCalled> mConstructorListener;
-        public ConstructorApiAsyncCaller(IOnConstructorCalled aCaller) {
+        private WeakReference<IOnApiCalled> mConstructorListener;
+        public ConstructorApiAsyncCaller(IOnApiCalled aCaller, IGenericHelper aApiGenericHelper) {
             mConstructorListener = new WeakReference<>(aCaller);
+            mApiGenericHelper = aApiGenericHelper;
         }
 
-        public void setListener(IOnConstructorCalled aCaller){
+        public void setListener(IOnApiCalled aCaller){
             mConstructorListener = new WeakReference<>(aCaller);
         }
 
         @Override
         protected String doInBackground(String... params) {
             ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
-            vConstructorsDataHelper = new ConstructorsDataHelper();
 
             // get json from api
-            vJsonToParse = vApiRequestHelper.getContentFromUrl("https://ergast.com/api/f1/current/constructorStandings.json");
+            vJsonToParse = vApiRequestHelper.getContentFromUrl(params[0]);
 
             // parse json to list
-            mConstructorsItemArraylist =  vConstructorsDataHelper.getArraylist(vJsonToParse);
+            mHelperArrayList =  mApiGenericHelper.getArrayList(vJsonToParse);
             return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
             if (mConstructorListener.get() != null){
-                mConstructorListener.get().onConstructorCalled(mConstructorsItemArraylist);
+                mConstructorListener.get().onApiCalled(mHelperArrayList);
             }
-           /* ((ConstructorsAdapter)mAdapter).updateData(mConstructorsItemArraylist);
-            mLayoutAnimation.runLayoutAnimation(mRecyclerView);
-
-            if(vJsonToParse == null) {
-                Toast.makeText(getActivity(), "Can't fetch ranking, check internet connection", Toast.LENGTH_LONG);
-            } else {
-
-                switch (mPgsBar.getVisibility())
-                {
-                    case View.GONE:
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        break;
-                    case View.VISIBLE:
-
-                        mPgsBar.setVisibility(vView.GONE);
-                        break;
-                }
-
-            }*/
         }
     }
 }

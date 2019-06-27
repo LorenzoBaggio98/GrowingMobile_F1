@@ -24,6 +24,6 @@ public class RacesViewModel extends AndroidViewModel {
         return allRaces;
     }
 
-    public void insert(RoomRace race){ repository.insertRace(race);}
+    public void insertRace(RoomRace race){ repository.insertRace(race);}
 
 }

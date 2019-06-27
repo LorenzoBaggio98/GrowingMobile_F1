@@ -3,6 +3,7 @@ package com.example.growingmobilef1.Database.InterfaceDao;
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
 
@@ -13,7 +14,7 @@ import java.util.List;
 @Dao
 public interface RaceResultsDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(RoomRaceResult raceResults);
 
     @Query("SELECT * FROM race_results WHERE id = :id")
@@ -23,5 +24,5 @@ public interface RaceResultsDao {
     LiveData<List<RoomRaceResult>> getAllRaceResults();
 
     @Query("SELECT * FROM race_results WHERE raceId = :raceId")
-    LiveData<List<RoomRaceResult>> getRaceResultsByRaceId(int raceId);
+    LiveData<List<RoomRaceResult>> getRaceResultsByRaceId(String raceId);
 }

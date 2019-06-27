@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.growingmobilef1.Adapter.QualifyingResultsAdapter;
-import com.example.growingmobilef1.Database.QualifyingResultsViewModel;
+import com.example.growingmobilef1.Database.ViewModel.QualifyingResultsViewModel;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.QualifyingResultsDataHelper;
 import com.example.growingmobilef1.Model.QualifyingResults;

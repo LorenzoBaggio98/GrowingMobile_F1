@@ -24,7 +24,7 @@ public class ApiAsyncCallerFragment extends Fragment {
     private IOnApiCalled mElementListener;
     private ApiAsyncCaller mElementCaller;
 
-    public static ApiAsyncCallerFragment getInstance(Serializable aSerializableClass){
+    public static ApiAsyncCallerFragment getInstance(){
         ApiAsyncCallerFragment vFragment = new ApiAsyncCallerFragment();
         return vFragment;
     }
@@ -75,7 +75,7 @@ public class ApiAsyncCallerFragment extends Fragment {
     /**
      *
      */
-    private class ApiAsyncCaller extends AsyncTask<String, Void, String> {
+    private static class ApiAsyncCaller extends AsyncTask<String, Void, String> {
 
         private JSONObject vJsonToParse;
         private ArrayList<IListableModel> mHelperArrayList;

@@ -99,12 +99,13 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         mSwipeRefresh = vView.findViewById(R.id.frag_calendar_refresh_layout);
         mLayoutAnimations = new LayoutAnimations();
 
+        // Call the async class to perform the api call
         mApiCallerFragment = (ApiAsyncCallerFragment) getFragmentManager().findFragmentByTag(CALENDAR_API_CALLER);
         if (mApiCallerFragment == null){
             launchApiCallerFragment();
         }
-        // Call the async class to perform the api call
-        //operateAsyncOperation();
+
+        startCall();
 
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(container.getContext());
@@ -119,7 +120,8 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
                 if (mApiCallerFragment == null){
                     launchApiCallerFragment();
                 }
-                //operateAsyncOperation();
+
+                startCall();
             }
         });
         return vView;
@@ -135,26 +137,10 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
 
     private void launchApiCallerFragment(){
         FragmentTransaction vFT = getChildFragmentManager().beginTransaction();
-        CalendarRaceDataHelper vDataHelper = new CalendarRaceDataHelper();
-        mApiCallerFragment = ApiAsyncCallerFragment.getInstance(vDataHelper);
+        mApiCallerFragment = ApiAsyncCallerFragment.getInstance();
         vFT.add(mApiCallerFragment, CALENDAR_API_CALLER);
         vFT.commit();
-        mApiCallerFragment.startCall("https://ergast.com/api/f1/current.json", vDataHelper);
     }
-
-    /**
-     * Operazioni asincrone
-     */
-   /* private void operateAsyncOperation(){
-
-        if(ConnectionStatusHelper.statusConnection(getContext())){
-            CalendarApiAsyncCaller vCalendarAsyncCaller = new CalendarApiAsyncCaller();
-            vCalendarAsyncCaller.execute();
-
-            CalendarPodiumApiAsyncCaller vPodiumAsyncCaller = new CalendarPodiumApiAsyncCaller();
-            vPodiumAsyncCaller.execute();
-        }
-    }*/
 
     /**
      * Override metodo RecycleView
@@ -317,5 +303,10 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         mLayoutAnimations.runLayoutAnimation(mRecyclerView);
         mSwipeRefresh.setRefreshing(false);
         mApiCallerFragment.stopCall();
+    }
+
+    public void startCall(){
+        CalendarRaceDataHelper vDataHelper = new CalendarRaceDataHelper();
+        mApiCallerFragment.startCall("https://ergast.com/api/f1/current.json", vDataHelper);
     }
 }

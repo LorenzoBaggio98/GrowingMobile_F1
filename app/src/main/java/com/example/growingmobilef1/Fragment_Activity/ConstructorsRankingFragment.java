@@ -118,7 +118,7 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
     private void launchApiCallerFragment(){
         FragmentTransaction vFT = getChildFragmentManager().beginTransaction();
         ConstructorsDataHelper vDataHelper = new ConstructorsDataHelper();
-        mApiCallerFragment = ApiAsyncCallerFragment.getInstance(vDataHelper);
+        mApiCallerFragment = ApiAsyncCallerFragment.getInstance();
         vFT.add(mApiCallerFragment, CONSTRUCTORS_API_CALLER);
         vFT.commit();
         mApiCallerFragment.startCall("https://ergast.com/api/f1/current/constructorStandings.json", vDataHelper);

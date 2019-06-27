@@ -185,7 +185,7 @@ public class DriversRankingFragment extends Fragment  implements ApiAsyncCallerF
         FragmentTransaction vFT = getChildFragmentManager().beginTransaction();
 
         DriversRankingHelper vDataHelper = new DriversRankingHelper();
-        mApiCallerFragment = ApiAsyncCallerFragment.getInstance(vDataHelper);
+        mApiCallerFragment = ApiAsyncCallerFragment.getInstance();
         vFT.add(mApiCallerFragment, DRIVER_API_CALLER);
         vFT.commit();
         mApiCallerFragment.startCall("https://ergast.com/api/f1/current/driverStandings.json", vDataHelper);

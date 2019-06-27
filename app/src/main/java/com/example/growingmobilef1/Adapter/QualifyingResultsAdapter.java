@@ -61,6 +61,7 @@ public class QualifyingResultsAdapter extends RecyclerView.Adapter<QualifyingRes
         if(!mData.get(i).getQ3().isEmpty()){
             viewHolder.mQ3.setText(mData.get(i).getQ3());
         }
+
     }
 
     @Override

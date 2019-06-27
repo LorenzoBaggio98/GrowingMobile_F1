@@ -147,6 +147,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
+        newPassButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(validateEmail()) {
+                    sendPasswordReset(mEmailField.getText().toString());
+                }
+            }
+        });
+
     }
 
     private void goToRegisterActivity() {
@@ -163,25 +172,47 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private boolean validateForm() {
         boolean valid = true;
 
-        String email = mEmailField.getText().toString();
-        String password = mPasswordField.getText().toString();
-
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            mEmailField.setError("enter a valid email address");
+        if(!validateEmail()) {
             valid = false;
-        } else {
-            mEmailField.setError(null);
         }
 
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            mPasswordField.setError("between 4 and 10 alphanumeric characters");
+        if(validatePassword()) {
             valid = false;
-        } else {
-            mPasswordField.setError(null);
         }
 
         return valid;
     }
+
+    private boolean validateEmail() {
+        String email = mEmailField.getText().toString();
+
+        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            mEmailField.setError("enter a valid email address");
+
+            return false;
+
+        } else {
+            mEmailField.setError(null);
+
+            return true;
+        }
+    }
+
+    private boolean validatePassword() {
+        String password = mPasswordField.getText().toString();
+
+        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
+            mPasswordField.setError("between 4 and 10 alphanumeric characters");
+
+            return false;
+
+        } else {
+            mPasswordField.setError(null);
+
+            return true;
+        }
+    }
+
 
     private void signIn(String email, String password) {
         Log.d(TAG, "signIn:" + email);
@@ -236,6 +267,22 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 authWithGoogle(account);
             }
         }
+    }
+
+    public void sendPasswordReset(String vEmail) {
+        // [START send_password_reset]
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        auth.sendPasswordResetEmail(vEmail)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "Email sent.");
+                        }
+                    }
+                });
+        // [END send_password_reset]
     }
 
     private void authWithGoogle(GoogleSignInAccount account) {

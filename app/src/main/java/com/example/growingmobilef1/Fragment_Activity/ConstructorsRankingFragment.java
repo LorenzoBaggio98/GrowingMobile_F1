@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.growingmobilef1.Adapter.ConstructorsAdapter;
 import com.example.growingmobilef1.Database.ViewModel.ConstructorViewModel;
 import com.example.growingmobilef1.Database.ModelRoom.RoomConstructor;
+import com.example.growingmobilef1.Helper.ConnectionStatusHelper;
 import com.example.growingmobilef1.Helper.ConstructorsDataHelper;
 
 import com.example.growingmobilef1.Model.Constructor;
@@ -108,7 +109,16 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
             @Override
             public void onRefresh() {
                 // refresh items
-                refreshItems();
+                if (ConnectionStatusHelper.statusConnection(getContext())){
+                    if (mApiCallerFragment == null){
+                        launchApiCallerFragment();
+                    }
+                    startCall();
+
+                }else{
+                    Toast.makeText(getContext(),"Non c'è connessione Internet", Toast.LENGTH_SHORT).show();
+                    mPgsBar.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -117,22 +127,30 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
 
     private void launchApiCallerFragment(){
         FragmentTransaction vFT = getChildFragmentManager().beginTransaction();
-        ConstructorsDataHelper vDataHelper = new ConstructorsDataHelper();
         mApiCallerFragment = ApiAsyncCallerFragment.getInstance();
         vFT.add(mApiCallerFragment, CONSTRUCTORS_API_CALLER);
         vFT.commit();
-        mApiCallerFragment.startCall("https://ergast.com/api/f1/current/constructorStandings.json", vDataHelper);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mApiCallerFragment.stopCall();
+
+        if(mApiCallerFragment != null) {
+            mApiCallerFragment.stopCall();
+        }
+    }
+
+    void startCall() {
+
+        ConstructorsDataHelper vDataHelper = new ConstructorsDataHelper();
+        mApiCallerFragment.startCall("https://ergast.com/api/f1/current/constructorStandings.json", vDataHelper);
     }
 
     @Override
     public void onApiCalled(ArrayList<IListableModel> aConstructorList) {
-        mAdapter.updateData(aConstructorList);
+
+        insertConstructorToDb(aConstructorList);
         mLayoutAnimation.runLayoutAnimation(mRecyclerView);
 
         if(aConstructorList.isEmpty()) {
@@ -153,10 +171,15 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
         mApiCallerFragment.stopCall();
     }
 
-    void refreshItems() {
-        // Load items
-        // Call the async class to perform the api call
-        ConstructorsDataHelper vDataHelper = new ConstructorsDataHelper();
-        mApiCallerFragment.startCall("https://ergast.com/api/f1/current/constructorStandings.json", vDataHelper);
+
+    /**
+     * Database call
+     */
+    void insertConstructorToDb(ArrayList<IListableModel> aConstructorList){
+
+        for(int i=0; i< aConstructorList.size(); i++){
+            constructorViewModel.insert((RoomConstructor) aConstructorList.get(i));
+        }
     }
+
 }

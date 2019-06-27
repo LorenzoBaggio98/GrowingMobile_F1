@@ -13,12 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.growingmobilef1.Adapter.RacesAdapter;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Database.ViewModel.RaceResultsViewModel;
 import com.example.growingmobilef1.Database.ViewModel.RacesViewModel;
 import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
+import com.example.growingmobilef1.Helper.ConnectionStatusHelper;
 import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
@@ -54,7 +56,6 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
 
     private ApiAsyncCallerFragment mApiCallerFragment;
 
-
     public static CalendarFragment newInstance() {
         return new CalendarFragment();
     }
@@ -84,6 +85,8 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
 
                 // Race list
                 mAdapter.updateData(roomRaces, null);
+                listBeforeViewing();
+
             }
         });
 
@@ -97,6 +100,8 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         mRecyclerView = vView.findViewById(R.id.frag_calendar_listview);
         mPgsBar = vView.findViewById(R.id.frag_calendar_progress_bar);
         mSwipeRefresh = vView.findViewById(R.id.frag_calendar_refresh_layout);
+
+        // Animazione della lista
         mLayoutAnimations = new LayoutAnimations();
 
         // Call the async class to perform the api call
@@ -104,8 +109,6 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         if (mApiCallerFragment == null){
             launchApiCallerFragment();
         }
-
-        startCall();
 
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(container.getContext());
@@ -116,12 +119,19 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mApiCallerFragment = (ApiAsyncCallerFragment) getFragmentManager().findFragmentByTag(CALENDAR_API_CALLER);
-                if (mApiCallerFragment == null){
-                    launchApiCallerFragment();
-                }
 
-                startCall();
+                // Se c'è connessione faccio il refresh
+                if (ConnectionStatusHelper.statusConnection(getContext())){
+                    if (mApiCallerFragment == null){
+                        launchApiCallerFragment();
+                    }
+                    startCall();
+
+                }else{
+                    Toast.makeText(getContext(),"Non c'è connessione Internet", Toast.LENGTH_SHORT).show();
+                    mPgsBar.setVisibility(View.GONE);
+                    mSwipeRefresh.setRefreshing(false);
+                }
             }
         });
         return vView;
@@ -199,35 +209,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
     /**
      * Private class needed to perform the API call asynchronously
      */
-    /*private class CalendarApiAsyncCaller extends AsyncTask<String, Void, String> {
-
-        // Races calendar variables
-        private JSONObject mJsonCalendarToParse;
-        private CalendarRaceDataHelper mCalendarRaceDataHelper;
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
-            mCalendarRaceDataHelper = new CalendarRaceDataHelper();
-
-            mJsonCalendarToParse = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current.json");
-            if (mJsonCalendarToParse != null) {
-
-                ArrayList<Races> temp = mCalendarRaceDataHelper.getArraylist(mJsonCalendarToParse);
-
-                for ( Races r: temp) {
-                    mCalendarRaceItemArraylist.add(r.toRoomRace());
-                }
-
-                // Inserire su db
-                insertRacesToDb();
-            }
-            return null;
-        }
-
-    }
-
+    /*
     private class CalendarPodiumApiAsyncCaller extends AsyncTask<String, Void, String> {
 
         CalendarRaceDataHelper vCalendarRaceDataHelper = new CalendarRaceDataHelper();
@@ -269,7 +251,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
     }*/
 
     /**
-     * Database call
+     * Database calls
      */
     void insertRacesToDb(){
 
@@ -294,23 +276,31 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
 
     }
 
-    @Override
-    public void onApiCalled(ArrayList<IListableModel> aRaceList) {
-
-        for (IListableModel temp: aRaceList) {
-            mCalendarRaceItemArraylist.add((RoomRace) temp);
-        }
-        insertRacesToDb();
-        //mAdapter.updateData(aRaceList, null);
-
+    //
+    public void listBeforeViewing(){
         mPgsBar.setVisibility(View.GONE);
         mLayoutAnimations.runLayoutAnimation(mRecyclerView);
         mSwipeRefresh.setRefreshing(false);
-        mApiCallerFragment.stopCall();
     }
 
+    // Eseguire la chiamata per ricevere i dati da Ergast
     public void startCall(){
         CalendarRaceDataHelper vDataHelper = new CalendarRaceDataHelper();
         mApiCallerFragment.startCall("https://ergast.com/api/f1/current.json", vDataHelper);
+    }
+
+    @Override
+    public void onApiCalled(ArrayList<IListableModel> aRaceList) {
+
+        // Da IListableModel a RoomRace
+        for (IListableModel temp: aRaceList) {
+            mCalendarRaceItemArraylist.add((RoomRace) temp);
+        }
+
+        // Inserisco su DB
+        insertRacesToDb();
+
+        listBeforeViewing();
+        mApiCallerFragment.stopCall();
     }
 }

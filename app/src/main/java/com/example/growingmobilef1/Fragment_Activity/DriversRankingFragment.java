@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.example.growingmobilef1.Adapter.DriverAdapter;
 import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
+import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Database.ViewModel.DriverViewModel;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.ConnectionStatusHelper;
@@ -67,6 +68,7 @@ public class DriversRankingFragment extends Fragment  implements ApiAsyncCallerF
             public void onChanged(List<RoomDriver> roomDrivers) {
 
                 vDriversAdapter.updateData(roomDrivers);
+                makeNewRecycleView();
             }
         });
     }
@@ -75,10 +77,11 @@ public class DriversRankingFragment extends Fragment  implements ApiAsyncCallerF
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View vView = inflater.inflate(R.layout.fragment_pilots_ranking, container, false);
-        //vPilotsApiAsync = new PilotsApiAsync();
 
         mApiCallerFragment = (ApiAsyncCallerFragment) getFragmentManager().findFragmentByTag(DRIVER_API_CALLER);
-
+        if (mApiCallerFragment == null){
+            launchApiCallerFragment();
+        }
 
         mRecyclerViewList = vView.findViewById(R.id.recyclerViewPiloti);
         mProgressBar = vView.findViewById(R.id.frag_calendar_progress_bar);
@@ -93,40 +96,44 @@ public class DriversRankingFragment extends Fragment  implements ApiAsyncCallerF
         mRecyclerViewList.setAdapter(vDriversAdapter);
 
         if (savedInstanceState != null) {
+
             mArrayListPilots = (ArrayList<IListableModel>) savedInstanceState.getSerializable(SAVE_LISTPILOTS);
-            makeNewRecycleView(mArrayListPilots);
+            //makeNewRecycleView(mArrayListPilots);
             mProgressBar.setVisibility(View.INVISIBLE);
 
         } else {
-            if (ConnectionStatusHelper.statusConnection(getContext())){
-                if (mApiCallerFragment == null){
-                    launchApiCallerFragment();
-                }
-
+           /* if (ConnectionStatusHelper.statusConnection(getContext())){
                 Toast.makeText(getContext(),"Si connessione", Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(getContext(),"No connessione", Toast.LENGTH_SHORT).show();
-            }
+            }*/
         }
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 
-                /*if (vPilotsApiAsync != null) {
-                    vPilotsApiAsync.isCancelled();
+                if(ConnectionStatusHelper.statusConnection(getContext())){
+                    startCall();
+                }else{
+                    Toast.makeText(getContext(),"Non c'è connessione Internet", Toast.LENGTH_SHORT).show();
+                    mProgressBar.setVisibility(View.GONE);
+                    mSwipeRefreshLayout.setRefreshing(false);
                 }
-                vPilotsApiAsync = new DriversRankingFragment.PilotsApiAsync();
-                vPilotsApiAsync.execute();*/
-
-                refreshItems();
-                stateProgresBar = false;
             }
         });
 
         return vView;
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        if(mApiCallerFragment != null) {
+            mApiCallerFragment.stopCall();
+        }
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -182,18 +189,17 @@ public class DriversRankingFragment extends Fragment  implements ApiAsyncCallerF
     }
 
     private void launchApiCallerFragment(){
-        FragmentTransaction vFT = getChildFragmentManager().beginTransaction();
 
-        DriversRankingHelper vDataHelper = new DriversRankingHelper();
+        FragmentTransaction vFT = getChildFragmentManager().beginTransaction();
         mApiCallerFragment = ApiAsyncCallerFragment.getInstance();
         vFT.add(mApiCallerFragment, DRIVER_API_CALLER);
         vFT.commit();
-        mApiCallerFragment.startCall("https://ergast.com/api/f1/current/driverStandings.json", vDataHelper);
     }
 
-    void refreshItems() {
-        // Load items
-        // Call the async class to perform the api call
+    /**
+     *
+     */
+    void startCall() {
         DriversRankingHelper vDataHelper = new DriversRankingHelper();
         mApiCallerFragment.startCall("https://ergast.com/api/f1/current/driverStandings.json", vDataHelper);
     }
@@ -201,18 +207,18 @@ public class DriversRankingFragment extends Fragment  implements ApiAsyncCallerF
     @Override
     public void onApiCalled(ArrayList<IListableModel> aReturnList) {
 
-        makeNewRecycleView(aReturnList);
+        mArrayListPilots = aReturnList;
 
-        if (stateProgresBar) {
-            mProgressBar.setVisibility(View.INVISIBLE);
-        } else {
-            mSwipeRefreshLayout.setRefreshing(false);
-            stateProgresBar = true;
-        }
+        //Inserisco su DB
+        insertDriversToDb();
+
+        makeNewRecycleView();
+        mApiCallerFragment.stopCall();
     }
 
-    private void makeNewRecycleView(ArrayList<IListableModel> aReturnList){
-        vDriversAdapter.updateData(aReturnList);
+    private void makeNewRecycleView(){
+        mProgressBar.setVisibility(View.GONE);
         mLayoutAnimation.runLayoutAnimation(mRecyclerViewList);
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 }

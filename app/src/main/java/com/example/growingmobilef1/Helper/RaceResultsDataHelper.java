@@ -19,7 +19,6 @@ public class RaceResultsDataHelper {
             if (aJsonToParse.length() != 0) {
 
                 try {
-                    //TODO uguale, fare uno per tutti
                     JSONObject vMRData = aJsonToParse.getJSONObject("MRData");
                     JSONObject vRaceTable = vMRData.getJSONObject("RaceTable");
 

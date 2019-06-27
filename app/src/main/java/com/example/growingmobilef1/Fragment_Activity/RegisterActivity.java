@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -29,10 +30,12 @@ public class RegisterActivity extends AppCompatActivity {
 
         mFirebaseAuth = FirebaseAuth.getInstance();
 
-        if(mFirebaseAuth.getCurrentUser()!=null){
-            Intent vIntent = new Intent(getApplicationContext(), MainActivity.class);
-            vIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(vIntent);
+        // check user status
+        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+        if(user != null){
+            if(user.isEmailVerified()) {
+                startMainActivity();
+            }
         }
 
         setContentView(R.layout.activity_registration);
@@ -65,7 +68,10 @@ public class RegisterActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
-                                    startMainActivity();
+                                    //Intent vIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                                    //startActivity(vIntent);
+                                    sendVerificationEmail();
+                                    finish();
                                 }
                                 else{
                                     Toast.makeText(getApplicationContext(),"E-mail or password is wrong",Toast.LENGTH_SHORT).show();
@@ -87,12 +93,42 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    private void sendVerificationEmail()
+    {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        user.sendEmailVerification()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            // email sent
+                            // after email is sent, logout the user and finish this activity
+                            FirebaseAuth.getInstance().signOut();
+                            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                            finish();
+                        }
+                        else
+                        {
+                            // email not sent, so display message and restart the activity
+                            Toast.makeText(getApplicationContext(),"E-mail not sent, retry",Toast.LENGTH_SHORT).show();
+                            //restart this activity
+                            overridePendingTransition(0, 0);
+                            finish();
+                            overridePendingTransition(0, 0);
+                            startActivity(getIntent());
+
+                        }
+                    }
+                });
+    }
+
     private void startMainActivity() {
         Intent vIntent = new Intent(getApplicationContext(), MainActivity.class);
         vIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(vIntent);
-        finish();
         overridePendingTransition(R.anim.left_in_page, R.anim.left_out_page);
+        finish();
     }
 
 }

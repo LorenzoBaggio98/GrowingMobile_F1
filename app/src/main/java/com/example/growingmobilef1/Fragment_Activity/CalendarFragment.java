@@ -2,10 +2,14 @@ package com.example.growingmobilef1.Fragment_Activity;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +25,8 @@ import com.example.growingmobilef1.Database.ViewModel.RacesViewModel;
 import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.ConnectionStatusHelper;
+import com.example.growingmobilef1.Helper.ConstructorsDataHelper;
+import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
@@ -34,7 +40,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceClicked, RacesAdapter.IOnNotificationIconClicked{
+public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceClicked, RacesAdapter.IOnNotificationIconClicked, ApiAsyncCallerFragment.IOnApiCalled{
+
+    public final static String CALENDAR_API_CALLER = "Constructor api caller tag";
 
     private ArrayList<RoomRace> mCalendarRaceItemArraylist;
     private HashMap<String, List<RaceResults>> mRaceResultsMap;
@@ -52,6 +60,13 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
     // Database
     private RacesViewModel racesViewModel;
     private RaceResultsViewModel raceResultsViewModel;
+
+    private ApiAsyncCallerFragment mApiCallerFragment;
+
+
+    public static CalendarFragment newInstance() {
+        return new CalendarFragment();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,10 +99,6 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         //todo observer lista classifica
     }
 
-    public static CalendarFragment newInstance() {
-        return new CalendarFragment();
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vView = inflater.inflate(R.layout.fragment_calendar, container, false);
@@ -97,8 +108,12 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         mSwipeRefresh = vView.findViewById(R.id.frag_calendar_refresh_layout);
         mLayoutAnimations = new LayoutAnimations();
 
+        mApiCallerFragment = (ApiAsyncCallerFragment) getFragmentManager().findFragmentByTag(CALENDAR_API_CALLER);
+        if (mApiCallerFragment == null){
+            launchApiCallerFragment();
+        }
         // Call the async class to perform the api call
-        operateAsyncOperation();
+        //operateAsyncOperation();
 
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(container.getContext());
@@ -109,16 +124,37 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                operateAsyncOperation();
+                mApiCallerFragment = (ApiAsyncCallerFragment) getFragmentManager().findFragmentByTag(CALENDAR_API_CALLER);
+                if (mApiCallerFragment == null){
+                    launchApiCallerFragment();
+                }
+                //operateAsyncOperation();
             }
         });
         return vView;
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if(mApiCallerFragment != null) {
+            mApiCallerFragment.stopConstructorsCall();
+        }
+    }
+
+    private void launchApiCallerFragment(){
+        FragmentTransaction vFT = getChildFragmentManager().beginTransaction();
+        CalendarRaceDataHelper vDataHelper = new CalendarRaceDataHelper();
+        mApiCallerFragment = ApiAsyncCallerFragment.getInstance(vDataHelper);
+        vFT.add(mApiCallerFragment, CALENDAR_API_CALLER);
+        vFT.commit();
+        mApiCallerFragment.startConstructorsCall("https://ergast.com/api/f1/current/constructorStandings.json", vDataHelper);
+    }
+
     /**
      * Operazioni asincrone
      */
-    private void operateAsyncOperation(){
+   /* private void operateAsyncOperation(){
 
         if(ConnectionStatusHelper.statusConnection(getContext())){
             CalendarApiAsyncCaller vCalendarAsyncCaller = new CalendarApiAsyncCaller();
@@ -127,7 +163,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
             CalendarPodiumApiAsyncCaller vPodiumAsyncCaller = new CalendarPodiumApiAsyncCaller();
             vPodiumAsyncCaller.execute();
         }
-    }
+    }*/
 
     /**
      * Override metodo RecycleView
@@ -186,7 +222,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
     /**
      * Private class needed to perform the API call asynchronously
      */
-    private class CalendarApiAsyncCaller extends AsyncTask<String, Void, String> {
+    /*private class CalendarApiAsyncCaller extends AsyncTask<String, Void, String> {
 
         // Races calendar variables
         private JSONObject mJsonCalendarToParse;
@@ -253,7 +289,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
             mLayoutAnimations.runLayoutAnimation(mRecyclerView);
             mSwipeRefresh.setRefreshing(false);
         }
-    }
+    }*/
 
     /**
      * Database call
@@ -279,5 +315,13 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
 
         }
 
+    }
+
+    @Override
+    public void onApiCalled(ArrayList<IListableModel> aConstructorList) {
+        mPgsBar.setVisibility(View.GONE);
+        mLayoutAnimations.runLayoutAnimation(mRecyclerView);
+        mSwipeRefresh.setRefreshing(false);
+        mApiCallerFragment.stopConstructorsCall();
     }
 }

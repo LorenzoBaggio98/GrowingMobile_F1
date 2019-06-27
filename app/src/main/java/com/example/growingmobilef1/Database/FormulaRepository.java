@@ -130,6 +130,7 @@ public class FormulaRepository {
 
         @Override
         protected Void doInBackground(RoomRace... ts) {
+
             asyncTaskDao.insert(ts[0]);
             return null;
         }
@@ -145,6 +146,7 @@ public class FormulaRepository {
 
         @Override
         protected Void doInBackground(RoomRaceResult... ts) {
+
             asyncTaskDao.insert(ts[0]);
             return null;
         }

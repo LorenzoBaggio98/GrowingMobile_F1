@@ -138,7 +138,7 @@ public class DriversRankingFragment extends Fragment {
 
             if(mArrayListPilots == null) {
                 mArrayListPilots = DriversRankingHelper.getArrayListPilotsPoints(vJsonObjectToParse);
-                insertDriversToDb();
+                //insertDriversToDb();
             }
 
             return null;

@@ -23,6 +23,16 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 )
 public class RoomQualifyingResult {
 
+    public RoomQualifyingResult(int id, int position, String raceId, String driverId, String temp1, String temp2, String temp3){
+        this.id = id;
+        this.position = position;
+        this.raceId = raceId;
+        this.driverId = driverId;
+        this.temp1 = temp1;
+        this.temp2 = temp2;
+        this.temp3 = temp3;
+    }
+
     @PrimaryKey(autoGenerate = true)
     @NonNull
     public int id;

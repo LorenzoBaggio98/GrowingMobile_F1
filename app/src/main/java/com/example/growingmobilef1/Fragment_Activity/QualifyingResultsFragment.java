@@ -1,5 +1,6 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.growingmobilef1.Adapter.QualifyingResultsAdapter;
+import com.example.growingmobilef1.Database.QualifyingResultsViewModel;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.QualifyingResultsDataHelper;
 import com.example.growingmobilef1.Model.QualifyingResults;
@@ -34,6 +36,9 @@ public class QualifyingResultsFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mRefreshLayout;
 
+    // Database
+    private QualifyingResultsViewModel mRoomQualifyingViewModel;
+
     public static QualifyingResultsFragment newInstance(Races aRace){
 
         Bundle vBundle = new Bundle();
@@ -54,6 +59,8 @@ public class QualifyingResultsFragment extends Fragment {
         mRefreshLayout = vView.findViewById(R.id.race_results_frag_swipe);
 
         mLayoutAnimation = new LayoutAnimations();
+        // ViewModel creato da Provider
+        mRoomQualifyingViewModel = ViewModelProviders.of(this).get(QualifyingResultsViewModel.class);
 
         Bundle vStartBundle = getArguments();
         if(vStartBundle != null){
@@ -85,7 +92,6 @@ public class QualifyingResultsFragment extends Fragment {
         vResultAsync.execute();
     }
 
-
     /**
      *
      */
@@ -104,6 +110,7 @@ public class QualifyingResultsFragment extends Fragment {
             vJsonToParse = vARHelper.getContentFromUrl(downloadUrl);
             mQualResultsArrayList = vQRDataHelper.getQualResults(vJsonToParse);
 
+            roomInsertQualifyingResults(mQualResultsArrayList);
             return null;
         }
 
@@ -116,4 +123,17 @@ public class QualifyingResultsFragment extends Fragment {
         }
     }
 
+    private void roomInsertQualifyingResults(ArrayList<QualifyingResults> aQualResultsArrayList){
+        for (QualifyingResults vQualResults: aQualResultsArrayList) {
+         /*   RoomQualifyingResult vRoomQualResult = new RoomQualifyingResult(0,
+                    vQualResults.getPosition(),
+                    mRace.getCircuit().getCircuitId(),
+                    vQualResults.getDriver().getDriverId(),
+                    vQualResults.getQ1(),
+                    vQualResults.getQ2(),
+                    vQualResults.getQ3());
+
+            mRoomQualifyingViewModel.insert(vRoomQualResult);*/
+        }
+    }
 }

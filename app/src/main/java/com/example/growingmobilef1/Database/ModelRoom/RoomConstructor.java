@@ -6,9 +6,10 @@ import android.support.annotation.NonNull;
 
 import com.example.growingmobilef1.Model.Constructor;
 import com.example.growingmobilef1.Model.ConstructorStandings;
+import com.example.growingmobilef1.Model.IListableModel;
 
 @Entity(tableName = "constructor")
-public class RoomConstructor {
+public class RoomConstructor implements IListableModel {
 
     @PrimaryKey
     @NonNull

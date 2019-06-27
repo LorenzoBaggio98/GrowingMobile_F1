@@ -27,7 +27,7 @@ public interface ConstructorDao {
     @Delete
     void deleteRecord(RoomConstructor user);
 
-    @Query("SELECT * FROM constructor WHERE id = :id")
+    @Query("SELECT * FROM constructor WHERE constructorId = :id")
     RoomConstructor findDriver(int id);
 
     @Query("SELECT * FROM constructor")

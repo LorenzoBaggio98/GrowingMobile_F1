@@ -45,7 +45,7 @@ public class ConstructorsAdapter extends RecyclerView.Adapter<ConstructorsAdapte
     public void updateData(List<RoomConstructor> viewModels) {
         mValues.clear();
         mValues.addAll(viewModels);
-        //notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     // Clean all elements of the recycler
@@ -68,7 +68,6 @@ public class ConstructorsAdapter extends RecyclerView.Adapter<ConstructorsAdapte
 
         // row layout
         View vItemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_constructors, viewGroup, false);
-
         return new ViewHolder(vItemView);
     }
 

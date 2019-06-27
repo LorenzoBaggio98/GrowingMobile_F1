@@ -73,9 +73,9 @@ public class ConstructorsRankingFragment extends Fragment {
         vLongOperation.execute();
 
         // get objects
-        mRecyclerView = (RecyclerView) vView.findViewById(R.id.list); // list
-        mPgsBar = (ProgressBar)vView.findViewById(R.id.progress_loaderC); // progressbar
-        mSwipeRefreshLayout = (SwipeRefreshLayout) vView.findViewById(R.id.swipeRefreshConstructos);
+        mRecyclerView = vView.findViewById(R.id.list); // list
+        mPgsBar = vView.findViewById(R.id.progress_loaderC); // progressbar
+        mSwipeRefreshLayout = vView.findViewById(R.id.swipeRefreshConstructos);
         mLayoutAnimation = new LayoutAnimations();
 
         // start loading progress bar
@@ -125,11 +125,10 @@ public class ConstructorsRankingFragment extends Fragment {
         private ConstructorsDataHelper vConstructorsDataHelper;
         private ArrayList<ConstructorStandings> mConstructorsItemArraylist;
         private ArrayList<RoomConstructor> mRoomConstructorsList;
-        private ConstructorViewModel mConstructorViewModel;
 
 
         public CalendarApiAsyncCaller() {
-            this.mConstructorViewModel = ViewModelProviders.of(getActivity()).get(ConstructorViewModel.class);
+
         }
 
         @Override
@@ -146,7 +145,7 @@ public class ConstructorsRankingFragment extends Fragment {
             mRoomConstructorsList = new ArrayList<>();
 
             for(ConstructorStandings cs : mConstructorsItemArraylist) {
-                mConstructorViewModel.insert(cs.toRoomRace());
+                constructorViewModel.insert(cs.toRoomConstructor());
             }
             //mConstructorViewModel.deleteAll();
 

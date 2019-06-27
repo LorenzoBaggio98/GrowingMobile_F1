@@ -12,11 +12,9 @@ public class RoomConstructor {
 
     @PrimaryKey
     @NonNull
-    public String id;
-
+    public String constructorId;
 
     public String name;
-
     public String nationality;
 
     public int rankPosition;
@@ -28,7 +26,7 @@ public class RoomConstructor {
         Constructor constructor = new Constructor();
         constructor.setName(name);
         constructor.setNationality(nationality);
-        constructor.setConstructorId(id);
+        constructor.setConstructorId(constructorId);
 
         // build ConstructorStandings
         ConstructorStandings temp = new ConstructorStandings();

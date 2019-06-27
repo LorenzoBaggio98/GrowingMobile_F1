@@ -6,19 +6,18 @@ import android.support.annotation.NonNull;
 
 import com.example.growingmobilef1.Model.Races;
 
+import java.util.Calendar;
+import java.util.Date;
+
 @Entity(tableName = "race")
 public class RoomRace {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @NonNull
-    public int id;
-
-    public String name;
-
     public String circuitId;
 
+    public String name;
     public String dateTime;
-
     public int notification;
 
     public Races toRace(){

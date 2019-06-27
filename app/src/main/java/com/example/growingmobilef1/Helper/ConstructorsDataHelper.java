@@ -1,6 +1,5 @@
 package com.example.growingmobilef1.Helper;
 
-import com.example.growingmobilef1.Interface.IListableObject;
 import com.example.growingmobilef1.Model.ConstructorStandings;
 
 import org.json.JSONArray;

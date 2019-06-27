@@ -10,16 +10,16 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 @Entity(tableName = "driver",
         foreignKeys = @ForeignKey(
                 entity = RoomConstructor.class,
-                parentColumns = "id",
+                parentColumns = "constructorId",
                 childColumns = "constructorId",
                 onDelete = CASCADE
         )
 )
 public class RoomDriver {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @NonNull
-    public int id;
+    public String driverId;
 
     public String name;
     public String surname;

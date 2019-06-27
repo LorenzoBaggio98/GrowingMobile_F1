@@ -183,12 +183,12 @@ public class FormulaRepository {
         @Override
         protected Void doInBackground(RoomConstructor... ts) {
 
-            try {
+            //try {
                 asyncTaskDao.insert(ts[0]);
 
-            } catch (SQLiteConstraintException exception) {
+            /*} catch (SQLiteConstraintException exception) {
                 asyncTaskDao.update(ts[0]);
-            }
+            }*/
 
             return null;
         }

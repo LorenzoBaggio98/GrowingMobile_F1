@@ -19,57 +19,52 @@ import com.example.growingmobilef1.R;
 
 import java.util.ArrayList;
 
-public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyWiewHolder> {
+public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyViewHolder> {
 
 
     ArrayList<DriverStandings> mArrayListDrivers;
     private Context context;
 
     public DriverAdapter(ArrayList<DriverStandings> mArrayList, Context context) {
-        this.context=context;
-
+        this.context = context;
         mArrayListDrivers = mArrayList;
     }
     public void updateData(ArrayList<DriverStandings> viewModels) {
         mArrayListDrivers.clear();
         mArrayListDrivers.addAll(viewModels);
         notifyDataSetChanged();
-
     }
 
-    public static class MyWiewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView mPositionLabel, mSurnameLabel, mNameLabel, mTeamLabel, mPointsLabel;
         public ImageView mNationalityImage;
         private LinearLayout touch_layout;
 
-
-        private MyWiewHolder(@NonNull View vView) {
+        private MyViewHolder(@NonNull View vView) {
             super(vView);
-           mPositionLabel = vView.findViewById(R.id.list_item_driver_position);
-          mSurnameLabel = vView.findViewById(R.id.list_item_driver_surname);
+            mPositionLabel = vView.findViewById(R.id.list_item_driver_position);
+            mSurnameLabel = vView.findViewById(R.id.list_item_driver_surname);
             mNameLabel = vView.findViewById(R.id.list_item_driver_name);
-         mTeamLabel = vView.findViewById(R.id.list_item_driver_team);
+            mTeamLabel = vView.findViewById(R.id.list_item_driver_team);
 
             mPointsLabel = vView.findViewById(R.id.list_item_driver_points);
-           mNationalityImage = vView.findViewById(R.id.list_item_driver_nationality);
+            mNationalityImage = vView.findViewById(R.id.list_item_driver_nationality);
             touch_layout=vView.findViewById(R.id.linearLayoutListItemPiloti);
-
-
         }
     }
 
     @NonNull
     @Override
-    public MyWiewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
-        View v = (View) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_drivers, viewGroup, false);
-        MyWiewHolder vh=new MyWiewHolder(v);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_drivers, viewGroup, false);
+        MyViewHolder vh = new MyViewHolder(v);
 
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyWiewHolder vHolder, final int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder vHolder, final int position) {
 
         final DriverStandings stand = mArrayListDrivers.get(position);
 
@@ -78,6 +73,7 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyWiewHold
         vHolder.mNameLabel.setText(" " + stand.getDriver().getGivenName());
         vHolder.mTeamLabel.setText(stand.getConstructor().getName());
         vHolder.mPointsLabel.setText(stand.getPoints() + " Pts");
+
         String flag_name = "flag_" + mArrayListDrivers.get(position).getDriver().getNationality().toLowerCase();
         int flag_drawable = vHolder.itemView.getResources().getIdentifier(flag_name, "drawable", vHolder.itemView.getContext().getPackageName());
 

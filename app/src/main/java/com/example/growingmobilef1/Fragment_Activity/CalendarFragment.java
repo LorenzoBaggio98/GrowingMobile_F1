@@ -295,9 +295,13 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
     }
 
     @Override
-    public void onApiCalled(ArrayList<IListableModel> aConstructorList) {
+    public void onApiCalled(ArrayList<IListableModel> aRaceList) {
 
-        mAdapter.updateData(aConstructorList, null);
+        for (IListableModel temp: aRaceList) {
+            mCalendarRaceItemArraylist.add((RoomRace) temp);
+        }
+        insertRacesToDb();
+        //mAdapter.updateData(aRaceList, null);
 
         mPgsBar.setVisibility(View.GONE);
         mLayoutAnimations.runLayoutAnimation(mRecyclerView);

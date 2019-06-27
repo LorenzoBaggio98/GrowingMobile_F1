@@ -33,7 +33,7 @@ public class ApiAsyncCallerFragment extends Fragment {
         return vFragment;
     }
 
-    public void startConstructorsCall(String aUrl, IGenericHelper aApiGenericHelper){
+    public void startApiCall(String aUrl, IGenericHelper aApiGenericHelper){
         if (mConstructorCaller == null){
             mConstructorCaller = new ConstructorApiAsyncCaller(mConstructorListener, aApiGenericHelper);
             mConstructorCaller.execute(aUrl);

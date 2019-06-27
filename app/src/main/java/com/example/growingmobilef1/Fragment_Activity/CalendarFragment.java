@@ -134,7 +134,9 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
     @Override
     public void onDetach() {
         super.onDetach();
-        mApiCallerFragment.stopConstructorsCall();
+        if(mApiCallerFragment != null) {
+            mApiCallerFragment.stopConstructorsCall();
+        }
     }
 
     private void launchApiCallerFragment(){

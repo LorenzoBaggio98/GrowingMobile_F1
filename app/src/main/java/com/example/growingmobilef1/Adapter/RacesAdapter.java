@@ -13,11 +13,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
+import com.example.growingmobilef1.Model.ConstructorStandings;
+import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -38,13 +41,13 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
     private IOnNotificationIconClicked mNotificationListener;
 
     public RacesAdapter(Context aContext,
-                        ArrayList<RoomRace> aData,
+                        ArrayList<? extends IListableModel> aData,
                         Map<String, List<RaceResults>> aRaceResultsMap,
                         IOnRaceClicked aListener,
                         IOnNotificationIconClicked aNotificationListener) {
 
         mContext = aContext;
-        mRacesArrayList = aData;
+        mRacesArrayList = (ArrayList<RoomRace>) aData;
         mRaceResultsMap = aRaceResultsMap;
         mItemListener = aListener;
         mNotificationListener = aNotificationListener;
@@ -55,9 +58,9 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
      * @param aData
      * @param aRaceResultsMap
      */
-    public void updateData(List<RoomRace> aData, Map<String, List<RaceResults>> aRaceResultsMap) {
+    public void updateData(List<? extends IListableModel> aData, Map<String, List<RaceResults>> aRaceResultsMap) {
         mRacesArrayList.clear();
-        mRacesArrayList.addAll(aData);
+        mRacesArrayList.addAll((Collection<? extends RoomRace>) aData);
 
         if(aRaceResultsMap != null) {
             mRaceResultsMap.clear();

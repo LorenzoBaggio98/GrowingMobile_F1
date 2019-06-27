@@ -4,6 +4,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.Model.Races;
 
 import java.text.ParseException;
@@ -13,7 +14,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 @Entity(tableName = "race")
-public class RoomRace {
+public class RoomRace implements IListableModel {
 
     @PrimaryKey
     @NonNull

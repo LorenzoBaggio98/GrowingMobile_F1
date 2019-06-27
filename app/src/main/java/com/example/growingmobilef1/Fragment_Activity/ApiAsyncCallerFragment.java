@@ -5,9 +5,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.IGenericHelper;
 import com.example.growingmobilef1.Model.IListableModel;
+
 import org.json.JSONObject;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
@@ -19,26 +21,25 @@ public class ApiAsyncCallerFragment extends Fragment {
         void onApiCalled(ArrayList<IListableModel> aConstructorList);
     }
 
-    private IOnApiCalled mConstructorListener;
-    private ConstructorApiAsyncCaller mConstructorCaller;
-    private IGenericHelper mApiGenericHelper;
+    private IOnApiCalled mElementListener;
+    private ApiAsyncCaller mElementCaller;
 
     public static ApiAsyncCallerFragment getInstance(Serializable aSerializableClass){
         ApiAsyncCallerFragment vFragment = new ApiAsyncCallerFragment();
         return vFragment;
     }
 
-    public void startConstructorsCall(String aUrl, IGenericHelper aApiGenericHelper){
-        if (mConstructorCaller == null){
-            mConstructorCaller = new ConstructorApiAsyncCaller(mConstructorListener, aApiGenericHelper);
-            mConstructorCaller.execute(aUrl);
+    public void startCall(String aUrl, IGenericHelper aApiGenericHelper){
+        if (mElementCaller == null){
+            mElementCaller = new ApiAsyncCaller(mElementListener, aApiGenericHelper);
+            mElementCaller.execute(aUrl);
         }
     }
 
-    public void stopConstructorsCall(){
-        if (mConstructorCaller != null){
-            mConstructorCaller.cancel(true);
-            mConstructorCaller = null;
+    public void stopCall(){
+        if (mElementCaller != null){
+            mElementCaller.cancel(true);
+            mElementCaller = null;
         }
     }
 
@@ -53,9 +54,9 @@ public class ApiAsyncCallerFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (getParentFragment() instanceof IOnApiCalled){
-            mConstructorListener = (IOnApiCalled) getParentFragment();
-            if (mConstructorCaller != null){
-                mConstructorCaller.setListener(mConstructorListener);
+            mElementListener = (IOnApiCalled) getParentFragment();
+            if (mElementCaller != null){
+                mElementCaller.setListener(mElementListener);
             }
         }
     }
@@ -63,7 +64,7 @@ public class ApiAsyncCallerFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mConstructorListener = null;
+        mElementListener = null;
     }
 
     @Override
@@ -74,20 +75,21 @@ public class ApiAsyncCallerFragment extends Fragment {
     /**
      *
      */
-    private class ConstructorApiAsyncCaller extends AsyncTask<String, Void, String> {
+    private class ApiAsyncCaller extends AsyncTask<String, Void, String> {
 
         private JSONObject vJsonToParse;
         private ArrayList<IListableModel> mHelperArrayList;
         private IGenericHelper mApiGenericHelper;
 
-        private WeakReference<IOnApiCalled> mConstructorListener;
-        public ConstructorApiAsyncCaller(IOnApiCalled aCaller, IGenericHelper aApiGenericHelper) {
-            mConstructorListener = new WeakReference<>(aCaller);
+        private WeakReference<IOnApiCalled> mListener;
+
+        public ApiAsyncCaller(IOnApiCalled aCaller, IGenericHelper aApiGenericHelper) {
+            mListener = new WeakReference<>(aCaller);
             mApiGenericHelper = aApiGenericHelper;
         }
 
         public void setListener(IOnApiCalled aCaller){
-            mConstructorListener = new WeakReference<>(aCaller);
+            mListener = new WeakReference<>(aCaller);
         }
 
         @Override
@@ -104,8 +106,8 @@ public class ApiAsyncCallerFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String result) {
-            if (mConstructorListener.get() != null){
-                mConstructorListener.get().onApiCalled(mHelperArrayList);
+            if (mListener.get() != null){
+                mListener.get().onApiCalled(mHelperArrayList);
             }
         }
     }

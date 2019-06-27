@@ -2,12 +2,8 @@ package com.example.growingmobilef1.Fragment_Activity;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -23,17 +19,12 @@ import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Database.ViewModel.RaceResultsViewModel;
 import com.example.growingmobilef1.Database.ViewModel.RacesViewModel;
 import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
-import com.example.growingmobilef1.Helper.ApiRequestHelper;
-import com.example.growingmobilef1.Helper.ConnectionStatusHelper;
-import com.example.growingmobilef1.Helper.ConstructorsDataHelper;
 import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
 import com.example.growingmobilef1.Utils.LayoutAnimations;
 import com.example.growingmobilef1.Utils.NotificationUtil;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -138,7 +129,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
     public void onDetach() {
         super.onDetach();
         if(mApiCallerFragment != null) {
-            mApiCallerFragment.stopConstructorsCall();
+            mApiCallerFragment.stopCall();
         }
     }
 
@@ -148,7 +139,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         mApiCallerFragment = ApiAsyncCallerFragment.getInstance(vDataHelper);
         vFT.add(mApiCallerFragment, CALENDAR_API_CALLER);
         vFT.commit();
-        mApiCallerFragment.startConstructorsCall("https://ergast.com/api/f1/current/constructorStandings.json", vDataHelper);
+        mApiCallerFragment.startCall("https://ergast.com/api/f1/current.json", vDataHelper);
     }
 
     /**
@@ -319,9 +310,12 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
 
     @Override
     public void onApiCalled(ArrayList<IListableModel> aConstructorList) {
+
+        ((RacesAdapter)mAdapter).updateData(aConstructorList, null);
+
         mPgsBar.setVisibility(View.GONE);
         mLayoutAnimations.runLayoutAnimation(mRecyclerView);
         mSwipeRefresh.setRefreshing(false);
-        mApiCallerFragment.stopConstructorsCall();
+        mApiCallerFragment.stopCall();
     }
 }

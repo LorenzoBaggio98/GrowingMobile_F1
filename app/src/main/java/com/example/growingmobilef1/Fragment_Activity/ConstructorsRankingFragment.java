@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -22,10 +21,8 @@ import android.widget.Toast;
 import com.example.growingmobilef1.Adapter.ConstructorsAdapter;
 import com.example.growingmobilef1.Database.ViewModel.ConstructorViewModel;
 import com.example.growingmobilef1.Database.ModelRoom.RoomConstructor;
-import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.ConstructorsDataHelper;
 
-import com.example.growingmobilef1.Model.ConstructorStandings;
 import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.R;
 import com.example.growingmobilef1.Utils.LayoutAnimations;
@@ -122,13 +119,13 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
         mApiCallerFragment = ApiAsyncCallerFragment.getInstance(vDataHelper);
         vFT.add(mApiCallerFragment, CONSTRUCTORS_API_CALLER);
         vFT.commit();
-        mApiCallerFragment.startConstructorsCall("https://ergast.com/api/f1/current/constructorStandings.json", vDataHelper);
+        mApiCallerFragment.startCall("https://ergast.com/api/f1/current/constructorStandings.json", vDataHelper);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mApiCallerFragment.stopConstructorsCall();
+        mApiCallerFragment.stopCall();
     }
 
     @Override
@@ -151,14 +148,14 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
                     break;
             }
         }
-        mApiCallerFragment.stopConstructorsCall();
+        mApiCallerFragment.stopCall();
     }
 
     void refreshItems() {
         // Load items
         // Call the async class to perform the api call
         ConstructorsDataHelper vDataHelper = new ConstructorsDataHelper();
-        mApiCallerFragment.startConstructorsCall("https://ergast.com/api/f1/current/constructorStandings.json", vDataHelper);
+        mApiCallerFragment.startCall("https://ergast.com/api/f1/current/constructorStandings.json", vDataHelper);
 
     }
 }

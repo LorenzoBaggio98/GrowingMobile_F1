@@ -33,8 +33,8 @@ public class CalendarRaceDataHelper implements IGenericHelper{
                     for (int i = 0; i < vRacesArray.length(); i++) {
 
                         JSONObject vRace  = vRacesArray.getJSONObject(i);
-                        Races vTempRace = Races.fromJson(vRace);
 
+                        RoomRace vTempRace = Races.fromJson(vRace).toRoomRace();
                         vCalendarRaceItemArraylist.add(vTempRace);
                     }
 

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class ApiAsyncCallerFragment extends Fragment {
 
     public interface IOnApiCalled {
-        void onApiCalled(ArrayList<IListableModel> aConstructorList);
+        void onApiCalled(ArrayList<IListableModel> aReturnList);
     }
 
     private IOnApiCalled mElementListener;
@@ -75,7 +75,7 @@ public class ApiAsyncCallerFragment extends Fragment {
     /**
      *
      */
-    private class ApiAsyncCaller extends AsyncTask<String, Void, String> {
+    private static class ApiAsyncCaller extends AsyncTask<String, Void, String> {
 
         private JSONObject vJsonToParse;
         private ArrayList<IListableModel> mHelperArrayList;

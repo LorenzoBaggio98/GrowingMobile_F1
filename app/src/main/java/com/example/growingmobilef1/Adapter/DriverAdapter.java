@@ -12,26 +12,32 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
+import com.example.growingmobilef1.Database.ViewModel.DriverViewModel;
 import com.example.growingmobilef1.Fragment_Activity.DriverDetailActivity;
 import com.example.growingmobilef1.Model.Driver;
 import com.example.growingmobilef1.Model.DriverStandings;
+import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.R;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyViewHolder> {
 
-
-    ArrayList<DriverStandings> mArrayListDrivers;
+    ArrayList<RoomDriver> mArrayListDrivers;
     private Context context;
 
-    public DriverAdapter(ArrayList<DriverStandings> mArrayList, Context context) {
+    DriverViewModel driverViewModel;
+
+    public DriverAdapter(ArrayList<? extends IListableModel> mArrayList, Context context) {
         this.context = context;
-        mArrayListDrivers = mArrayList;
+        mArrayListDrivers = (ArrayList<RoomDriver>) mArrayList;
     }
-    public void updateData(ArrayList<DriverStandings> viewModels) {
+    public void updateData(List<? extends IListableModel> viewModels) {
         mArrayListDrivers.clear();
-        mArrayListDrivers.addAll(viewModels);
+        mArrayListDrivers.addAll((Collection<? extends RoomDriver>)viewModels);
         notifyDataSetChanged();
     }
 
@@ -66,15 +72,15 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder vHolder, final int position) {
 
-        final DriverStandings stand = mArrayListDrivers.get(position);
+        final RoomDriver stand = mArrayListDrivers.get(position);
 
-        vHolder.mPositionLabel.setText("" + stand.getPositionText() );
-        vHolder.mSurnameLabel.setText(stand.getDriver().getFamilyName());
-        vHolder.mNameLabel.setText(" " + stand.getDriver().getGivenName());
-        vHolder.mTeamLabel.setText(stand.getConstructor().getName());
-        vHolder.mPointsLabel.setText(stand.getPoints() + " Pts");
+        vHolder.mPositionLabel.setText("" + stand.rankPosition );
+        vHolder.mSurnameLabel.setText(stand.name);
+        vHolder.mNameLabel.setText(" " + stand.surname);
+        vHolder.mTeamLabel.setText(stand.constructorId);
+        vHolder.mPointsLabel.setText(stand.rankPoints + " Pts");
 
-        String flag_name = "flag_" + mArrayListDrivers.get(position).getDriver().getNationality().toLowerCase();
+        String flag_name = "flag_" + mArrayListDrivers.get(position).nationality.toLowerCase();
         int flag_drawable = vHolder.itemView.getResources().getIdentifier(flag_name, "drawable", vHolder.itemView.getContext().getPackageName());
 
         vHolder.mNationalityImage.setImageResource(flag_drawable);
@@ -82,14 +88,15 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyViewHold
             @Override
             public void onClick(View v) {
 
-                Driver vdriver = stand.getDriver();
+                //TODO commentato perchè sarà da usare RoomDriver
+                /*Driver vdriver = stand;
 
                 Intent vIntent = new Intent(context, DriverDetailActivity.class);
                 vIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 Bundle vBundle = new Bundle();
                 vBundle.putSerializable("SAVE_ID", vdriver);
                 vIntent.putExtras(vBundle);
-               context.startActivity(vIntent);
+                context.startActivity(vIntent);*/
             }
         });
 

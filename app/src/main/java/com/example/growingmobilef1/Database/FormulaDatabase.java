@@ -7,6 +7,8 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
 import com.example.growingmobilef1.Database.InterfaceDao.ConstructorDao;
 import com.example.growingmobilef1.Database.InterfaceDao.DriverDao;
@@ -18,6 +20,10 @@ import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
 import com.example.growingmobilef1.Database.ModelRoom.RoomQualifyingResult;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
+import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
+import com.example.growingmobilef1.Helper.ConstructorsDataHelper;
+import com.example.growingmobilef1.Helper.DriversRankingHelper;
+import com.example.growingmobilef1.MainActivity;
 
 import java.util.concurrent.Executors;
 
@@ -56,6 +62,14 @@ public abstract class FormulaDatabase extends RoomDatabase {
                             .fallbackToDestructiveMigration()
                             .build();
 
+                    RoomDatabase.Callback vRoomCallback = new RoomDatabase.Callback(){
+                        @Override
+                        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                            super.onCreate(db);
+                            MainActivity vMainAct = new MainActivity();
+                            vMainAct.populateDatabase();
+                        }
+                    };
                 }
 
             }
@@ -63,4 +77,6 @@ public abstract class FormulaDatabase extends RoomDatabase {
 
         return INSTANCE;
     }
+
+
 }

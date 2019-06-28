@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.growingmobilef1.Database.ModelRoom.RoomConstructor;
-import com.example.growingmobilef1.Model.ConstructorStandings;
 import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.R;
 

@@ -96,8 +96,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(vIntent);
             //finish();
         }*/
-
-
+        setContentView(R.layout.activity_main);
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -119,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
         };
 
 
-        setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.main_act_nav_view);
         //mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -305,5 +303,9 @@ public class MainActivity extends AppCompatActivity {
     private void signOut() {
         FirebaseAuth.getInstance().signOut();
         LoginManager.getInstance().logOut(); // facebook logout, fatto bene
+    }
+
+    public void populateDatabase(){
+        Toast.makeText(getApplicationContext(), "db populated", Toast.LENGTH_LONG).show();
     }
 }

@@ -16,8 +16,6 @@ public class RaceResultsDataHelper implements IGenericHelper{
 
     public ArrayList<IListableModel> getArrayList(JSONObject aJsonToParse){
 
-        Circuit mCircuit = new Circuit();
-
         ArrayList<IListableModel> vRaceResultsArray = new ArrayList<>();
 
         if(aJsonToParse != null) {

@@ -105,7 +105,6 @@ public class FormulaRepository {
         }
     }
 
-
     public void deleteAll() {
         new DeleteConstructorAsyncTask(constructorDao).execute();
     }
@@ -115,7 +114,7 @@ public class FormulaRepository {
      */
 
     /* Metodo alternativo
-    static private void insertItem(RoomRace currentRace){
+    static private void insertRace(RoomRace currentRace){
         new AsyncTask<RoomRace, Void, Void>(){
 
             @Override

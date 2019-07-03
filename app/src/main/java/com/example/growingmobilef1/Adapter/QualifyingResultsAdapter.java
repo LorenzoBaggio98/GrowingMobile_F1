@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
 import com.example.growingmobilef1.Database.ModelRoom.RoomQualifyingResult;
 import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.R;
@@ -19,9 +20,12 @@ import java.util.List;
 public class QualifyingResultsAdapter extends RecyclerView.Adapter<QualifyingResultsAdapter.ViewHolder> {
 
     private List<RoomQualifyingResult> mData;
+    private List<RoomDriver> mDriverData;
 
-    public QualifyingResultsAdapter(ArrayList<? extends IListableModel> aData){
+    public QualifyingResultsAdapter(ArrayList<? extends IListableModel> aData, ArrayList<? extends IListableModel> aDriverData){
         mData = (ArrayList<RoomQualifyingResult>) aData;
+        mDriverData = (ArrayList<RoomDriver>) aDriverData;
+
     }
 
     public void updateData(List<? extends IListableModel> aData) {
@@ -37,11 +41,9 @@ public class QualifyingResultsAdapter extends RecyclerView.Adapter<QualifyingRes
     }
 
     // Add a list of items -- change to type used
-    public void addAll(ArrayList<RoomQualifyingResult> list) {
-        mData.addAll(list);
-        notifyDataSetChanged();
+    public void addAllDriver(List<? extends IListableModel> list) {
+        mDriverData.addAll((Collection<? extends RoomDriver>) list);
     }
-
     @NonNull
     @Override
     public QualifyingResultsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -56,7 +58,16 @@ public class QualifyingResultsAdapter extends RecyclerView.Adapter<QualifyingRes
         RoomQualifyingResult data = mData.get(i);
 
         viewHolder.mPosition.setText("" + data.position);
-        viewHolder.mDriver.setText(data.driverId);
+
+        if(mDriverData != null){
+            RoomDriver temp = mDriverData
+                    .stream()
+                    .filter(driver -> driver.driverId.equals(data.driverId))
+                    .findFirst()
+                    .orElse(null);
+
+            viewHolder.mDriver.setText(temp.name + " " + temp.surname);
+        }
 
         if(!TextUtils.isEmpty(data.q1)){
             viewHolder.mQ1.setText(data.q1);

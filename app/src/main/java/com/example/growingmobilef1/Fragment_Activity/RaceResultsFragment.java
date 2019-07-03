@@ -4,6 +4,7 @@ package com.example.growingmobilef1.Fragment_Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,8 +17,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.growingmobilef1.Adapter.RaceResultsAdapter;
+import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
+import com.example.growingmobilef1.Database.ViewModel.DriverViewModel;
 import com.example.growingmobilef1.Database.ViewModel.RaceResultsViewModel;
 import com.example.growingmobilef1.Helper.ConnectionStatusHelper;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
@@ -55,6 +58,8 @@ public class RaceResultsFragment extends Fragment implements ApiAsyncCallerFragm
 
     // Database and API
     private RaceResultsViewModel raceResultsViewModel;
+    private DriverViewModel driverViewModel;
+
     private ApiAsyncCallerFragment mApiCallerFragment;
 
     // Pass the calendar to perform the URL query
@@ -73,8 +78,11 @@ public class RaceResultsFragment extends Fragment implements ApiAsyncCallerFragm
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAdapter = new RaceResultsAdapter(new ArrayList<RoomRaceResult>());
+        mAdapter = new RaceResultsAdapter(new ArrayList<RoomRaceResult>(), new ArrayList<RoomDriver>());
+
+        // VIEW MODELS
         raceResultsViewModel = ViewModelProviders.of(this).get(RaceResultsViewModel.class);
+        driverViewModel = ViewModelProviders.of(this).get(DriverViewModel.class);
 
         Bundle vStartingBundle = getArguments();
         if (vStartingBundle != null) {
@@ -82,11 +90,20 @@ public class RaceResultsFragment extends Fragment implements ApiAsyncCallerFragm
             mCalendarRace = (RoomRace)vStartingBundle.getSerializable(RACE_ITEM);
         }
 
+        // Prendo tutti i risultati
         raceResultsViewModel.getRaceResults(mCalendarRace.circuitId).observe(this, new Observer<List<RoomRaceResult>>() {
             @Override
             public void onChanged(List<RoomRaceResult> roomRaceResults) {
                 mRaceResultsArrayList = (ArrayList<RoomRaceResult>) roomRaceResults;
                 mAdapter.updateData(roomRaceResults);
+            }
+        });
+
+        // Prendo tutti i driver
+        driverViewModel.getAllDriver().observe(this, new Observer<List<RoomDriver>>() {
+            @Override
+            public void onChanged(@Nullable List<RoomDriver> roomDrivers) {
+                mAdapter.addAllDriver(roomDrivers);
             }
         });
     }

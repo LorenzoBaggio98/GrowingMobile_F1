@@ -3,6 +3,7 @@ package com.example.growingmobilef1.Fragment_Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,8 +15,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.growingmobilef1.Adapter.QualifyingResultsAdapter;
+import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
 import com.example.growingmobilef1.Database.ModelRoom.RoomQualifyingResult;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
+import com.example.growingmobilef1.Database.ViewModel.DriverViewModel;
 import com.example.growingmobilef1.Database.ViewModel.QualifyingResultsViewModel;
 import com.example.growingmobilef1.Helper.ConnectionStatusHelper;
 import com.example.growingmobilef1.Helper.QualifyingResultsDataHelper;
@@ -42,6 +45,8 @@ public class QualifyingResultsFragment extends Fragment implements ApiAsyncCalle
 
     // Database
     private QualifyingResultsViewModel qualifyingViewModel;
+    private DriverViewModel driverViewModel;
+
     private ApiAsyncCallerFragment mApiCallerFragment;
 
     public static QualifyingResultsFragment newInstance(RoomRace aRace){
@@ -59,8 +64,9 @@ public class QualifyingResultsFragment extends Fragment implements ApiAsyncCalle
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAdapter = new QualifyingResultsAdapter(new ArrayList<RoomQualifyingResult>());
+        mAdapter = new QualifyingResultsAdapter(new ArrayList<RoomQualifyingResult>(), new ArrayList<RoomDriver>());
         qualifyingViewModel = ViewModelProviders.of(this).get(QualifyingResultsViewModel.class);
+        driverViewModel = ViewModelProviders.of(this).get(DriverViewModel.class);
 
         Bundle vStartBundle = getArguments();
         if(vStartBundle != null){
@@ -73,6 +79,14 @@ public class QualifyingResultsFragment extends Fragment implements ApiAsyncCalle
 
                 mQualResultsArrayList = (ArrayList<RoomQualifyingResult>) roomQualifyingResults;
                 mAdapter.updateData(roomQualifyingResults);
+            }
+        });
+
+        // Prendo tutti i driver
+        driverViewModel.getAllDriver().observe(this, new Observer<List<RoomDriver>>() {
+            @Override
+            public void onChanged(@Nullable List<RoomDriver> roomDrivers) {
+                mAdapter.addAllDriver(roomDrivers);
             }
         });
     }

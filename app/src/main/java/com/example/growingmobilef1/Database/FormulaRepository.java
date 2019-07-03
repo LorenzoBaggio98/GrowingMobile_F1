@@ -2,9 +2,7 @@ package com.example.growingmobilef1.Database;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
-import android.database.sqlite.SQLiteConstraintException;
 import android.os.AsyncTask;
-import android.widget.ListView;
 
 import com.example.growingmobilef1.Database.InterfaceDao.ConstructorDao;
 import com.example.growingmobilef1.Database.InterfaceDao.DriverDao;
@@ -35,7 +33,8 @@ public class FormulaRepository {
     private LiveData<List<RoomDriver>> allDrivers;
     private LiveData<List<RoomConstructor>> allConstructors;
 
-    // Constructor
+
+    // Costruttore
     public FormulaRepository(Application application){
         FormulaDatabase db = FormulaDatabase.getDatabase(application);
 
@@ -62,6 +61,16 @@ public class FormulaRepository {
 
     public LiveData<List<RoomRaceResult>> getAllRaceResults() {
         return allRaceResults;
+    }
+
+    public LiveData<List<RoomRaceResult>> getRaceResultsRequested(String raceId) {
+
+        return raceResultsDao.getRaceResultsByRaceId(raceId);
+    }
+
+    public LiveData<List<RoomQualifyingResult>> getQualResultsRequested(String raceId) {
+
+        return qualifyingResultDao.getQualResultsByRaceId(raceId);
     }
 
     public LiveData<List<RoomQualifyingResult>> getAllQualResults() {
@@ -100,8 +109,6 @@ public class FormulaRepository {
     public void deleteAll() {
         new DeleteConstructorAsyncTask(constructorDao).execute();
     }
-
-
 
     /**
      * ASYNC TASK

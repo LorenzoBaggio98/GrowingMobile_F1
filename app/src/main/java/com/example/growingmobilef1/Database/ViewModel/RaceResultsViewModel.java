@@ -23,6 +23,10 @@ public class RaceResultsViewModel extends AndroidViewModel {
 
     public LiveData<List<RoomRaceResult>> getAllResults(){ return allResults; }
 
+    public LiveData<List<RoomRaceResult>> getRaceResults(String race_id){
+        return repository.getRaceResultsRequested(race_id);
+    }
+
     public void insertResults(RoomRaceResult result){
         repository.insertItem(result);
     }

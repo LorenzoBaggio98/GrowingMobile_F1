@@ -47,7 +47,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
     private ProgressBar mPgsBar;
 
     // Notification
-    NotificationUtil mNotificationUtil;
+    private NotificationUtil mNotificationUtil;
     private LayoutAnimations mLayoutAnimations;
 
     // Database
@@ -82,6 +82,8 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         racesViewModel.getAllRaces().observe(this, new Observer<List<RoomRace>>() {
             @Override
             public void onChanged(List<RoomRace> roomRaces) {
+
+                mCalendarRaceItemArraylist = (ArrayList<RoomRace>) roomRaces;
 
                 // Race list
                 mAdapter.updateData(roomRaces, null);
@@ -158,7 +160,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
      */
     @Override
     public void onRaceClicked(int aPosition) {
-        Races vRaceItem = new Races();
+        RoomRace vRaceItem = new RoomRace();
         long vId = mCalendarRaceItemArraylist.get(aPosition).round;
 
         boolean isFound = true;
@@ -168,11 +170,12 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         while(isFound) {
 
             if (mCalendarRaceItemArraylist.get(i).round == vId) {
-                vRaceItem = mCalendarRaceItemArraylist.get(aPosition).toRace();
+                vRaceItem = mCalendarRaceItemArraylist.get(aPosition);
                 isFound = false;
             }
             i++;
         }
+
         launchRaceDetailActivity(vRaceItem);
     }
 
@@ -180,7 +183,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
      * Avvio del dettaglio race
      * @param aRaceItem
      */
-    private void launchRaceDetailActivity(Races aRaceItem){
+    private void launchRaceDetailActivity(RoomRace aRaceItem){
 
         Intent intent = new Intent(getContext(), RaceDetailActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -225,7 +228,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
             List<RaceResults> valueResults = entry.getValue();
 
             for(RaceResults results: valueResults){
-                raceResultsViewModel.insertResults(results.toRoomRaceResults(keyCircuitId));
+                //raceResultsViewModel.insertResults(results.toRoomRaceResults(keyCircuitId));
             }
 
         }

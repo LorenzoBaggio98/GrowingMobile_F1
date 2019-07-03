@@ -14,7 +14,12 @@ import java.util.ArrayList;
 
 public class RaceResultsDataHelper implements IGenericHelper{
 
-    public ArrayList<IListableModel> getArrayList(JSONObject aJsonToParse){
+    public RaceResultsDataHelper(){
+
+    }
+
+    @Override
+    public ArrayList<IListableModel> getArrayList(JSONObject aJsonToParse) {
 
         ArrayList<IListableModel> vRaceResultsArray = new ArrayList<>();
 
@@ -33,6 +38,7 @@ public class RaceResultsDataHelper implements IGenericHelper{
                         JSONObject vRace = vRaces.getJSONObject(i);
                         JSONArray vResults = vRace.getJSONArray("Results");
 
+                        //
                         Circuit temp = Circuit.fromJson(vRace.getJSONObject("Circuit"));
 
                         // Iterate the Results

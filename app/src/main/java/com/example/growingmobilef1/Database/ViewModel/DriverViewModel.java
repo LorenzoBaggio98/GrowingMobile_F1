@@ -4,7 +4,6 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
-
 import com.example.growingmobilef1.Database.FormulaRepository;
 import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
 

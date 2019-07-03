@@ -7,6 +7,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 
 public class RaceResults implements Serializable, IListableModel {
 
@@ -65,14 +67,6 @@ public class RaceResults implements Serializable, IListableModel {
         }
 
         return temp;
-    }
-
-    public int get_id() {
-        return _id;
-    }
-
-    public void set_id(int _id) {
-        this._id = _id;
     }
 
     public int getNumber() {
@@ -163,16 +157,19 @@ public class RaceResults implements Serializable, IListableModel {
         FastestLap = fastestLap;
     }
 
+    public void set_id(int _id) {
+        this._id = _id;
+    }
 
     /**
      *
-     * @param circuitId
      * @return
      */
     public RoomRaceResult toRoomRaceResults(String circuitId){
 
         RoomRaceResult temp = new RoomRaceResult();
 
+        temp.id = this._id;
         temp.raceId = circuitId;
         temp.position = this.position;
         temp.time = this.getTime().getTime();
@@ -180,4 +177,8 @@ public class RaceResults implements Serializable, IListableModel {
 
         return temp;
     }
+
+
+
+
 }

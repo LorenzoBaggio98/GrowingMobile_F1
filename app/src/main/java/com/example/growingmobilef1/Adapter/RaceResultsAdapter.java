@@ -5,14 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
-import com.example.growingmobilef1.Model.ConstructorStandings;
 import com.example.growingmobilef1.Model.IListableModel;
-import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.R;
 
 import java.util.ArrayList;
@@ -21,15 +17,16 @@ import java.util.List;
 
 public class RaceResultsAdapter extends RecyclerView.Adapter<RaceResultsAdapter.ViewHolder> {
 
-    private ArrayList<RoomRaceResult> mData;
+    private String firstPositionTime;
+    private List<RoomRaceResult> mData;
 
     public RaceResultsAdapter(ArrayList<? extends IListableModel> aData){
         mData = (ArrayList<RoomRaceResult>) aData;
     }
 
-    public void updateData(ArrayList<? extends IListableModel> viewModels) {
+    public void updateData(List<? extends IListableModel> aData) {
         mData.clear();
-        mData.addAll((Collection<? extends RoomRaceResult>)viewModels);
+        mData.addAll((Collection<? extends RoomRaceResult>) aData);
         notifyDataSetChanged();
     }
 
@@ -47,7 +44,7 @@ public class RaceResultsAdapter extends RecyclerView.Adapter<RaceResultsAdapter.
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
 
         View vView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_race_result, viewGroup, false);
         return new ViewHolder(vView);
@@ -55,12 +52,19 @@ public class RaceResultsAdapter extends RecyclerView.Adapter<RaceResultsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.mPosition.setText("" + mData.get(i).position);
-        viewHolder.mDriver.setText("" + mData.get(i).driverId);
-        viewHolder.mTime.setText("" + mData.get(i).time != null ? mData.get(i).time : "");
 
-        if(mData.get(i).position != 1){
-            viewHolder.mTimeSep.setText("" + mData.get(i).time != null ? mData.get(i).time : "");
+        RoomRaceResult data = mData.get(i);
+
+        viewHolder.mPosition.setText(""+data.position);
+        viewHolder.mDriver.setText(data.driverId);
+        viewHolder.mTime.setText(data.time != null ? data.time : "");
+
+        if(data.position != 1){
+            viewHolder.mTimeSep.setText(data != null ? data.time : "");
+        }else{
+
+            firstPositionTime = data.time;
+            viewHolder.mTimeSep.setText("--");
         }
     }
 

@@ -8,23 +8,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.growingmobilef1.Model.QualifyingResults;
+import com.example.growingmobilef1.Database.ModelRoom.RoomQualifyingResult;
+import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.R;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class QualifyingResultsAdapter extends RecyclerView.Adapter<QualifyingResultsAdapter.ViewHolder> {
 
-    private ArrayList<QualifyingResults> mData;
+    private List<RoomQualifyingResult> mData;
 
-    public QualifyingResultsAdapter(ArrayList<QualifyingResults> aData){
-        mData = aData;
+    public QualifyingResultsAdapter(ArrayList<? extends IListableModel> aData){
+        mData = (ArrayList<RoomQualifyingResult>) aData;
     }
 
-    public void updateData(ArrayList<QualifyingResults> viewModels) {
+    public void updateData(List<? extends IListableModel> aData) {
         mData.clear();
-        mData.addAll(viewModels);
-        //notifyDataSetChanged();
+        mData.addAll((Collection<? extends RoomQualifyingResult>) aData);
+        notifyDataSetChanged();
     }
 
     // Clean all elements of the recycler
@@ -34,7 +37,7 @@ public class QualifyingResultsAdapter extends RecyclerView.Adapter<QualifyingRes
     }
 
     // Add a list of items -- change to type used
-    public void addAll(ArrayList<QualifyingResults> list) {
+    public void addAll(ArrayList<RoomQualifyingResult> list) {
         mData.addAll(list);
         notifyDataSetChanged();
     }
@@ -49,23 +52,26 @@ public class QualifyingResultsAdapter extends RecyclerView.Adapter<QualifyingRes
 
     @Override
     public void onBindViewHolder(@NonNull QualifyingResultsAdapter.ViewHolder viewHolder, int i) {
-        viewHolder.mPosition.setText("" + mData.get(i).getPosition());
-        viewHolder.mDriver.setText("" + mData.get(i).getDriver().getFamilyName());
 
-        if(!TextUtils.isEmpty(mData.get(i).getQ1())){
-            viewHolder.mQ1.setText(mData.get(i).getQ1());
+        RoomQualifyingResult data = mData.get(i);
+
+        viewHolder.mPosition.setText("" + data.position);
+        viewHolder.mDriver.setText(data.driverId);
+
+        if(!TextUtils.isEmpty(data.q1)){
+            viewHolder.mQ1.setText(data.q1);
         } else {
             viewHolder.mQ1.setText("");
         }
 
-        if(!TextUtils.isEmpty(mData.get(i).getQ2())){
-            viewHolder.mQ2.setText(mData.get(i).getQ2());
+        if(!TextUtils.isEmpty(data.q2)){
+            viewHolder.mQ2.setText(data.q2);
         } else {
             viewHolder.mQ2.setText("");
         }
 
-        if(!TextUtils.isEmpty(mData.get(i).getQ3())){
-            viewHolder.mQ3.setText(mData.get(i).getQ3());
+        if(!TextUtils.isEmpty(data.q3)){
+            viewHolder.mQ3.setText(data.q3);
         } else {
             viewHolder.mQ3.setText("");
         }
@@ -92,82 +98,3 @@ public class QualifyingResultsAdapter extends RecyclerView.Adapter<QualifyingRes
         }
     }
 }
-/*
-public class QualifyingResultsAdapter extends BaseAdapter {
-
-    private ArrayList<QualifyingResults> dataList;
-
-    public QualifyingResultsAdapter(ArrayList<QualifyingResults> data){ this.dataList = data;}
-
-    @Override
-    public int getCount() {
-        return dataList.size();
-    }
-
-    @Override
-    public QualifyingResults getItem(int position) {
-        return dataList.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return dataList.get(position).getPosition();
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        View cellView;
-        if(convertView == null){
-
-            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            cellView = inflater.inflate(R.layout.list_item_qualifying_result, parent, false);
-
-            QualifyViewHolder viewHolder = new QualifyViewHolder();
-            viewHolder.txt_position = cellView.findViewById(R.id.txt_qual_result_position);
-            viewHolder.txt_driver = cellView.findViewById(R.id.txt_qual_result_driver);
-
-            viewHolder.txt_q1 = cellView.findViewById(R.id.txt_qual_result_q1_time);
-            viewHolder.txt_q2 = cellView.findViewById(R.id.txt_qual_result_q2_time);
-            viewHolder.txt_q3 = cellView.findViewById(R.id.txt_qual_result_q3_time);
-
-            cellView.setTag(viewHolder);
-
-        }else{
-            cellView = convertView;
-        }
-
-        //
-        QualifyViewHolder vHolder = (QualifyViewHolder) cellView.getTag();
-        QualifyingResults tempItem = getItem(position);
-
-        vHolder.txt_position.setText(""+tempItem.getPosition());
-        vHolder.txt_driver.setText(tempItem.getDriver().getDriverId());
-
-        // Controllo se ci sono i tempi delle qualifiche
-        if(!tempItem.getQ1().isEmpty()){
-            vHolder.txt_q1.setText(tempItem.getQ1());
-        }
-
-        if(!tempItem.getQ2().isEmpty()){
-            vHolder.txt_q2.setText(tempItem.getQ2());
-        }
-
-        if(!tempItem.getQ3().isEmpty()){
-            vHolder.txt_q3.setText(tempItem.getQ3());
-        }
-
-
-        return cellView;
-    }
-
-    private class QualifyViewHolder{
-
-        TextView txt_position;
-        TextView txt_driver;
-        TextView txt_q1;
-        TextView txt_q2;
-        TextView txt_q3;
-
-    }
-}*/

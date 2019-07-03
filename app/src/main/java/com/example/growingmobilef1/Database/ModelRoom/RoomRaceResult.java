@@ -2,15 +2,15 @@ package com.example.growingmobilef1.Database.ModelRoom;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
-import android.arch.persistence.room.Index;
-import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import com.example.growingmobilef1.Model.IListableModel;
+import java.time.LocalTime;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "race_results",
+        primaryKeys = {"id", "raceId"},
         foreignKeys = {@ForeignKey(
                 entity = RoomRace.class,
                 parentColumns = "circuitId",
@@ -25,14 +25,21 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 )
 public class RoomRaceResult implements IListableModel {
 
-    @PrimaryKey(autoGenerate = true)
     @NonNull
     public int id;
 
     public int position;
     public String time;
 
+    @NonNull
     public String raceId;
     public String driverId;
 
+    //Todo
+    public LocalTime timeToLocalTime(){
+
+        LocalTime time = LocalTime.parse(this.time);
+
+        return time;
+    }
 }

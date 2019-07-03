@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.growingmobilef1.Database.ModelRoom.RoomConstructor;
 import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
 import com.example.growingmobilef1.Database.ViewModel.DriverViewModel;
 import com.example.growingmobilef1.Model.IListableModel;
@@ -22,18 +23,25 @@ import java.util.List;
 public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyViewHolder> {
 
     ArrayList<RoomDriver> mArrayListDrivers;
+    private List<RoomConstructor> mConstructorData;
+
     private Context context;
 
     DriverViewModel driverViewModel;
 
-    public DriverAdapter(ArrayList<? extends IListableModel> mArrayList, Context context) {
+    public DriverAdapter(ArrayList<? extends IListableModel> mArrayList, Context context, ArrayList<? extends IListableModel> mConstructorList) {
         this.context = context;
         mArrayListDrivers = (ArrayList<RoomDriver>) mArrayList;
+        mConstructorData = (ArrayList<RoomConstructor>) mConstructorList;
     }
     public void updateData(List<? extends IListableModel> viewModels) {
         mArrayListDrivers.clear();
         mArrayListDrivers.addAll((Collection<? extends RoomDriver>)viewModels);
         notifyDataSetChanged();
+    }
+
+    public void addAllConstructor(List<? extends IListableModel> list) {
+        mConstructorData.addAll((Collection<? extends RoomConstructor>) list);
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -72,7 +80,17 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyViewHold
         vHolder.mPositionLabel.setText("" + stand.rankPosition );
         vHolder.mSurnameLabel.setText(stand.name);
         vHolder.mNameLabel.setText(" " + stand.surname);
-        vHolder.mTeamLabel.setText(stand.constructorId);
+
+        if(mConstructorData != null){
+            RoomConstructor temp = mConstructorData
+                    .stream()
+                    .filter(constructor -> constructor.constructorId.equals(stand.constructorId))
+                    .findFirst()
+                    .orElse(null);
+
+            vHolder.mTeamLabel.setText(temp.name);
+        }
+
         vHolder.mPointsLabel.setText(stand.rankPoints + " Pts");
 
         String flag_name = "flag_" + mArrayListDrivers.get(position).nationality.toLowerCase();

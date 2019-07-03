@@ -53,6 +53,7 @@ public class RaceResultsFragment extends Fragment implements ApiAsyncCallerFragm
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private RaceResultsAdapter mAdapter;
+
     private SwipeRefreshLayout mSwipeRefresh;
     private LayoutAnimations mLayoutAnimation;
 
@@ -94,8 +95,12 @@ public class RaceResultsFragment extends Fragment implements ApiAsyncCallerFragm
         raceResultsViewModel.getRaceResults(mCalendarRace.circuitId).observe(this, new Observer<List<RoomRaceResult>>() {
             @Override
             public void onChanged(List<RoomRaceResult> roomRaceResults) {
-                mRaceResultsArrayList = (ArrayList<RoomRaceResult>) roomRaceResults;
-                mAdapter.updateData(roomRaceResults);
+
+                if(roomRaceResults != null) {
+                    mRaceResultsArrayList = (ArrayList<RoomRaceResult>) roomRaceResults;
+                    mAdapter.updateData(roomRaceResults);
+                    listBeforeViewing();
+                }
             }
         });
 
@@ -168,10 +173,12 @@ public class RaceResultsFragment extends Fragment implements ApiAsyncCallerFragm
         vFT.add(mApiCallerFragment, RESULTS_API_CALLER);
         vFT.commit();
     }
+
     public void startCall(){
         RaceResultsDataHelper vDataHelper = new RaceResultsDataHelper();
         mApiCallerFragment.startCall("https://ergast.com/api/f1/current/"+mCalendarRace.round+"/results.json", vDataHelper);
     }
+
     @Override
     public void onApiCalled(ArrayList<IListableModel> aReturnList) {
 

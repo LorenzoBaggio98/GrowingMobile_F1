@@ -40,6 +40,7 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
     private RecyclerView.LayoutManager mLayoutManager;
     private ProgressBar mPgsBar;
     private View vView;
+
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private LayoutAnimations mLayoutAnimation;
     private ApiAsyncCallerFragment mApiCallerFragment;
@@ -66,6 +67,8 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
                 if (vConstructors != null) {
                     mPgsBar.setVisibility(vView.GONE);
                     mAdapter.updateData(vConstructors);
+                    mLayoutAnimation.runLayoutAnimation(mRecyclerView);
+                    mSwipeRefreshLayout.setRefreshing(false);
                 } else {
                     mPgsBar.setVisibility(vView.VISIBLE);
                 }
@@ -87,15 +90,11 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
         mRecyclerView = vView.findViewById(R.id.list); // list
         mPgsBar = vView.findViewById(R.id.progress_loaderC); // progressbar
         mSwipeRefreshLayout = vView.findViewById(R.id.swipeRefreshConstructos);
+
         mLayoutAnimation = new LayoutAnimations();
 
         // start loading progress bar
         mPgsBar.setVisibility(vView.VISIBLE);
-
-        // set list animation
-        int resId = R.anim.layout_animation_slide_right;
-        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(container.getContext(), resId);
-        mRecyclerView.setLayoutAnimation(animation);
 
         // create list
         mRecyclerView.setHasFixedSize(true);
@@ -149,7 +148,6 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
     public void onApiCalled(ArrayList<IListableModel> aConstructorList) {
 
         insertConstructorToDb(aConstructorList);
-        mLayoutAnimation.runLayoutAnimation(mRecyclerView);
 
         if(aConstructorList.isEmpty()) {
             Toast.makeText(getActivity(), "Can't fetch ranking, check internet connection", Toast.LENGTH_LONG);

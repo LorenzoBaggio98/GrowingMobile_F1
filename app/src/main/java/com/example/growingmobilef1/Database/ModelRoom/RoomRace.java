@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.Model.Races;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,7 +15,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 @Entity(tableName = "race")
-public class RoomRace implements IListableModel {
+public class RoomRace implements IListableModel, Serializable {
 
     @PrimaryKey
     @NonNull
@@ -64,5 +65,4 @@ public class RoomRace implements IListableModel {
 
         return calendar;
     }
-
 }

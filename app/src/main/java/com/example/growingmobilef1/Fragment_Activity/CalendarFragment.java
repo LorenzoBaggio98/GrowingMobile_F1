@@ -47,7 +47,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
     private ProgressBar mPgsBar;
 
     // Notification
-    NotificationUtil mNotificationUtil;
+    private NotificationUtil mNotificationUtil;
     private LayoutAnimations mLayoutAnimations;
 
     // Database
@@ -82,6 +82,8 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         racesViewModel.getAllRaces().observe(this, new Observer<List<RoomRace>>() {
             @Override
             public void onChanged(List<RoomRace> roomRaces) {
+
+                mCalendarRaceItemArraylist = (ArrayList<RoomRace>) roomRaces;
 
                 // Race list
                 mAdapter.updateData(roomRaces, null);
@@ -158,7 +160,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
      */
     @Override
     public void onRaceClicked(int aPosition) {
-        Races vRaceItem = new Races();
+        RoomRace vRaceItem = new RoomRace();
         long vId = mCalendarRaceItemArraylist.get(aPosition).round;
 
         boolean isFound = true;
@@ -168,11 +170,12 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         while(isFound) {
 
             if (mCalendarRaceItemArraylist.get(i).round == vId) {
-                vRaceItem = mCalendarRaceItemArraylist.get(aPosition).toRace();
+                vRaceItem = mCalendarRaceItemArraylist.get(aPosition);
                 isFound = false;
             }
             i++;
         }
+
         launchRaceDetailActivity(vRaceItem);
     }
 
@@ -180,7 +183,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
      * Avvio del dettaglio race
      * @param aRaceItem
      */
-    private void launchRaceDetailActivity(Races aRaceItem){
+    private void launchRaceDetailActivity(RoomRace aRaceItem){
 
         Intent intent = new Intent(getContext(), RaceDetailActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -207,50 +210,6 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
     }
 
     /**
-     * Private class needed to perform the API call asynchronously
-     */
-    /*
-    private class CalendarPodiumApiAsyncCaller extends AsyncTask<String, Void, String> {
-
-        CalendarRaceDataHelper vCalendarRaceDataHelper = new CalendarRaceDataHelper();
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
-            mRaceResultsMap = new HashMap<>();
-
-            JSONObject vResultsObject = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current/results.json?limit=10000");
-
-            if(vResultsObject != null) {
-                ArrayList<Races> vRacesArrayList = vCalendarRaceDataHelper.getArraylist(vResultsObject);
-
-                if (vRacesArrayList != null) {
-                    // Mi servono i risultati
-                    for (Races vRaceResult : vRacesArrayList) {
-                        for (RoomRace vRace : mCalendarRaceItemArraylist) {
-                            if (vRaceResult.getRaceName().equals(vRace.name)) {
-                                mRaceResultsMap.put(vRace.circuitId, vRaceResult.getResults());
-                            }
-                        }
-                    }
-                    //
-                    insertRaceResultsToDb();
-
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            mPgsBar.setVisibility(View.GONE);
-            mLayoutAnimations.runLayoutAnimation(mRecyclerView);
-            mSwipeRefresh.setRefreshing(false);
-        }
-    }*/
-
-    /**
      * Database calls
      */
     void insertRacesToDb(){
@@ -269,7 +228,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
             List<RaceResults> valueResults = entry.getValue();
 
             for(RaceResults results: valueResults){
-                raceResultsViewModel.insertResults(results.toRoomRaceResults(keyCircuitId));
+                //raceResultsViewModel.insertResults(results.toRoomRaceResults(keyCircuitId));
             }
 
         }

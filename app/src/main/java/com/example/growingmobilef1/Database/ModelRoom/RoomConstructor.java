@@ -21,23 +21,4 @@ public class RoomConstructor implements IListableModel {
     public int rankPosition;
     public int rankPoints;
 
-    public ConstructorStandings toConstructorStanding(){
-
-        // build constructor
-        Constructor constructor = new Constructor();
-        constructor.setName(name);
-        constructor.setNationality(nationality);
-        constructor.setConstructorId(constructorId);
-
-        // build ConstructorStandings
-        ConstructorStandings temp = new ConstructorStandings();
-
-        temp.setPoints(rankPoints);
-        temp.setPosition(rankPosition);
-        temp.setConstructor(constructor);
-
-
-        return temp;
-    }
-
 }

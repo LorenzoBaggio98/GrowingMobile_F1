@@ -35,7 +35,11 @@ public class FormulaRepository {
     private LiveData<List<RoomDriver>> allDrivers;
     private LiveData<List<RoomConstructor>> allConstructors;
 
-    // Constructor
+    // RICERCHE DATO UN PARAMETRO
+    private LiveData<List<RoomRaceResult>> raceResultsRequested;
+
+
+    // Costruttore
     public FormulaRepository(Application application){
         FormulaDatabase db = FormulaDatabase.getDatabase(application);
 
@@ -63,6 +67,11 @@ public class FormulaRepository {
 
     public LiveData<List<RoomRaceResult>> getAllRaceResults() {
         return allRaceResults;
+    }
+
+    public LiveData<List<RoomRaceResult>> getRaceResultsRequested(String raceId) {
+
+        return raceResultsDao.getRaceResultsByRaceId(raceId);
     }
 
     public LiveData<List<RoomQualifyingResult>> getAllQualResults() {
@@ -101,8 +110,6 @@ public class FormulaRepository {
     public void deleteAll() {
         new DeleteConstructorAsyncTask(constructorDao).execute();
     }
-
-
 
     /**
      * ASYNC TASK

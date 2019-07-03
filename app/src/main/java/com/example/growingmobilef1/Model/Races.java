@@ -61,7 +61,7 @@ public class Races implements Serializable, IListableModel {
 
                     if (temp != null) {
                         for (int i = 0; i < temp.length(); i++) {
-                            vRaceResultsArrayList.add(RaceResults.fromJson(temp.getJSONObject(i)));
+                            vRaceResultsArrayList.add(RaceResults.fromJson(temp.getJSONObject(i), i));
                         }
                         tempRaces.setResults(vRaceResultsArrayList);
                     }

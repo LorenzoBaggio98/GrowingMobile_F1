@@ -10,6 +10,7 @@ import java.io.Serializable;
 
 public class RaceResults implements Serializable {
 
+    private int _id;
     private int number;
     private int position;
     private String positionText;
@@ -28,7 +29,7 @@ public class RaceResults implements Serializable {
 
     }
 
-    public static RaceResults fromJson(JSONObject json){
+    public static RaceResults fromJson(JSONObject json, int id){
 
         RaceResults temp = new RaceResults();
 
@@ -41,6 +42,7 @@ public class RaceResults implements Serializable {
             if (json.length() != 0) {
                 try {
 
+                    temp.set_id(id);
                     temp.setNumber(json.getInt("number"));
                     temp.setPosition(json.getInt("position"));
                     temp.setPositionText(json.getString("positionText"));
@@ -156,18 +158,26 @@ public class RaceResults implements Serializable {
 
     /**
      *
-     * @param circuitId
      * @return
      */
     public RoomRaceResult toRoomRaceResults(String circuitId){
 
         RoomRaceResult temp = new RoomRaceResult();
 
+        temp.id = this._id;
         temp.raceId = circuitId;
         temp.position = this.position;
         temp.time = this.getTime().getTime();
         temp.driverId = this.getDriver().getDriverId();
 
         return temp;
+    }
+
+    public int get_id() {
+        return _id;
+    }
+
+    public void set_id(int _id) {
+        this._id = _id;
     }
 }

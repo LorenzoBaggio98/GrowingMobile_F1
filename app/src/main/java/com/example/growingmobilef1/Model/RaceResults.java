@@ -7,6 +7,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 
 public class RaceResults implements Serializable {
 
@@ -155,6 +157,9 @@ public class RaceResults implements Serializable {
         FastestLap = fastestLap;
     }
 
+    public void set_id(int _id) {
+        this._id = _id;
+    }
 
     /**
      *
@@ -173,11 +178,7 @@ public class RaceResults implements Serializable {
         return temp;
     }
 
-    public int get_id() {
-        return _id;
-    }
 
-    public void set_id(int _id) {
-        this._id = _id;
-    }
+
+
 }

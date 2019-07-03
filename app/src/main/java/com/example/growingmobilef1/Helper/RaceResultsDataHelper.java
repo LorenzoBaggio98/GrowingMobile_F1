@@ -22,8 +22,6 @@ public class RaceResultsDataHelper implements IGenericHelper{
     @Override
     public ArrayList<IListableModel> getArrayList(JSONObject aJsonToParse) {
 
-        Circuit tempCircuit = new Circuit();
-
         ArrayList<IListableModel> vRaceResultsArray = new ArrayList<>();
 
         if(aJsonToParse != null) {
@@ -41,7 +39,8 @@ public class RaceResultsDataHelper implements IGenericHelper{
                         JSONObject vRace = vRaces.getJSONObject(i);
                         JSONArray vResults = vRace.getJSONArray("Results");
 
-                        Circuit temp = tempCircuit.fromJson(vRace.getJSONObject("Circuit"));
+                        //
+                        Circuit temp = Circuit.fromJson(vRace.getJSONObject("Circuit"));
 
                         // Iterate the Results
                         for (int j = 0; j < vResults.length(); j++) {

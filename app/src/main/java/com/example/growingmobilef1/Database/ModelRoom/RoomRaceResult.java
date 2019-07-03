@@ -8,6 +8,10 @@ import android.support.annotation.NonNull;
 
 import com.example.growingmobilef1.Model.IListableModel;
 
+import java.time.Instant;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "race_results",
@@ -35,4 +39,11 @@ public class RoomRaceResult implements IListableModel {
     public String raceId;
     public String driverId;
 
+    //Todo
+    public LocalTime timeToLocalTime(){
+
+        LocalTime time = LocalTime.parse(this.time);
+
+        return time;
+    }
 }

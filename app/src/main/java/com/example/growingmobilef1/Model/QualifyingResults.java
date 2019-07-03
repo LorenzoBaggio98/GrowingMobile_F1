@@ -1,11 +1,14 @@
 package com.example.growingmobilef1.Model;
 
+import com.example.growingmobilef1.Database.ModelRoom.RoomQualifyingResult;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.Serializable;
 
 public class QualifyingResults implements Serializable {
 
+    private int _id;
     private int number;
     private int position;
 
@@ -104,5 +107,30 @@ public class QualifyingResults implements Serializable {
 
     public void setQ3(String q3) {
         Q3 = q3;
+    }
+
+    /**
+     *
+     * @param circuitId
+     * @return
+     */
+    public RoomQualifyingResult toRoomQualifyingResult(String circuitId){
+
+        RoomQualifyingResult temp = new RoomQualifyingResult();
+
+        temp.id = this._id;
+        temp.raceId = circuitId;
+        temp.position = this.position;
+        temp.driverId = this.getDriver().getDriverId();
+
+        temp.q1 = this.Q1;
+        temp.q2 = this.Q2;
+        temp.q3 = this.Q3;
+
+        return temp;
+    }
+
+    public void set_id(int _id) {
+        this._id = _id;
     }
 }

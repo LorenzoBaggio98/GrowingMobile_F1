@@ -76,7 +76,6 @@ public class RaceResultsFragment extends Fragment implements ApiAsyncCallerFragm
             mCalendarRace = (RoomRace)vStartingBundle.getSerializable(RACE_ITEM);
         }
 
-
         raceResultsViewModel.getRaceResults(mCalendarRace.circuitId).observe(this, new Observer<List<RoomRaceResult>>() {
             @Override
             public void onChanged(List<RoomRaceResult> roomRaceResults) {

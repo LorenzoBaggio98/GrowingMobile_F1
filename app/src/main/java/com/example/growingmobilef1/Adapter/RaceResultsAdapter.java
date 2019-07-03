@@ -15,13 +15,15 @@ import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.R;
 
+import java.time.Instant;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class RaceResultsAdapter extends RecyclerView.Adapter<RaceResultsAdapter.ViewHolder> {
 
-
+    private String firstPositionTime;
     private List<RoomRaceResult> mData;
 
     public RaceResultsAdapter(ArrayList<? extends IListableModel> aData){
@@ -57,13 +59,17 @@ public class RaceResultsAdapter extends RecyclerView.Adapter<RaceResultsAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
-        viewHolder.mPosition.setText(""+mData.get(i).position);
-        viewHolder.mDriver.setText(mData.get(i).driverId);
-        viewHolder.mTime.setText(mData.get(i).time != null ? mData.get(i).time : "");
+        RoomRaceResult data = mData.get(i);
 
-        if(mData.get(i).position != 1){
-            viewHolder.mTimeSep.setText(mData.get(i).time != null ? mData.get(i).time : "");
+        viewHolder.mPosition.setText(""+data.position);
+        viewHolder.mDriver.setText(data.driverId);
+        viewHolder.mTime.setText(data.time != null ? data.time : "");
+
+        if(data.position != 1){
+            viewHolder.mTimeSep.setText(data != null ? data.time : "");
         }else{
+
+            firstPositionTime = data.time;
             viewHolder.mTimeSep.setText("--");
         }
     }

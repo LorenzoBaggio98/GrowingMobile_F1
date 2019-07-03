@@ -8,23 +8,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.growingmobilef1.Database.ModelRoom.RoomQualifyingResult;
+import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
+import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.Model.QualifyingResults;
 import com.example.growingmobilef1.R;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class QualifyingResultsAdapter extends RecyclerView.Adapter<QualifyingResultsAdapter.ViewHolder> {
 
-    private ArrayList<QualifyingResults> mData;
+    private List<RoomQualifyingResult> mData;
 
-    public QualifyingResultsAdapter(ArrayList<QualifyingResults> aData){
-        mData = aData;
+    public QualifyingResultsAdapter(ArrayList<? extends IListableModel> aData){
+        mData = (ArrayList<RoomQualifyingResult>) aData;
     }
 
-    public void updateData(ArrayList<QualifyingResults> viewModels) {
+    public void updateData(List<? extends IListableModel> aData) {
         mData.clear();
-        mData.addAll(viewModels);
-        //notifyDataSetChanged();
+        mData.addAll((Collection<? extends RoomQualifyingResult>) aData);
+        notifyDataSetChanged();
     }
 
     // Clean all elements of the recycler
@@ -34,7 +39,7 @@ public class QualifyingResultsAdapter extends RecyclerView.Adapter<QualifyingRes
     }
 
     // Add a list of items -- change to type used
-    public void addAll(ArrayList<QualifyingResults> list) {
+    public void addAll(ArrayList<RoomQualifyingResult> list) {
         mData.addAll(list);
         notifyDataSetChanged();
     }
@@ -49,23 +54,26 @@ public class QualifyingResultsAdapter extends RecyclerView.Adapter<QualifyingRes
 
     @Override
     public void onBindViewHolder(@NonNull QualifyingResultsAdapter.ViewHolder viewHolder, int i) {
-        viewHolder.mPosition.setText("" + mData.get(i).getPosition());
-        viewHolder.mDriver.setText("" + mData.get(i).getDriver().getFamilyName());
 
-        if(!TextUtils.isEmpty(mData.get(i).getQ1())){
-            viewHolder.mQ1.setText(mData.get(i).getQ1());
+        RoomQualifyingResult data = mData.get(i);
+
+        viewHolder.mPosition.setText("" + data.position);
+        viewHolder.mDriver.setText(data.driverId);
+
+        if(!TextUtils.isEmpty(data.q1)){
+            viewHolder.mQ1.setText(data.q1);
         } else {
             viewHolder.mQ1.setText("");
         }
 
-        if(!TextUtils.isEmpty(mData.get(i).getQ2())){
-            viewHolder.mQ2.setText(mData.get(i).getQ2());
+        if(!TextUtils.isEmpty(data.q2)){
+            viewHolder.mQ2.setText(data.q2);
         } else {
             viewHolder.mQ2.setText("");
         }
 
-        if(!TextUtils.isEmpty(mData.get(i).getQ3())){
-            viewHolder.mQ3.setText(mData.get(i).getQ3());
+        if(!TextUtils.isEmpty(data.q3)){
+            viewHolder.mQ3.setText(data.q3);
         } else {
             viewHolder.mQ3.setText("");
         }

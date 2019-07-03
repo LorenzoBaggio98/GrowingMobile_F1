@@ -12,11 +12,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.growingmobilef1.Adapter.QualifyingResultsAdapter;
 import com.example.growingmobilef1.Database.ModelRoom.RoomQualifyingResult;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
+import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
 import com.example.growingmobilef1.Database.ViewModel.QualifyingResultsViewModel;
+import com.example.growingmobilef1.Helper.ConnectionStatusHelper;
+import com.example.growingmobilef1.Helper.QualifyingResultsDataHelper;
+import com.example.growingmobilef1.Helper.RaceResultsDataHelper;
+import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.Model.QualifyingResults;
 import com.example.growingmobilef1.R;
 import com.example.growingmobilef1.Utils.LayoutAnimations;
@@ -24,7 +30,7 @@ import com.example.growingmobilef1.Utils.LayoutAnimations;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QualifyingResultsFragment extends Fragment {
+public class QualifyingResultsFragment extends Fragment implements ApiAsyncCallerFragment.IOnApiCalled {
 
     private static final String QUAL_API_CALLER = "QUAL API CALLER";
     public static final String QUALIFYING_ITEM = "QI";
@@ -70,7 +76,7 @@ public class QualifyingResultsFragment extends Fragment {
             public void onChanged(List<RoomQualifyingResult> roomQualifyingResults) {
 
                 mQualResultsArrayList = (ArrayList<RoomQualifyingResult>) roomQualifyingResults;
-                //mAdapter.updateData(roomQualifyingResults);
+                mAdapter.updateData(roomQualifyingResults);
             }
         });
     }
@@ -99,7 +105,17 @@ public class QualifyingResultsFragment extends Fragment {
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                // Se c'è connessione faccio il refresh
+                if (ConnectionStatusHelper.statusConnection(getContext())){
+                    if (mApiCallerFragment == null){
+                        launchApiCallerFragment();
+                    }
+                    startCall();
 
+                }else{
+                    Toast.makeText(getContext(),"Non c'è connessione Internet", Toast.LENGTH_SHORT).show();
+                    mSwipeRefresh.setRefreshing(false);
+                }
             }
         });
 
@@ -120,5 +136,37 @@ public class QualifyingResultsFragment extends Fragment {
         mApiCallerFragment = ApiAsyncCallerFragment.getInstance();
         vFT.add(mApiCallerFragment, QUAL_API_CALLER);
         vFT.commit();
+    }
+
+    public void startCall(){
+        QualifyingResultsDataHelper vDataHelper = new QualifyingResultsDataHelper();
+        mApiCallerFragment.startCall("https://ergast.com/api/f1/current/"+mRace.round+"/qualifying.json", vDataHelper);
+    }
+
+    @Override
+    public void onApiCalled(ArrayList<IListableModel> aReturnList) {
+
+        // Da IListableModel a RoomRace
+        for (IListableModel temp: aReturnList) {
+            mQualResultsArrayList.add((RoomQualifyingResult) temp);
+        }
+
+        // Inserisco su DB
+        insertQualResultsToDb();
+
+        listBeforeViewing();
+        mApiCallerFragment.stopCall();
+    }
+
+    void insertQualResultsToDb(){
+
+        for(int i=0; i< mQualResultsArrayList.size(); i++){
+            qualifyingViewModel.insert(mQualResultsArrayList.get(i));
+        }
+    }
+
+    public void listBeforeViewing(){
+        mLayoutAnimation.runLayoutAnimation(mRecyclerView);
+        mSwipeRefresh.setRefreshing(false);
     }
 }

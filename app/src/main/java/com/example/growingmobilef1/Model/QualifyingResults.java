@@ -23,7 +23,7 @@ public class QualifyingResults implements Serializable {
 
     }
 
-    public static QualifyingResults fromJson(JSONObject json){
+    public static QualifyingResults fromJson(JSONObject json, int id){
 
         QualifyingResults temp = new QualifyingResults();
 
@@ -34,6 +34,7 @@ public class QualifyingResults implements Serializable {
             if (json.length() != 0) {
                 try {
 
+                    temp.set_id(id);
                     temp.setNumber(json.getInt("number"));
                     temp.setPosition(json.getInt("position"));
                     temp.setDriver(tempDriver.fromJson(json.getJSONObject("Driver")));

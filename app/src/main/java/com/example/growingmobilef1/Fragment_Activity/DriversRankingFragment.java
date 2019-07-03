@@ -179,8 +179,6 @@ public class DriversRankingFragment extends Fragment  implements ApiAsyncCallerF
         }
     }*/
 
-
-
     void insertDriversToDb(){
 
         for(int i=0; i< mArrayListPilots.size(); i++){

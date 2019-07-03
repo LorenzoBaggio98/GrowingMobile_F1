@@ -1,6 +1,9 @@
 package com.example.growingmobilef1;
 import android.app.Dialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -11,6 +14,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -28,10 +32,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.growingmobilef1.Fragment_Activity.ApiAsyncCallerFragment;
 import com.example.growingmobilef1.Fragment_Activity.CalendarFragment;
 import com.example.growingmobilef1.Fragment_Activity.ConstructorsRankingFragment;
 import com.example.growingmobilef1.Fragment_Activity.DriversRankingFragment;
 import com.example.growingmobilef1.Fragment_Activity.LoginActivity;
+import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
+import com.example.growingmobilef1.Utils.ApiAsyncCallerService;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -73,10 +80,10 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         // firebase auth
     /*    mFirebaseAuth = FirebaseAuth.getInstance();
@@ -96,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(vIntent);
             //finish();
         }*/
-        setContentView(R.layout.activity_main);
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -117,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-
         BottomNavigationView navView = findViewById(R.id.main_act_nav_view);
         //mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -129,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
         else {
             getSupportActionBar().setTitle(savedInstanceState.getString(SAVED_TITLE));
         }
-
 
         setNavMenuItemThemeColors();
 
@@ -303,9 +307,5 @@ public class MainActivity extends AppCompatActivity {
     private void signOut() {
         FirebaseAuth.getInstance().signOut();
         LoginManager.getInstance().logOut(); // facebook logout, fatto bene
-    }
-
-    public void populateDatabase(){
-        Toast.makeText(getApplicationContext(), "db populated", Toast.LENGTH_LONG).show();
     }
 }

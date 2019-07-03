@@ -8,24 +8,28 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
+import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
 import com.example.growingmobilef1.Model.ConstructorStandings;
+import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.R;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class RaceResultsAdapter extends RecyclerView.Adapter<RaceResultsAdapter.ViewHolder> {
 
-    private ArrayList<RaceResults> mData;
+    private ArrayList<RoomRaceResult> mData;
 
-    public RaceResultsAdapter(ArrayList<RaceResults> aData){
-        mData = aData;
+    public RaceResultsAdapter(ArrayList<? extends IListableModel> aData){
+        mData = (ArrayList<RoomRaceResult>) aData;
     }
 
-    public void updateData(ArrayList<RaceResults> viewModels) {
+    public void updateData(ArrayList<? extends IListableModel> viewModels) {
         mData.clear();
-        mData.addAll(viewModels);
+        mData.addAll((Collection<? extends RoomRaceResult>)viewModels);
         notifyDataSetChanged();
     }
 
@@ -36,7 +40,7 @@ public class RaceResultsAdapter extends RecyclerView.Adapter<RaceResultsAdapter.
     }
 
     // Add a list of items -- change to type used
-    public void addAll(ArrayList<RaceResults> list) {
+    public void addAll(ArrayList<RoomRaceResult> list) {
         mData.addAll(list);
         notifyDataSetChanged();
     }
@@ -51,12 +55,12 @@ public class RaceResultsAdapter extends RecyclerView.Adapter<RaceResultsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.mPosition.setText("" + mData.get(i).getPosition());
-        viewHolder.mDriver.setText("" + mData.get(i).getDriver().getFamilyName());
-        viewHolder.mTime.setText("" + mData.get(i).getTime().getTime() != null ? mData.get(i).getTime().getTime() : "");
+        viewHolder.mPosition.setText("" + mData.get(i).position);
+        viewHolder.mDriver.setText("" + mData.get(i).driverId);
+        viewHolder.mTime.setText("" + mData.get(i).time != null ? mData.get(i).time : "");
 
-        if(mData.get(i).getPosition() != 1){
-            viewHolder.mTimeSep.setText("" + mData.get(i).getTime().getTime() != null ? mData.get(i).getTime().getTime() : "");
+        if(mData.get(i).position != 1){
+            viewHolder.mTimeSep.setText("" + mData.get(i).time != null ? mData.get(i).time : "");
         }
     }
 

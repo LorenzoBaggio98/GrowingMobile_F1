@@ -6,6 +6,8 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import com.example.growingmobilef1.Model.IListableModel;
+
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "race_results",
@@ -21,7 +23,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
                 onDelete = CASCADE
         )}
 )
-public class RoomRaceResult {
+public class RoomRaceResult implements IListableModel {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull

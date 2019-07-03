@@ -14,7 +14,7 @@ public class Circuit implements Serializable {
     private String circuitName;
     private Location Location;
 
-    public Circuit fromJson(JSONObject json){
+    public static Circuit fromJson(JSONObject json){
 
         Circuit tempCircuit = new Circuit();
         Location tempL = new Location();

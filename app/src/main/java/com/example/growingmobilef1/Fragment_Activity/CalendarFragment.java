@@ -207,50 +207,6 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
     }
 
     /**
-     * Private class needed to perform the API call asynchronously
-     */
-    /*
-    private class CalendarPodiumApiAsyncCaller extends AsyncTask<String, Void, String> {
-
-        CalendarRaceDataHelper vCalendarRaceDataHelper = new CalendarRaceDataHelper();
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
-            mRaceResultsMap = new HashMap<>();
-
-            JSONObject vResultsObject = vApiRequestHelper.getContentFromUrl("http://ergast.com/api/f1/current/results.json?limit=10000");
-
-            if(vResultsObject != null) {
-                ArrayList<Races> vRacesArrayList = vCalendarRaceDataHelper.getArraylist(vResultsObject);
-
-                if (vRacesArrayList != null) {
-                    // Mi servono i risultati
-                    for (Races vRaceResult : vRacesArrayList) {
-                        for (RoomRace vRace : mCalendarRaceItemArraylist) {
-                            if (vRaceResult.getRaceName().equals(vRace.name)) {
-                                mRaceResultsMap.put(vRace.circuitId, vRaceResult.getResults());
-                            }
-                        }
-                    }
-                    //
-                    insertRaceResultsToDb();
-
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            mPgsBar.setVisibility(View.GONE);
-            mLayoutAnimations.runLayoutAnimation(mRecyclerView);
-            mSwipeRefresh.setRefreshing(false);
-        }
-    }*/
-
-    /**
      * Database calls
      */
     void insertRacesToDb(){

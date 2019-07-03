@@ -17,9 +17,11 @@ import android.widget.ListView;
 
 import com.example.growingmobilef1.Adapter.ConstructorsAdapter;
 import com.example.growingmobilef1.Adapter.RaceResultsAdapter;
+import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.RaceResultsDataHelper;
 import com.example.growingmobilef1.Model.ConstructorStandings;
+import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
@@ -36,12 +38,12 @@ import java.util.ArrayList;
  */
 public class RaceResultsFragment extends Fragment {
 
-    private RaceResultsApiAsyncCaller mRaceAsync;
+   // private RaceResultsApiAsyncCaller mRaceAsync;
 
     public static final String RACE_ITEM = "RI";
 
     // Array containing the race's results
-    private ArrayList<RaceResults> mRaceResultsArrayList;
+    private ArrayList<RoomRaceResult> mRaceResultsArrayList;
     private Races mCalendarRace;
     private LayoutAnimations mLayoutAnimation;
 
@@ -78,8 +80,8 @@ public class RaceResultsFragment extends Fragment {
             mCalendarRace = (Races)vStartingBundle.getSerializable(RACE_ITEM);
         }
 
-        mRaceAsync = new RaceResultsApiAsyncCaller();
-        mRaceAsync.execute();
+  //      mRaceAsync = new RaceResultsApiAsyncCaller();
+    //    mRaceAsync.execute();
 
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(container.getContext());
@@ -91,13 +93,13 @@ public class RaceResultsFragment extends Fragment {
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshList();
+               // refreshList();
             }
         });
 
         return vView;
     }
-
+/*
     private void refreshList(){
         RaceResultsApiAsyncCaller vResultAsync = new RaceResultsApiAsyncCaller();
         vResultAsync.execute();
@@ -117,7 +119,7 @@ public class RaceResultsFragment extends Fragment {
             String downloadUrl = String.format("http://ergast.com/api/f1/current/%s/results.json", mCalendarRace.getRound());
 
             vJsonToParse = vApiRequestHelper.getContentFromUrl(downloadUrl);
-            mRaceResultsArrayList = vRaceDetailDataHelper.getRaceResults(vJsonToParse);
+            mRaceResultsArrayList = vRaceDetailDataHelper.getArrayList(vJsonToParse);
 
             return null;
         }
@@ -129,5 +131,5 @@ public class RaceResultsFragment extends Fragment {
             mAdapter.updateData(mRaceResultsArrayList);
             mRecyclerView.getAdapter().notifyDataSetChanged();
         }
-    }
+    }*/
 }

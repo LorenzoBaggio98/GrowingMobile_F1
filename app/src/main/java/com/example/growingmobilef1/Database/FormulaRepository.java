@@ -57,7 +57,6 @@ public class FormulaRepository {
 
         constructorDao = db.constructorDao();
         allConstructors = constructorDao.getAllConstructors();
-
     }
 
     // WRAPPERS

@@ -5,7 +5,12 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 
 import com.example.growingmobilef1.Database.InterfaceDao.ConstructorDao;
@@ -18,8 +23,8 @@ import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
 import com.example.growingmobilef1.Database.ModelRoom.RoomQualifyingResult;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
-
-import java.util.concurrent.Executors;
+import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
+import com.example.growingmobilef1.Utils.ApiAsyncCallerService;
 
 @Database(
         entities = {
@@ -28,7 +33,7 @@ import java.util.concurrent.Executors;
                 RoomQualifyingResult.class,
                 RoomDriver.class,
                 RoomConstructor.class
-        }, version = 6
+        }, version = 7
 )
 @TypeConverters({Converters.class})
 public abstract class FormulaDatabase extends RoomDatabase {
@@ -52,10 +57,37 @@ public abstract class FormulaDatabase extends RoomDatabase {
 
                     // Create database
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            FormulaDatabase.class, "formula_database")
+                            FormulaDatabase.class,
+                            "formula_database")
+                            .addCallback(new Callback() {
+                                @Override
+                                public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                                    super.onCreate(db);
+
+                                    // TODO: Manca l'unbind del service
+                                    // Async call service
+                                    ServiceConnection mConnection = new ServiceConnection() {
+                                        @Override
+                                        public void onServiceConnected(ComponentName name, IBinder service) {
+                                           final ApiAsyncCallerService mAsyncCallerService =
+                                                   ((ApiAsyncCallerService.ApiCallerBinder)service).getAsyncService();
+
+                                           mAsyncCallerService.populateDatabaseOnCreate();
+                                        }
+
+                                        @Override
+                                        public void onServiceDisconnected(ComponentName name) {
+
+                                        }
+                                    };
+
+                                    Intent vIntent = new Intent(context, ApiAsyncCallerService.class);
+                                    vIntent.setPackage(context.getPackageName());
+                                    context.bindService(vIntent, mConnection, Context.BIND_AUTO_CREATE);
+                                }
+                            })
                             .fallbackToDestructiveMigration()
                             .build();
-
                 }
 
             }

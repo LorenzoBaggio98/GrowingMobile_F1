@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "race_results",
+        primaryKeys = {"id", "raceId"},
         foreignKeys = {@ForeignKey(
                 entity = RoomRace.class,
                 parentColumns = "circuitId",
@@ -29,13 +30,13 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 )
 public class RoomRaceResult implements IListableModel {
 
-    @PrimaryKey
     @NonNull
     public int id;
 
     public int position;
     public String time;
 
+    @NonNull
     public String raceId;
     public String driverId;
 

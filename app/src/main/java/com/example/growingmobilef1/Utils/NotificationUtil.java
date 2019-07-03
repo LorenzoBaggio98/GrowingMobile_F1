@@ -58,7 +58,7 @@ public class NotificationUtil {
         vNotificationIntent.putExtras(vBundle);
 
         PendingIntent vBroadcast = PendingIntent.getBroadcast(mContext,
-                100,
+                mRace.getRound(),
                 vNotificationIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 

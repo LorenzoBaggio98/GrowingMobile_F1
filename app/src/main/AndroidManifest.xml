@@ -51,6 +51,7 @@
             </intent-filter>
         </receiver>
 
+        <service android:name=".Utils.ApiAsyncCallerService"/>
     </application>
 
 </manifest>

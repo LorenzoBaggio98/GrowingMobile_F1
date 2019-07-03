@@ -11,6 +11,7 @@ import com.example.growingmobilef1.Model.IListableModel;
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "qualifying_results",
+        primaryKeys = {"id", "raceId"},
         foreignKeys = {@ForeignKey(
                 entity = RoomRace.class,
                 parentColumns = "circuitId",
@@ -35,12 +36,12 @@ public class RoomQualifyingResult implements IListableModel {
         this.q3 = q3;
     }*/
 
-    @PrimaryKey
     @NonNull
     public int id;
 
     public int position;
 
+    @NonNull
     public String raceId;
     public String driverId;
 

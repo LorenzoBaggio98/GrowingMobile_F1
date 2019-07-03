@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 
-public class RaceResults implements Serializable {
+public class RaceResults implements Serializable, IListableModel {
 
     private int _id;
     private int number;

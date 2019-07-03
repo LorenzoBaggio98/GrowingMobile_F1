@@ -1,6 +1,5 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
-
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
@@ -142,7 +141,6 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
     }
 
     void startCall() {
-
         ConstructorsDataHelper vDataHelper = new ConstructorsDataHelper();
         mApiCallerFragment.startCall("https://ergast.com/api/f1/current/constructorStandings.json", vDataHelper);
     }
@@ -170,7 +168,6 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
         }
         mApiCallerFragment.stopCall();
     }
-
 
     /**
      * Database call

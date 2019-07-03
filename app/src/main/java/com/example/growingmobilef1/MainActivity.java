@@ -1,6 +1,9 @@
 package com.example.growingmobilef1;
 import android.app.Dialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -11,6 +14,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -28,10 +32,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.growingmobilef1.Fragment_Activity.ApiAsyncCallerFragment;
 import com.example.growingmobilef1.Fragment_Activity.CalendarFragment;
 import com.example.growingmobilef1.Fragment_Activity.ConstructorsRankingFragment;
 import com.example.growingmobilef1.Fragment_Activity.DriversRankingFragment;
 import com.example.growingmobilef1.Fragment_Activity.LoginActivity;
+import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
+import com.example.growingmobilef1.Utils.ApiAsyncCallerService;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -46,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String CONSTRUCTORS_RANKING_FRAGMENT = "Constructors";
     private static final String SAVED_TITLE = "title of the support action bar";
 
-    FirebaseAuth mFirebaseAuth;
+    //FirebaseAuth mFirebaseAuth;
 
     private FirebaseAuth.AuthStateListener  mAuthStateListener;
     private String mSupportActionBarTitle;
@@ -73,13 +80,13 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         // firebase auth
-        mFirebaseAuth = FirebaseAuth.getInstance();
+    /*    mFirebaseAuth = FirebaseAuth.getInstance();
 
         // check user status
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
@@ -95,9 +102,7 @@ public class MainActivity extends AppCompatActivity {
             Intent vIntent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(vIntent);
             //finish();
-        }
-
-
+        }*/
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -118,8 +123,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-
-        setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.main_act_nav_view);
         //mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -131,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
         else {
             getSupportActionBar().setTitle(savedInstanceState.getString(SAVED_TITLE));
         }
-
 
         setNavMenuItemThemeColors();
 
@@ -216,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         // check auth
-        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+     //   mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
     @Override
@@ -224,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         if(mAuthStateListener!=null){
             // remove auth listener
-            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+         //   mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
         }
     }
 

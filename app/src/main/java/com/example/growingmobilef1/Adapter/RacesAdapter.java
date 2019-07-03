@@ -13,10 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
-import com.example.growingmobilef1.Model.ConstructorStandings;
 import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.Model.RaceResults;
-import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
 import java.util.ArrayList;
 import java.util.Calendar;

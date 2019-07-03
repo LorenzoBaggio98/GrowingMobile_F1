@@ -13,8 +13,6 @@ public class RaceResultsViewModel extends AndroidViewModel {
 
     private FormulaRepository repository;
     private LiveData<List<RoomRaceResult>> allResults;
-    private LiveData<List<RoomRaceResult>> raceResults;
-
 
     public RaceResultsViewModel(Application application) {
         super(application);

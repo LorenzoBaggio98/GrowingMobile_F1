@@ -9,9 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.growingmobilef1.Database.ModelRoom.RoomQualifyingResult;
-import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
 import com.example.growingmobilef1.Model.IListableModel;
-import com.example.growingmobilef1.Model.QualifyingResults;
 import com.example.growingmobilef1.R;
 
 import java.util.ArrayList;

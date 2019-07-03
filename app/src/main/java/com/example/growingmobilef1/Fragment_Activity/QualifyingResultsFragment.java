@@ -3,7 +3,6 @@ package com.example.growingmobilef1.Fragment_Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,13 +16,10 @@ import android.widget.Toast;
 import com.example.growingmobilef1.Adapter.QualifyingResultsAdapter;
 import com.example.growingmobilef1.Database.ModelRoom.RoomQualifyingResult;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
-import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
 import com.example.growingmobilef1.Database.ViewModel.QualifyingResultsViewModel;
 import com.example.growingmobilef1.Helper.ConnectionStatusHelper;
 import com.example.growingmobilef1.Helper.QualifyingResultsDataHelper;
-import com.example.growingmobilef1.Helper.RaceResultsDataHelper;
 import com.example.growingmobilef1.Model.IListableModel;
-import com.example.growingmobilef1.Model.QualifyingResults;
 import com.example.growingmobilef1.R;
 import com.example.growingmobilef1.Utils.LayoutAnimations;
 
@@ -71,7 +67,7 @@ public class QualifyingResultsFragment extends Fragment implements ApiAsyncCalle
             mRace = (RoomRace)vStartBundle.getSerializable(QUALIFYING_ITEM);
         }
 
-        qualifyingViewModel.getAllQualReslts().observe(this, new Observer<List<RoomQualifyingResult>>() {
+        qualifyingViewModel.getRaceQualifyingResults(mRace.circuitId).observe(this, new Observer<List<RoomQualifyingResult>>() {
             @Override
             public void onChanged(List<RoomQualifyingResult> roomQualifyingResults) {
 

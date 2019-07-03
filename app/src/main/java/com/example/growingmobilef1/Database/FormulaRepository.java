@@ -2,9 +2,7 @@ package com.example.growingmobilef1.Database;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
-import android.database.sqlite.SQLiteConstraintException;
 import android.os.AsyncTask;
-import android.widget.ListView;
 
 import com.example.growingmobilef1.Database.InterfaceDao.ConstructorDao;
 import com.example.growingmobilef1.Database.InterfaceDao.DriverDao;
@@ -34,9 +32,6 @@ public class FormulaRepository {
     private LiveData<List<RoomQualifyingResult>> allQualResults;
     private LiveData<List<RoomDriver>> allDrivers;
     private LiveData<List<RoomConstructor>> allConstructors;
-
-    // RICERCHE DATO UN PARAMETRO
-    private LiveData<List<RoomRaceResult>> raceResultsRequested;
 
 
     // Costruttore
@@ -71,6 +66,11 @@ public class FormulaRepository {
     public LiveData<List<RoomRaceResult>> getRaceResultsRequested(String raceId) {
 
         return raceResultsDao.getRaceResultsByRaceId(raceId);
+    }
+
+    public LiveData<List<RoomQualifyingResult>> getQualResultsRequested(String raceId) {
+
+        return qualifyingResultDao.getQualResultsByRaceId(raceId);
     }
 
     public LiveData<List<RoomQualifyingResult>> getAllQualResults() {

@@ -4,8 +4,6 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-import com.example.growingmobilef1.Model.Constructor;
-import com.example.growingmobilef1.Model.ConstructorStandings;
 import com.example.growingmobilef1.Model.IListableModel;
 
 @Entity(tableName = "constructor")

@@ -5,20 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
-import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
-import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
-import com.example.growingmobilef1.Model.ConstructorStandings;
 import com.example.growingmobilef1.Model.IListableModel;
-import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.R;
 
-import java.time.Instant;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

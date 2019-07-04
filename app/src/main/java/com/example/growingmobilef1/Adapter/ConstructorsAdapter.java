@@ -7,16 +7,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.growingmobilef1.Model.ConstructorStandings;
+import com.example.growingmobilef1.Database.ModelRoom.RoomConstructor;
+import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.R;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 // must be paramitized to access to viewHolder and use custom layout widjet
 public class ConstructorsAdapter extends RecyclerView.Adapter<ConstructorsAdapter.ViewHolder> {
 
-    List<ConstructorStandings> mValues;
+    List<RoomConstructor> mValues;
 
     // class used to protect from the calling findViewById on each bind
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -33,18 +35,18 @@ public class ConstructorsAdapter extends RecyclerView.Adapter<ConstructorsAdapte
         }
     }
 
-    public ConstructorsAdapter(List<ConstructorStandings> vValues) {
-        mValues = vValues;
+    public ConstructorsAdapter(ArrayList<? extends IListableModel> vValues) {
+        mValues = (ArrayList<RoomConstructor>) vValues;
     }
 
     public ConstructorsAdapter() {
         mValues = new ArrayList<>();
     }
 
-    public void updateData(List<ConstructorStandings> viewModels) {
+    public void updateData(List<? extends IListableModel> viewModels) {
         mValues.clear();
-        mValues.addAll(viewModels);
-        //notifyDataSetChanged();
+        mValues.addAll((Collection<? extends RoomConstructor>) viewModels);
+        notifyDataSetChanged();
     }
 
     // Clean all elements of the recycler
@@ -54,7 +56,7 @@ public class ConstructorsAdapter extends RecyclerView.Adapter<ConstructorsAdapte
     }
 
     // Add a list of items -- change to type used
-    public void addAll(List<ConstructorStandings> list) {
+    public void addAll(List<RoomConstructor> list) {
         mValues.addAll(list);
         notifyDataSetChanged();
     }
@@ -67,16 +69,15 @@ public class ConstructorsAdapter extends RecyclerView.Adapter<ConstructorsAdapte
 
         // row layout
         View vItemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_constructors, viewGroup, false);
-
         return new ViewHolder(vItemView);
     }
 
     // Sets the data for each row
     @Override
     public void onBindViewHolder(@NonNull ViewHolder vViewHolder, int i) {
-        vViewHolder.mConstructorPosition.setText(mValues.get(i).getPosition() + "");
-        vViewHolder.mConstructorName.setText(mValues.get(i).getConstructor().getName());
-        vViewHolder.mConstructorScore.setText(mValues.get(i).getPoints() + " Pts");
+        vViewHolder.mConstructorPosition.setText(mValues.get(i).rankPosition + "");
+        vViewHolder.mConstructorName.setText(mValues.get(i).name);
+        vViewHolder.mConstructorScore.setText(mValues.get(i).rankPoints + " Pts");
     }
 
 

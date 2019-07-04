@@ -1,5 +1,7 @@
 package com.example.growingmobilef1.Helper;
 
+import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
+import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.Model.Races;
 
 import org.json.JSONArray;
@@ -8,14 +10,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class CalendarRaceDataHelper {
+public class CalendarRaceDataHelper implements IGenericHelper{
 
     public CalendarRaceDataHelper() {
     }
 
-    public ArrayList<Races> getArraylist(JSONObject aJsonToParse){
+    public ArrayList<IListableModel> getArrayList(JSONObject aJsonToParse){
 
-        ArrayList<Races> vCalendarRaceItemArraylist = new ArrayList<>();
+        ArrayList<IListableModel> vCalendarRaceItemArraylist = new ArrayList<>();
 
         if(aJsonToParse != null){
             if(aJsonToParse.length() != 0){
@@ -31,8 +33,8 @@ public class CalendarRaceDataHelper {
                     for (int i = 0; i < vRacesArray.length(); i++) {
 
                         JSONObject vRace  = vRacesArray.getJSONObject(i);
-                        Races vTempRace = Races.fromJson(vRace);
 
+                        RoomRace vTempRace = Races.fromJson(vRace).toRoomRace();
                         vCalendarRaceItemArraylist.add(vTempRace);
                     }
 

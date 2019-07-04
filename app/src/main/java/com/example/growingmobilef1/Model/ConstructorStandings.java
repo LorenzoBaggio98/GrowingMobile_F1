@@ -1,11 +1,10 @@
 package com.example.growingmobilef1.Model;
 
-import com.example.growingmobilef1.Interface.IListableObject;
-
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.example.growingmobilef1.Database.ModelRoom.RoomConstructor;
 
-public class ConstructorStandings implements IListableObject {
+public class ConstructorStandings implements IListableModel {
 
     private int position;
     private String positionText;
@@ -79,28 +78,18 @@ public class ConstructorStandings implements IListableObject {
         Constructor = constructor;
     }
 
-    @Override
-    public int getmId() {
-        return 0;
-    }
+    public RoomConstructor toRoomConstructor(){
 
-    @Override
-    public String getmMainInformation() {
-        return getConstructor().getName();
-    }
+        RoomConstructor temp = new RoomConstructor();
+        Constructor constructor = getConstructor();
 
-    @Override
-    public String getmOptionalInformation() {
-        return "" + getPosition();
-    }
+        temp.name = constructor.getName();
+        temp.nationality = constructor.getNationality();
+        temp.constructorId = constructor.getConstructorId();
 
-    @Override
-    public String getmSecondaryInformation() {
-        return "" + getPoints();
-    }
+        temp.rankPoints = getPoints();
+        temp.rankPosition = getPosition();
 
-    @Override
-    public Boolean isButtonRequired() {
-        return false;
+        return temp;
     }
 }

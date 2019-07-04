@@ -1,19 +1,20 @@
 package com.example.growingmobilef1.Helper;
 
-import com.example.growingmobilef1.Interface.IListableObject;
+import com.example.growingmobilef1.Database.ModelRoom.RoomConstructor;
 import com.example.growingmobilef1.Model.ConstructorStandings;
+import com.example.growingmobilef1.Model.IListableModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ConstructorsDataHelper {
+public class ConstructorsDataHelper implements IGenericHelper {
 
-    public ArrayList<ConstructorStandings> getArraylist(JSONObject aJsonToParse){
-        ArrayList<ConstructorStandings> vCalendarRaceItemArraylist = new ArrayList<>();
-
+    public ArrayList<IListableModel> getArrayList(JSONObject aJsonToParse){
+        ArrayList<IListableModel> vCalendarRaceItemArraylist = new ArrayList<>();
 
         if(aJsonToParse != null) {
             if (aJsonToParse.length() != 0) {
@@ -32,7 +33,9 @@ public class ConstructorsDataHelper {
                         for (int j = 0; j < vConstructorStandings.length(); j++) {
 
                             JSONObject vConstStand = vConstructorStandings.getJSONObject(j);
-                            ConstructorStandings vTempConst = ConstructorStandings.fromJson(vConstStand);
+
+                            // Trasformo da ConstructorStandings a RoomConstructor
+                            RoomConstructor vTempConst = ConstructorStandings.fromJson(vConstStand).toRoomConstructor();
                             vCalendarRaceItemArraylist.add(vTempConst);
                         }
                     }

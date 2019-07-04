@@ -3,20 +3,7 @@ package com.example.growingmobilef1.Helper;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
 import android.util.Log;
-import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.growingmobilef1.MainActivity;
-import com.example.growingmobilef1.Model.DriverStandings;
-import com.facebook.internal.LockOnGetVariable;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.BufferedReader;
@@ -26,11 +13,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 
 public class ApiRequestHelper{
-    JSONObject vJsonObject;
-    ArrayList<DriverStandings> arrayListPilotsPoints = new ArrayList<>();
 
     public ApiRequestHelper(){
 
@@ -41,7 +25,7 @@ public class ApiRequestHelper{
     public JSONObject getContentFromUrl(String aUrl) {
         StringBuilder vStringBuilder = new StringBuilder();
         JSONObject vResponseJsonObject = new JSONObject();
-        Boolean vHasErrors = false;
+        boolean vHasErrors = false;
 
 
         try {
@@ -80,8 +64,5 @@ public class ApiRequestHelper{
 
         return (vHasErrors) ? null : vResponseJsonObject;
     }
-
-
-
 
 }

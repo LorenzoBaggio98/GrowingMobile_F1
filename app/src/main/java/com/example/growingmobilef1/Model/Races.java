@@ -1,6 +1,6 @@
 package com.example.growingmobilef1.Model;
 
-import com.example.growingmobilef1.Interface.IListableObject;
+import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,7 +16,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class Races implements Serializable, IListableObject {
+public class Races implements Serializable, IListableModel {
 
     private int season;
     private int round;
@@ -49,8 +49,11 @@ public class Races implements Serializable, IListableObject {
                     tempRaces.setRaceName(json.getString("raceName"));
                     tempRaces.setCircuit(tempC.fromJson(json.getJSONObject("Circuit")));
 
-                    tempRaces.setDateTime(getCalendarDate(json.getString("date"), json.getString("time")));
+                    tempRaces.setmDate(json.getString("date"));
+                    tempRaces.setTime(json.getString("time"));
 
+
+                    tempRaces.setDateTime(getCalendarDate(json.getString("date") + " " + json.getString("time")));
 
                     ArrayList<RaceResults> vRaceResultsArrayList = new ArrayList<>();
 
@@ -58,7 +61,7 @@ public class Races implements Serializable, IListableObject {
 
                     if (temp != null) {
                         for (int i = 0; i < temp.length(); i++) {
-                            vRaceResultsArrayList.add(RaceResults.fromJson(temp.getJSONObject(i)));
+                            vRaceResultsArrayList.add(RaceResults.fromJson(temp.getJSONObject(i), i));
                         }
                         tempRaces.setResults(vRaceResultsArrayList);
                     }
@@ -130,32 +133,6 @@ public class Races implements Serializable, IListableObject {
         Results = results;
     }
 
-    /// IS LISTABLE OBJECT METHODS
-    @Override
-    public int getmId() {
-        return 0;
-    }
-
-    @Override
-    public String getmMainInformation() {
-        return getRaceName();
-    }
-
-    @Override
-    public String getmOptionalInformation() {
-        return getmDate().toString();
-    }
-
-    @Override
-    public String getmSecondaryInformation() {
-        return getTime();
-    }
-
-    @Override
-    public Boolean isButtonRequired() {
-        return true;
-    }
-
     public Boolean getNotificationScheduled() {
         return isNotificationScheduled;
     }
@@ -164,26 +141,8 @@ public class Races implements Serializable, IListableObject {
         isNotificationScheduled = notificationScheduled;
     }
 
-    // DateTime dell'elemento nel tipo Date
-   /*public Date getDate(){
-
-        SimpleDateFormat tempFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        tempFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-
-        Date tempDate = new Date();
-
-        try {
-            tempDate = tempFormat.parse(getmDate() + " " + getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return tempDate;
-    }*/
-
-
     // DateTime dell'elemento nel tipo Calendar
-    static public Calendar getCalendarDate(String date, String time){
+    static public Calendar getCalendarDate(String dateTime){
 
         // Istanza di Calendar
         Calendar calendar = Calendar.getInstance();
@@ -197,7 +156,7 @@ public class Races implements Serializable, IListableObject {
 
         // Parsing della data in Date
         try {
-            tempDate = tempFormat.parse(date + " " + time);
+            tempDate = tempFormat.parse(dateTime);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -215,4 +174,30 @@ public class Races implements Serializable, IListableObject {
     public void setDateTime(Calendar dateTime) {
         this.dateTime = dateTime;
     }
+
+    public void setmDate(String mDate) {
+        this.mDate = mDate;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public RoomRace toRoomRace(){
+
+        RoomRace temp = new RoomRace();
+
+        temp.name = this.raceName;
+        temp.round = this.round;
+        temp.dateTime = getmDate() + " " + getTime();
+        temp.circuitId = this.getCircuit().getCircuitId();
+        temp.notification = this.isNotificationScheduled ? 1 : 0;
+
+        return temp;
+    }
+
 }

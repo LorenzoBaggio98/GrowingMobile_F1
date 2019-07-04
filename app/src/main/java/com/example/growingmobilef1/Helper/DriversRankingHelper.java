@@ -1,7 +1,9 @@
 package com.example.growingmobilef1.Helper;
 
+import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
 import com.example.growingmobilef1.Model.Constructor;
 import com.example.growingmobilef1.Model.DriverStandings;
+import com.example.growingmobilef1.Model.IListableModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,12 +11,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class DriversRankingHelper {
+public class DriversRankingHelper implements IGenericHelper{
 
+    @Override
+    public ArrayList<IListableModel> getArrayList(JSONObject aJsonsToParse) {
 
-    public static ArrayList<DriverStandings> getArrayListPilotsPoints(JSONObject aJsonsToParse) {
-
-        ArrayList<DriverStandings> arrayListPilotsPoints = new ArrayList<>();
+        ArrayList<IListableModel> arrayListPilotsPoints = new ArrayList<>();
 
         if(aJsonsToParse != null) {
             if (aJsonsToParse.length() != 0) {
@@ -36,11 +38,15 @@ public class DriversRankingHelper {
 
                             JSONArray vJSONArrayConstructor = vDriverStanding.getJSONArray("Constructors");
                             JSONObject vJSONObjectConstructor = vJSONArrayConstructor.getJSONObject(0);
+
+                            //
                             DriverStandings vTempDriverS = DriverStandings.fromJson(vDriverStanding);
                             Constructor vConstructor = Constructor.fromJson(vJSONObjectConstructor);
-
                             vTempDriverS.setConstructor(vConstructor);
-                            arrayListPilotsPoints.add(vTempDriverS);
+
+                            //
+                            RoomDriver vRoomDriver = vTempDriverS.toRoomDriver();
+                            arrayListPilotsPoints.add(vRoomDriver);
                         }
                     }
 

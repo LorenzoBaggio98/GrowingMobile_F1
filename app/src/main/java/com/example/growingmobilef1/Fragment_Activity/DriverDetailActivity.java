@@ -8,11 +8,10 @@ import com.example.growingmobilef1.Model.Driver;
 import com.example.growingmobilef1.R;
 
 public class DriverDetailActivity extends AppCompatActivity {
+
     private DriverDetailFragment mDriverDetailFragment;
     private static final String FRAGMENT_DETAGLIO="FRAGMENT_DETAGLIO";
     private Driver mDriver;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +21,7 @@ public class DriverDetailActivity extends AppCompatActivity {
 
         Bundle vBundle=getIntent().getExtras();
         if (vBundle !=null){
-           mDriver=(Driver) vBundle.getSerializable("SAVE_ID");
+           mDriver = (Driver) vBundle.getSerializable("SAVE_ID");
         }
 
         if (savedInstanceState ==null){

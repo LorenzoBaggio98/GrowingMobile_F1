@@ -5,28 +5,36 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.growingmobilef1.Model.ConstructorStandings;
-import com.example.growingmobilef1.Model.RaceResults;
+import com.example.growingmobilef1.Database.FormulaRepository;
+import com.example.growingmobilef1.Database.InterfaceDao.DriverDao;
+import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
+import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
+import com.example.growingmobilef1.Database.ViewModel.DriverViewModel;
+import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.R;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class RaceResultsAdapter extends RecyclerView.Adapter<RaceResultsAdapter.ViewHolder> {
 
-    private ArrayList<RaceResults> mData;
+    private String firstPositionTime;
+    private List<RoomRaceResult> mData;
+    private List<RoomDriver> mDriverData;
 
-    public RaceResultsAdapter(ArrayList<RaceResults> aData){
-        mData = aData;
+    public RaceResultsAdapter(ArrayList<? extends IListableModel> aData, ArrayList<? extends IListableModel> aDriverData){
+        mData = (ArrayList<RoomRaceResult>) aData;
+        mDriverData = (ArrayList<RoomDriver>) aDriverData;
     }
 
-    public void updateData(ArrayList<RaceResults> viewModels) {
+    public void updateData(List<? extends IListableModel> aData) {
         mData.clear();
-        mData.addAll(viewModels);
-        //notifyDataSetChanged();
+        mData.addAll((Collection<? extends RoomRaceResult>) aData);
+        notifyDataSetChanged();
     }
 
     // Clean all elements of the recycler
@@ -36,14 +44,13 @@ public class RaceResultsAdapter extends RecyclerView.Adapter<RaceResultsAdapter.
     }
 
     // Add a list of items -- change to type used
-    public void addAll(ArrayList<RaceResults> list) {
-        mData.addAll(list);
-        notifyDataSetChanged();
+    public void addAllDriver(List<? extends IListableModel> list) {
+        mDriverData.addAll((Collection<? extends RoomDriver>) list);
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
 
         View vView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_race_result, viewGroup, false);
         return new ViewHolder(vView);
@@ -51,12 +58,28 @@ public class RaceResultsAdapter extends RecyclerView.Adapter<RaceResultsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.mPosition.setText("" + mData.get(i).getPosition());
-        viewHolder.mDriver.setText("" + mData.get(i).getDriver().getFamilyName());
-        viewHolder.mTime.setText("" + mData.get(i).getTime().getTime() != null ? mData.get(i).getTime().getTime() : "");
 
-        if(mData.get(i).getPosition() != 1){
-            viewHolder.mTimeSep.setText("" + mData.get(i).getTime().getTime() != null ? mData.get(i).getTime().getTime() : "");
+        RoomRaceResult data = mData.get(i);
+
+        viewHolder.mPosition.setText(""+data.position);
+
+        if(mDriverData != null){
+            RoomDriver temp = mDriverData
+                    .stream()
+                    .filter(driver -> driver.driverId.equals(data.driverId))
+                    .findFirst()
+                    .orElse(null);
+
+            viewHolder.mDriver.setText(temp.name + " " + temp.surname);
+        }
+
+        viewHolder.mTime.setText(data.time != null ? data.time : "");
+        if(data.position != 1){
+            viewHolder.mTimeSep.setText(data != null ? data.time : "");
+        }else{
+
+            firstPositionTime = data.time;
+            viewHolder.mTimeSep.setText("--");
         }
     }
 

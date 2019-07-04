@@ -147,7 +147,7 @@ public class DriversRankingFragment extends Fragment  implements ApiAsyncCallerF
         super.onSaveInstanceState(outState);
         outState.putSerializable(SAVE_LISTPILOTS, mArrayListPilots);
     }
-
+//inserisco i dati sulla room
     void insertDriversToDb(){
 
         for(int i=0; i< mArrayListPilots.size(); i++){
@@ -166,6 +166,7 @@ public class DriversRankingFragment extends Fragment  implements ApiAsyncCallerF
     /**
      *
      */
+    // chiamo per prendere i dati
     void startCall() {
         DriversRankingHelper vDataHelper = new DriversRankingHelper();
         mApiCallerFragment.startCall("https://ergast.com/api/f1/current/driverStandings.json", vDataHelper);

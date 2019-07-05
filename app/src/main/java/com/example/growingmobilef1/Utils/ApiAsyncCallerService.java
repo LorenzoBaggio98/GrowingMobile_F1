@@ -139,6 +139,9 @@ public class ApiAsyncCallerService extends Service {
         }
     }
 
+    /**
+     * ALLA FINE CHIAMO POPULATE RACE DETAILS
+     */
     private static class ApiAsyncCaller extends AsyncTask<String, Void, String> {
 
         private WeakReference<ApiAsyncCallerService> mApiService;
@@ -179,8 +182,6 @@ public class ApiAsyncCallerService extends Service {
                     mApiService.get().populateRaceDetails();
                 }
             }
-
-
         }
     }
 

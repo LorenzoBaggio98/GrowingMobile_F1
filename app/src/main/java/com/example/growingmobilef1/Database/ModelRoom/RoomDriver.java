@@ -30,6 +30,7 @@ public class RoomDriver implements IListableModel, Serializable {
     public String url;
     public String nationality;
     public String dateOfBirth;
+    public String code;
 
     public int rankPosition;
     public int rankPoints;

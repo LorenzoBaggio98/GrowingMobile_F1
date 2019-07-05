@@ -43,3 +43,4 @@ public class RoomRaceResult implements IListableModel {
         return time;
     }
 }
+

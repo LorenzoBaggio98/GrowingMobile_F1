@@ -29,4 +29,17 @@ public interface RaceResultsDao {
 
     @Query("SELECT * FROM race_results WHERE raceId = :raceId")
     LiveData<List<RoomRaceResult>> getRaceResultsByRaceId(String raceId);
+
+    @Query("SELECT raceId AS res_race_id, race_results.position AS res_position, driver.code AS dri_code " +
+            "FROM race_results JOIN driver ON (race_results.driverId = driver.driverId) " +
+            "WHERE raceId IN (:races) AND race_results.position < 4")
+    LiveData<List<RoomPodium>> getRacePodium(List<String> races);
+
+    class RoomPodium{
+
+        public String res_race_id;
+        public int res_position;
+        public String dri_code;
+
+    }
 }

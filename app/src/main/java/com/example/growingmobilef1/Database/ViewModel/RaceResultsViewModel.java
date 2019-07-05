@@ -5,6 +5,8 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
 import com.example.growingmobilef1.Database.FormulaRepository;
+import com.example.growingmobilef1.Database.InterfaceDao.RaceResultsDao;
+import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
 
 import java.util.List;
@@ -25,6 +27,10 @@ public class RaceResultsViewModel extends AndroidViewModel {
 
     public LiveData<List<RoomRaceResult>> getRaceResults(String race_id){
         return repository.getRaceResultsRequested(race_id);
+    }
+
+    public LiveData<List<RaceResultsDao.RoomPodium>> getRaceResultPodium(List<String> races){
+        return repository.getRaceResultPodium(races);
     }
 
     public void insertResults(RoomRaceResult result){

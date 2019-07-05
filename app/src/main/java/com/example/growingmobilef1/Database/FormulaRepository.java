@@ -33,7 +33,6 @@ public class FormulaRepository {
     private LiveData<List<RoomDriver>> allDrivers;
     private LiveData<List<RoomConstructor>> allConstructors;
 
-
     // Costruttore
     public FormulaRepository(Application application){
         FormulaDatabase db = FormulaDatabase.getDatabase(application);
@@ -105,7 +104,6 @@ public class FormulaRepository {
         }
     }
 
-
     public void deleteAll() {
         new DeleteConstructorAsyncTask(constructorDao).execute();
     }
@@ -113,7 +111,6 @@ public class FormulaRepository {
     /**
      * ASYNC TASK
      */
-
     /* Metodo alternativo
     static private void insertItem(RoomRace currentRace){
         new AsyncTask<RoomRace, Void, Void>(){

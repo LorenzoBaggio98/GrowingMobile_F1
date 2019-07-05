@@ -48,7 +48,7 @@ public abstract class FormulaDatabase extends RoomDatabase {
     // SINGLETON
     private static volatile FormulaDatabase INSTANCE;
 
-    static FormulaDatabase getDatabase(final Context context){
+    public static FormulaDatabase getDatabase(final Context context){
 
         if(INSTANCE == null){
             synchronized (FormulaDatabase.class){

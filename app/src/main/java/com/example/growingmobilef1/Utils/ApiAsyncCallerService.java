@@ -3,6 +3,8 @@ package com.example.growingmobilef1.Utils;
 import android.app.Application;
 import android.app.Service;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
@@ -10,10 +12,14 @@ import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
+import com.example.growingmobilef1.Database.FormulaDatabase;
 import com.example.growingmobilef1.Database.FormulaRepository;
 import com.example.growingmobilef1.Database.InterfaceDao.RaceDao;
+import com.example.growingmobilef1.Database.ModelRoom.RoomQualifyingResult;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Database.ViewModel.RaceResultsViewModel;
 import com.example.growingmobilef1.Database.ViewModel.RacesViewModel;
@@ -22,8 +28,11 @@ import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
 import com.example.growingmobilef1.Helper.ConstructorsDataHelper;
 import com.example.growingmobilef1.Helper.DriversRankingHelper;
 import com.example.growingmobilef1.Helper.IGenericHelper;
+import com.example.growingmobilef1.Helper.QualifyingResultsDataHelper;
 import com.example.growingmobilef1.Helper.RaceResultsDataHelper;
 import com.example.growingmobilef1.Model.IListableModel;
+import com.example.growingmobilef1.Model.RaceResults;
+
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
@@ -31,6 +40,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ApiAsyncCallerService extends Service {
+
+    private Observer<List<RoomRace>> mRoomRaceObserver;
+    private Observer<List<RoomRace>> mQualifyingObserver;
+    private LiveData<List<RoomRace>> mRoomRaceLiveData;
+    private LiveData<List<RoomRace>> mQualifyingLiveData;
 
     ApiCallerBinder mBinder = new ApiCallerBinder();
     @Override
@@ -54,16 +68,56 @@ public class ApiAsyncCallerService extends Service {
         vDriverAsyncCaller.execute("https://ergast.com/api/f1/current/driverStandings.json");
 
         populateRaceResultsOnCreate();
+        populateQualifyingResultsOnCreate();
     }
 
+    // Create an observer
     private void populateRaceResultsOnCreate(){
-        ApiAsyncCaller vRaceResultsAsyncCaller = new ApiAsyncCaller(new RaceResultsDataHelper(), getApplication());
-        RacesViewModel vRacesViewModel = new RacesViewModel(getApplication());
-        LiveData<List<RoomRace>> vRoomRaceArrayList = vRacesViewModel.getAllRaces();
-        Log.d("AAAAAAAAAA", vRoomRaceArrayList.toString());
-        for (int i = 0; i < vRoomRaceArrayList.getValue().size(); i++){
-            String downloadUrl = String.format("http://ergast.com/api/f1/current/%s/results.json", vRoomRaceArrayList.getValue().get(i).round);
-            vRaceResultsAsyncCaller.execute(downloadUrl);
+        FormulaRepository vFR = new FormulaRepository(getApplication());
+        mRoomRaceLiveData = vFR.getAllRaces();
+
+        mRoomRaceLiveData.observeForever(mRoomRaceObserver = new Observer<List<RoomRace>>() {
+            @Override
+            public void onChanged(@Nullable List<RoomRace> roomRaces) {
+                List<RoomRace> vRoomRaceList = mRoomRaceLiveData.getValue();
+
+                RaceResultsApiAsyncCaller vRaceResultsAsyncCaller =
+                            new RaceResultsApiAsyncCaller(
+                                    ApiAsyncCallerService.this,
+                                    new RaceResultsDataHelper(),
+                                    getApplication(),
+                                    vRoomRaceList);
+                vRaceResultsAsyncCaller.execute("http://ergast.com/api/f1/current/%s/results.json");
+            }
+        });
+    }
+
+    private void populateQualifyingResultsOnCreate(){
+        FormulaRepository vFR = new FormulaRepository(getApplication());
+        mQualifyingLiveData = vFR.getAllRaces();
+
+        mQualifyingLiveData.observeForever(mQualifyingObserver = new Observer<List<RoomRace>>() {
+            @Override
+            public void onChanged(@Nullable List<RoomRace> roomQualifyingResults) {
+                List<RoomRace> vRoomRaceList = mRoomRaceLiveData.getValue();
+
+                RaceResultsApiAsyncCaller vRaceResultsAsyncCaller = new RaceResultsApiAsyncCaller(
+                        ApiAsyncCallerService.this,
+                        new QualifyingResultsDataHelper(),
+                        getApplication(),
+                        vRoomRaceList);
+                vRaceResultsAsyncCaller.execute("https://ergast.com/api/f1/current/%s/qualifying.json");
+            }
+        });
+    }
+
+    private void removeRoomRaceListObserver(){
+        if (mRoomRaceLiveData.hasObservers()) {
+            mRoomRaceLiveData.removeObserver(mRoomRaceObserver);
+        }
+
+        if (mQualifyingLiveData.hasObservers()){
+            mQualifyingLiveData.removeObserver(mQualifyingObserver);
         }
     }
 
@@ -73,6 +127,9 @@ public class ApiAsyncCallerService extends Service {
         private ArrayList<IListableModel> mHelperArrayList;
         private IGenericHelper mApiGenericHelper;
         private FormulaRepository mRepository;
+
+        //Debug
+        private int mCounter = 0;
 
         public ApiAsyncCaller(IGenericHelper aApiGenericHelper, Application aApplication) {
             mApiGenericHelper = aApiGenericHelper;
@@ -95,11 +152,57 @@ public class ApiAsyncCallerService extends Service {
             }
             return null;
         }
+    }
+
+    private static class RaceResultsApiAsyncCaller extends AsyncTask<String, Void, Void> {
+
+        private WeakReference<ApiAsyncCallerService> mApiService;
+        private JSONObject vJsonToParse;
+        private ArrayList<IListableModel> mHelperArrayList;
+        private IGenericHelper mApiGenericHelper;
+        private FormulaRepository mRepository;
+        private List<RoomRace> mRaceResultsList;
+
+        public RaceResultsApiAsyncCaller(ApiAsyncCallerService aApiService,
+                                         IGenericHelper aApiGenericHelper,
+                                         Application aApplication,
+                                         List<RoomRace> aRaceResultsList) {
+
+            mApiService = new WeakReference<>(aApiService);
+            mApiGenericHelper = aApiGenericHelper;
+            mRepository = new FormulaRepository(aApplication);
+            mRaceResultsList = aRaceResultsList;
+        }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected Void doInBackground(String... params) {
+            ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
+
+            for (RoomRace vRoomRace: mRaceResultsList) {
+                mHelperArrayList = new ArrayList<>();
+
+                // get json from api
+                String downloadUrl = String.format(params[0], vRoomRace.round);
+                vJsonToParse = vApiRequestHelper.getContentFromUrl(downloadUrl);
+
+                // parse json to list
+                mHelperArrayList =  mApiGenericHelper.getArrayList(vJsonToParse);
+
+                for(int i=0; i< mHelperArrayList.size(); i++){
+                    mRepository.insertItem(mHelperArrayList.get(i));
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (mApiService.get() != null)
+                mApiService.get().removeRoomRaceListObserver();
         }
     }
+
 
     public class ApiCallerBinder extends Binder {
         public ApiAsyncCallerService getAsyncService(){

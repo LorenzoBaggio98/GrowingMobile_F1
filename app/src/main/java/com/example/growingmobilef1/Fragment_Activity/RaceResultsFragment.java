@@ -135,7 +135,6 @@ public class RaceResultsFragment extends Fragment implements ApiAsyncCallerFragm
         return vView;
     }
 
-
     @Override
     public void onDetach() {
         super.onDetach();
@@ -151,10 +150,12 @@ public class RaceResultsFragment extends Fragment implements ApiAsyncCallerFragm
         vFT.add(mApiCallerFragment, RESULTS_API_CALLER);
         vFT.commit();
     }
+
     public void startCall(){
         RaceResultsDataHelper vDataHelper = new RaceResultsDataHelper();
         mApiCallerFragment.startCall("https://ergast.com/api/f1/current/"+mCalendarRace.round+"/results.json", vDataHelper);
     }
+
     @Override
     public void onApiCalled(ArrayList<IListableModel> aReturnList) {
 

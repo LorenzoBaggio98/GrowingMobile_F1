@@ -9,5 +9,4 @@
                 android:type="linear" />
         </shape>
     </item>
-    <item android:drawable="@drawable/ic_formula1_logo_black" android:gravity="center" android:height="250dp" android:width="250dp"/>
 </layer-list>

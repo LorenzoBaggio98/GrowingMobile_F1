@@ -2,23 +2,16 @@ package com.example.growingmobilef1;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.growingmobilef1.Fragment_Activity.LoginActivity;
 import com.facebook.login.LoginManager;
-//import com.google.android.gms.tasks.OnFailureListener;
-//import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-//import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
-//import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
 abstract class SplashActivity extends AppCompatActivity {
 
@@ -34,54 +27,17 @@ abstract class SplashActivity extends AppCompatActivity {
 
         // firebase auth
         mFirebaseAuth = FirebaseAuth.getInstance();
-
+/*
         if (!isAuthenticated()) {
             startActivityForResult(new Intent(this, LoginActivity.class), ACTIVITY_AUTH);
-        }
-/*
-        FirebaseDynamicLinks.getInstance()
-                .getDynamicLink(getIntent())
-                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
-                    @Override
-                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
-                        // Get deep link from result (may be null if no link is found)
-                        Uri deepLink = null;
-                        if (pendingDynamicLinkData != null) {
-                            deepLink = pendingDynamicLinkData.getLink();
-                        }
+        }*/
 
-
-                        // Handle the deep link. For example, open the linked
-                        // content, or apply promotional credit to the user's
-                        // account.
-                        // ...
-
-                        // ...
-                    }
-                })
-                .addOnFailureListener(this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "getDynamicLink:onFailure", e);
-                    }
-                });
-
-*/
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if(user == null) {
-                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                if (!isAuthenticated()) {
                     startActivityForResult(new Intent(SplashActivity.this, LoginActivity.class), ACTIVITY_AUTH);
-                } else {
-
-                    if (!user.isEmailVerified()) {
-                        Toast.makeText(getApplicationContext(), "Email is not verified", Toast.LENGTH_SHORT).show();
-
-                        startActivityForResult(new Intent(SplashActivity.this, LoginActivity.class), ACTIVITY_AUTH);
-                    }
                 }
 
             }
@@ -89,6 +45,7 @@ abstract class SplashActivity extends AppCompatActivity {
 
 
         setTheme(R.style.AppTheme_Base);
+
         super.onCreate(savedInstanceState);
     }
 
@@ -100,10 +57,11 @@ abstract class SplashActivity extends AppCompatActivity {
         if(user != null){
             if(user.isEmailVerified()) {
                 return true;
+            } else {
+                Toast.makeText(getApplicationContext(), "Email is not verified", Toast.LENGTH_SHORT).show();
+                //user.reload();
             }
         }
-
-        Toast.makeText(getApplicationContext(),"Email is not verified",Toast.LENGTH_SHORT).show();
 
         return false;
     }

@@ -1,5 +1,6 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,10 +27,13 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -50,7 +55,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private static final int RC_SIGN_IN = 9001;
     FirebaseAuth mFirebaseAuth;
     CallbackManager mCallbackManager;
-    GoogleApiClient mGoogleApiClient;
+    GoogleSignInClient mGoogleApiClient;
 
     // widgets
     EditText mEmailField,mPasswordField;
@@ -60,23 +65,27 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     Button newPassButton;
     Button facebookLoginBtn;
     Dialog progressDialog;
+    ImageView imageViewLogo;
 
     // layouts
     LinearLayout bootmView, topView;
 
-
+/*
     Handler handler = new Handler();
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            bootmView.setVisibility(View.VISIBLE);
-            topView.setVisibility(View.VISIBLE);
+            //moveLogo(imageViewLogo);
+            move(topView);
+            move(bootmView);
+            move(editsView);
         }
     };
-
+*/
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
@@ -90,8 +99,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         if(user != null){
             if(user.isEmailVerified()) {
-                // startMainActivity();
-                performCallBack();
+                startMainActivity();
+                //performCallBack();
+            } else {
+                Toast.makeText(getApplicationContext(),"Email is not verified",Toast.LENGTH_SHORT).show();
             }
         }
         // END FIREBASE INITIALIZATION
@@ -101,18 +112,18 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mPasswordField = (EditText) findViewById(R.id.editText_password);
         Button loginButton = findViewById(R.id.btn_login);
         TextView registerButton = findViewById(R.id.btn_register);
+        imageViewLogo = findViewById(R.id.imgView_logo);
 
         bootmView = (LinearLayout) findViewById(R.id.bottomLayout);
         topView = (LinearLayout) findViewById(R.id.topLayout);
+        //editsView = (LinearLayout) findViewById(R.id.editsLayout);
+
         mTextOr = bootmView.findViewById(R.id.textOr);
         googleLoginBtn = bootmView.findViewById(R.id.btn_signin_google);
         newPassButton = bootmView.findViewById(R.id.btn_pw_forgotten);
         facebookLoginBtn = bootmView.findViewById(R.id.btn_signin_facebook);
 
         setDialog();
-
-
-        handler.postDelayed(runnable, 2000); //2000 is the timeout for the splash
 
         // EMAIL AND PASSWORD LOGIN
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -128,11 +139,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-
+/*
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(LoginActivity.this,this)
+                .enableAutoManage(LoginActivity.this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+        */
+        mGoogleApiClient = GoogleSignIn.getClient(this, gso);
 
         // GOOGLE LOGIN
         googleLoginBtn.setOnClickListener(new View.OnClickListener() {
@@ -160,7 +173,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
-                Toast.makeText(getApplicationContext(),"Facebook auth error",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Facebook auth error",Toast.LENGTH_LONG).show();
             }
         });
 
@@ -190,9 +203,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
+
+        //handler.postDelayed(runnable, 2000);
+
     }
-
-
 
 
     private void goToRegisterActivity() {
@@ -202,7 +216,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void googleSignIn() {
-        Intent signIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        Intent signIntent = mGoogleApiClient.getSignInIntent();
         startActivityForResult(signIntent,RC_SIGN_IN);
     }
 
@@ -238,8 +252,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private boolean validatePassword() {
         String password = mPasswordField.getText().toString();
 
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            mPasswordField.setError("between 4 and 10 alphanumeric characters");
+        if (password.isEmpty() || password.length() < 6) {
+            mPasswordField.setError("password less than 6");
 
             return false;
 
@@ -270,8 +284,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                         if (!task.isSuccessful()) {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(getApplicationContext(),"Auth Error",Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(getApplicationContext(),"Is the email or password correct?",Toast.LENGTH_LONG).show();
                         } else  {
 
                             checkIfEmailVerified();
@@ -287,7 +301,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         // pass back to activityResult
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
-
+/*
         if(requestCode==RC_SIGN_IN){
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             boolean flag = result.isSuccess();
@@ -295,6 +309,20 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             if(flag){
                 GoogleSignInAccount account = result.getSignInAccount();
                 authWithGoogle(account);
+            }
+        }*/
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                authWithGoogle(account);
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Log.w(TAG, "Google sign in failed", e);
+                // [START_EXCLUDE]
+                Toast.makeText(getApplicationContext(), "Google auth error", Toast.LENGTH_LONG).show();
+                // [END_EXCLUDE]
             }
         }
     }
@@ -325,10 +353,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 if(task.isSuccessful()){
                     // start main
                     //startMainActivity();
+                    Log.d(TAG, "signInWithgooglel:success");
+                    Toast.makeText(getApplicationContext(), "Successfully logged in", Toast.LENGTH_LONG).show();
                     performCallBack();
                 }
                 else{
-                    Toast.makeText(getApplicationContext(),"Auth Error",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Auth Error",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -350,8 +380,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         if (task.isSuccessful()) {
                             // Sign in success
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mFirebaseAuth.getCurrentUser();
-
+                            Toast.makeText(getApplicationContext(), "Successfully logged in", Toast.LENGTH_LONG).show();
                             /*startMainActivity();*/
                             performCallBack();
 
@@ -359,7 +388,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         else {
                             // If sign in fails, display a message
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_LONG).show();
                         }
 
                     }
@@ -376,16 +405,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user.isEmailVerified()) {
-/*
+
             Log.d(TAG, "signInWithEmail:success");
-            Toast.makeText(getApplicationContext(), "Successfully logged in", Toast.LENGTH_SHORT).show();
-            startMainActivity();
-            finish();*/
+            Toast.makeText(getApplicationContext(), "Successfully logged in", Toast.LENGTH_LONG).show();
             performCallBack();
 
         }
         else {
-            Toast.makeText(getApplicationContext(), "Email in not verified", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Email in not verified", Toast.LENGTH_LONG).show();
             Log.d(TAG, "signInWithEmail:unsuccess");
             FirebaseAuth.getInstance().signOut();
 /*
@@ -422,10 +449,26 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
     }
 
+    /*
+    public static void move(final LinearLayout view){
+        ValueAnimator va = ValueAnimator.ofInt(0, 0);
+        va.setDuration(400);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Integer value = (Integer) animation.getAnimatedValue();
+                view.getLayoutParams().height = value.intValue();
+                view.requestLayout();
+            }
+        });
+        va.start();
+    }*/
+
     private void performCallBack() {
         Intent resultIntent = new Intent();
         setResult(Activity.RESULT_OK, resultIntent);
         finish();
     }
+
+
 
 }

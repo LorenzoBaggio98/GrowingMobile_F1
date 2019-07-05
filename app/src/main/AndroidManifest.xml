@@ -21,8 +21,8 @@
             android:theme="@style/AppTheme"/>
         <activity
             android:name=".Fragment_Activity.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Fragment_Activity.NewPasswordActivity" />
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <activity
             android:name=".Fragment_Activity.RegisterActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -33,14 +33,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data
-                    android:host="growingmobilef1.firebaseapp.com"
-                    android:scheme="https"/>
             </intent-filter>
         </activity>
 

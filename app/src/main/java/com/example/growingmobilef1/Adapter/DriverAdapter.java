@@ -19,6 +19,7 @@ import com.example.growingmobilef1.R;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyViewHolder> {
 
@@ -84,7 +85,12 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyViewHold
         if(mConstructorData != null){
             RoomConstructor temp = mConstructorData
                     .stream()
-                    .filter(constructor -> constructor.constructorId.equals(stand.constructorId))
+                    .filter(new Predicate<RoomConstructor>() {
+                        @Override
+                        public boolean test(RoomConstructor constructor) {
+                            return constructor.constructorId.equals(stand.constructorId);
+                        }
+                    })
                     .findFirst()
                     .orElse(null);
 

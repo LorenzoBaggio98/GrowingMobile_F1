@@ -1,4 +1,3 @@
-
 package com.example.growingmobilef1.Fragment_Activity;
 
 import android.content.Context;
@@ -25,7 +24,7 @@ import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class ApiAsyncCallerFragment extends Fragment {
+public class ApiAsyncCallerFragment1 extends Fragment {
 
     private ArrayList<IListableModel> mHelperArrayList;
     private JsonObjectRequest mJsonObjectRequest;
@@ -39,8 +38,8 @@ public class ApiAsyncCallerFragment extends Fragment {
 
     IOnApiCalled mElementListener;
 
-    public static ApiAsyncCallerFragment getInstance() {
-        ApiAsyncCallerFragment vFragment = new ApiAsyncCallerFragment();
+    public static ApiAsyncCallerFragment1 getInstance() {
+        ApiAsyncCallerFragment1 vFragment = new ApiAsyncCallerFragment1();
         return vFragment;
 
 

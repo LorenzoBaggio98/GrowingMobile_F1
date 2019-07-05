@@ -88,7 +88,9 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyViewHold
                     .findFirst()
                     .orElse(null);
 
-            vHolder.mTeamLabel.setText(temp.name);
+            if(temp != null){
+                vHolder.mTeamLabel.setText(temp.name);
+            }
         }
 
         vHolder.mPointsLabel.setText(stand.rankPoints + " Pts");

@@ -7,6 +7,7 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
 import com.example.growingmobilef1.Database.ModelRoom.RoomQualifyingResult;
+import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
 
 import java.util.List;
 
@@ -15,6 +16,9 @@ public interface QualifyingResultDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(RoomQualifyingResult qualifyingResult);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertAllQualifyingResults(List<RoomQualifyingResult> aRoomQualifyingResultList);
 
     @Query("SELECT * FROM qualifying_results WHERE id = :id")
     RoomQualifyingResult findQualResults(int id);

@@ -7,6 +7,7 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
 
+import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
 
 import java.util.List;
@@ -16,6 +17,9 @@ public interface RaceResultsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(RoomRaceResult raceResults);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertAllRacesResult(List<RoomRaceResult> aRoomRaceList);
 
     @Query("SELECT * FROM race_results WHERE id = :id")
     RoomRaceResult findRaceResults(int id);

@@ -34,4 +34,8 @@ public class RacesViewModel extends AndroidViewModel {
         }
     }
 
+    public void insertAllRaces(List<RoomRace> aRoomRaceList) {
+      //  repository.insertItems(aRoomRaceList);
+    }
+
 }

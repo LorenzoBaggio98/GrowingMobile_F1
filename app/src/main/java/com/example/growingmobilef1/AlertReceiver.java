@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Fragment_Activity.RaceDetailActivity;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.Utils.NotificationUtil;
@@ -25,7 +26,7 @@ public class AlertReceiver extends BroadcastReceiver {
     private static final String CHANNEL_ID = "channelId";
     private static final String ALERT_RACE_DETAIL_FRAGMENT = "Tag to send the race item to the detail fragment";
 
-    private Races mRaceItem;
+    private RoomRace mRaceItem;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -39,7 +40,7 @@ public class AlertReceiver extends BroadcastReceiver {
             ObjectInput vObjectInput = null;
             try {
                 vObjectInput = new ObjectInputStream(vByteArrayInput);
-                mRaceItem = (Races) vObjectInput.readObject();
+                mRaceItem = (RoomRace) vObjectInput.readObject();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -69,7 +70,7 @@ public class AlertReceiver extends BroadcastReceiver {
         Notification.Builder builder = new Notification.Builder(context);
 
         Notification notification = builder.setContentTitle("GrowingMobile F1")
-                .setContentText(mRaceItem.getRaceName() + " starting in 10 minutes!")
+                .setContentText(mRaceItem.name + " starting in 10 minutes!")
                 .setTicker("New Growing Mobile F1 Alert!")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(vPendingIntent)

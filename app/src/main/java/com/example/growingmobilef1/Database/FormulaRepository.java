@@ -3,6 +3,7 @@ package com.example.growingmobilef1.Database;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.growingmobilef1.Database.InterfaceDao.ConstructorDao;
 import com.example.growingmobilef1.Database.InterfaceDao.DriverDao;
@@ -14,6 +15,7 @@ import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
 import com.example.growingmobilef1.Database.ModelRoom.RoomQualifyingResult;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
+import com.example.growingmobilef1.Model.IListableModel;
 
 import java.util.List;
 
@@ -104,6 +106,14 @@ public class FormulaRepository {
         }
     }
 
+    public void insertItems(List<IListableModel> aItemsList) {
+        if (aItemsList.get(0).getClass().getTypeName().equals(RoomRaceResult.class.getTypeName()))
+            new InsertAllRacesResultsAsyncTask(raceResultsDao).execute(aItemsList);
+
+        if (aItemsList.get(0).getClass().getTypeName().equals(RoomQualifyingResult.class.getTypeName()))
+            new InsertQualifyingResultsAsyncTask(qualifyingResultDao).execute(aItemsList);
+    }
+
     public void deleteAll() {
         new DeleteConstructorAsyncTask(constructorDao).execute();
     }
@@ -111,18 +121,6 @@ public class FormulaRepository {
     /**
      * ASYNC TASK
      */
-    /* Metodo alternativo
-    static private void insertRace(RoomRace currentRace){
-        new AsyncTask<RoomRace, Void, Void>(){
-
-            @Override
-            protected Void doInBackground(RoomRace... roomRaces) {
-                raceDao.insert(roomRaces[0]);
-                return null;
-            }
-        }.execute(currentRace);
-    }*/
-
     private static class InsertRaceAsyncTask extends AsyncTask<RoomRace, Void, Void>{
 
         private RaceDao asyncTaskDao;
@@ -135,6 +133,36 @@ public class FormulaRepository {
         protected Void doInBackground(RoomRace... ts) {
 
             asyncTaskDao.insert(ts[0]);
+            return null;
+        }
+    }
+
+    private static class InsertAllRacesResultsAsyncTask extends AsyncTask<List, Void, Void> {
+
+        private RaceResultsDao asyncTaskDao;
+
+        public InsertAllRacesResultsAsyncTask(RaceResultsDao dao) {
+            asyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(List... lists) {
+            asyncTaskDao.insertAllRacesResult(lists[0]);
+            return null;
+        }
+    }
+
+    private static class InsertQualifyingResultsAsyncTask extends AsyncTask<List, Void, Void>{
+
+        private QualifyingResultDao asyncTaskDao;
+
+        public InsertQualifyingResultsAsyncTask(QualifyingResultDao dao) {
+            asyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(List... lists) {
+            asyncTaskDao.insertAllQualifyingResults(lists[0]);
             return null;
         }
     }

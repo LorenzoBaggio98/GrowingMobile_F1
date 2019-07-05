@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.growingmobilef1.AlertReceiver;
+import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Model.Races;
 
 import java.io.ByteArrayOutputStream;
@@ -23,9 +24,9 @@ public class NotificationUtil {
 
     private Calendar mDate;
     private Context mContext;
-    private Races mRace;
+    private RoomRace mRace;
 
-    public NotificationUtil(Calendar aDate, Context context, Races race){
+    public NotificationUtil(Calendar aDate, Context context, RoomRace race){
         this.mDate = aDate;
         this.mContext = context;
         this.mRace = race;
@@ -58,11 +59,11 @@ public class NotificationUtil {
         vNotificationIntent.putExtras(vBundle);
 
         PendingIntent vBroadcast = PendingIntent.getBroadcast(mContext,
-                mRace.getRound(),
+                mRace.round,
                 vNotificationIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        if (!mRace.getNotificationScheduled()){
+        if (mRace.notification == 0){
            /* Date vDate = new Date();
             vDate.setTime(new Date().getTime());
             vDate.setMinutes(vDate.getMinutes() + 1); */
@@ -74,13 +75,13 @@ public class NotificationUtil {
             mDate.set(Calendar.MINUTE, mDate.get(Calendar.MINUTE) - 10);
             vAlarmManager.setExact(AlarmManager.RTC_WAKEUP, mDate.getTimeInMillis(), vBroadcast);*/
             Log.d("DATE_MILLIS", "Time in milliseconds: " + mDate.getTimeInMillis());
-            mRace.setNotificationScheduled(true);
+            mRace.notification = 1;
             String vToastText = mDate.get(Calendar.DAY_OF_MONTH) + " / " + mDate.get(Calendar.MONTH) + " at " + mDate.get(Calendar.HOUR_OF_DAY) + ":" + mDate.get(Calendar.MINUTE);
             Toast.makeText(mContext, "Notification scheduled for " + vToastText, Toast.LENGTH_LONG).show();
 
         } else {
             vAlarmManager.cancel(vBroadcast);
-            mRace.setNotificationScheduled(false);
+            mRace.notification = 0;
             Toast.makeText(mContext, "Notification cancelled", Toast.LENGTH_LONG).show();
         }
     }

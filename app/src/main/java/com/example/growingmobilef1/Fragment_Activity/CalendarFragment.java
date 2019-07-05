@@ -203,7 +203,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         mNotificationUtil = new NotificationUtil(
                 mCalendarRaceItemArraylist.get(aPosition).dateToCalendar(),
                 getContext(),
-                mCalendarRaceItemArraylist.get(aPosition).toRace()
+                mCalendarRaceItemArraylist.get(aPosition)
         );
         mNotificationUtil.sendNotification();
     }

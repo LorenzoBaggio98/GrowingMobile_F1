@@ -6,6 +6,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -173,8 +174,7 @@ public class ApiAsyncCallerService extends Service {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            if (mApiGenericHelper.getClass().getName().equals(DriversRankingHelper.class.getName())) {
-                Log.d("AAAAAAAAA", "Helper == DriverRankingHelper");
+            if (mApiGenericHelper.getClass().getName().equals(CalendarRaceDataHelper.class.getName())) {
                 if (mApiService.get() != null){
                     mApiService.get().populateRaceDetails();
                 }
@@ -216,11 +216,11 @@ public class ApiAsyncCallerService extends Service {
                 vJsonToParse = vApiRequestHelper.getContentFromUrl(downloadUrl);
 
                 // parse json to list
-                mHelperArrayList =  mApiGenericHelper.getArrayList(vJsonToParse);
+                mHelperArrayList = mApiGenericHelper.getArrayList(vJsonToParse);
 
-                for(int i=0; i< mHelperArrayList.size(); i++){
-                    mRepository.insertItem(mHelperArrayList.get(i));
-                }
+                if (!mHelperArrayList.isEmpty())
+                    mRepository.insertItems(mHelperArrayList);
+
             }
             return null;
         }

@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.example.growingmobilef1.Database.ModelRoom.RoomConstructor;
 
-public class ConstructorStandings {
+public class ConstructorStandings implements IListableModel {
 
     private int position;
     private String positionText;

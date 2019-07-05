@@ -2,9 +2,7 @@ package com.example.growingmobilef1.Database;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
-import android.database.sqlite.SQLiteConstraintException;
 import android.os.AsyncTask;
-import android.widget.ListView;
 
 import com.example.growingmobilef1.Database.InterfaceDao.ConstructorDao;
 import com.example.growingmobilef1.Database.InterfaceDao.DriverDao;
@@ -22,7 +20,7 @@ import java.util.List;
 public class FormulaRepository {
 
     // DAO
-    private RaceDao raceDao;
+    static private RaceDao raceDao;
     private RaceResultsDao raceResultsDao;
     private QualifyingResultDao qualifyingResultDao;
     private DriverDao driverDao;
@@ -35,8 +33,8 @@ public class FormulaRepository {
     private LiveData<List<RoomDriver>> allDrivers;
     private LiveData<List<RoomConstructor>> allConstructors;
 
-    // Constructor
-    FormulaRepository(Application application){
+    // Costruttore
+    public FormulaRepository(Application application){
         FormulaDatabase db = FormulaDatabase.getDatabase(application);
 
         raceDao = db.raceDao();
@@ -53,7 +51,6 @@ public class FormulaRepository {
 
         constructorDao = db.constructorDao();
         allConstructors = constructorDao.getAllConstructors();
-
     }
 
     // WRAPPERS
@@ -63,6 +60,16 @@ public class FormulaRepository {
 
     public LiveData<List<RoomRaceResult>> getAllRaceResults() {
         return allRaceResults;
+    }
+
+    public LiveData<List<RoomRaceResult>> getRaceResultsRequested(String raceId) {
+
+        return raceResultsDao.getRaceResultsByRaceId(raceId);
+    }
+
+    public LiveData<List<RoomQualifyingResult>> getQualResultsRequested(String raceId) {
+
+        return qualifyingResultDao.getQualResultsByRaceId(raceId);
     }
 
     public LiveData<List<RoomQualifyingResult>> getAllQualResults() {
@@ -78,12 +85,11 @@ public class FormulaRepository {
     }
 
     // ASYNC
-    public<T> void insertRace(T item){
+    public<T> void insertItem(T item){
 
         if(item instanceof RoomRace) {
             new InsertRaceAsyncTask(raceDao).execute((RoomRace)item);
         }
-
         else if(item instanceof RoomRaceResult) {
             new InsertRaceResultsAsyncTask(raceResultsDao).execute((RoomRaceResult)item);
         }
@@ -98,20 +104,25 @@ public class FormulaRepository {
         }
     }
 
-/*
-    public void populate(List<RoomConstructor> vConstructors) {
-        new PopulateDbAsync(constructorDao, vConstructors).execute();
-    }
-*/
-
     public void deleteAll() {
         new DeleteConstructorAsyncTask(constructorDao).execute();
     }
 
-
     /**
      * ASYNC TASK
      */
+    /* Metodo alternativo
+    static private void insertRace(RoomRace currentRace){
+        new AsyncTask<RoomRace, Void, Void>(){
+
+            @Override
+            protected Void doInBackground(RoomRace... roomRaces) {
+                raceDao.insert(roomRaces[0]);
+                return null;
+            }
+        }.execute(currentRace);
+    }*/
+
     private static class InsertRaceAsyncTask extends AsyncTask<RoomRace, Void, Void>{
 
         private RaceDao asyncTaskDao;
@@ -122,6 +133,7 @@ public class FormulaRepository {
 
         @Override
         protected Void doInBackground(RoomRace... ts) {
+
             asyncTaskDao.insert(ts[0]);
             return null;
         }
@@ -137,6 +149,7 @@ public class FormulaRepository {
 
         @Override
         protected Void doInBackground(RoomRaceResult... ts) {
+
             asyncTaskDao.insert(ts[0]);
             return null;
         }
@@ -183,13 +196,7 @@ public class FormulaRepository {
         @Override
         protected Void doInBackground(RoomConstructor... ts) {
 
-            //try {
-                asyncTaskDao.insert(ts[0]);
-
-            /*} catch (SQLiteConstraintException exception) {
-                asyncTaskDao.update(ts[0]);
-            }*/
-
+            asyncTaskDao.insert(ts[0]);
             return null;
         }
     }
@@ -208,8 +215,4 @@ public class FormulaRepository {
             return null;
         }
     }
-
-
-
-
 }

@@ -16,7 +16,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class Races implements Serializable {
+public class Races implements Serializable, IListableModel {
 
     private int season;
     private int round;
@@ -61,7 +61,7 @@ public class Races implements Serializable {
 
                     if (temp != null) {
                         for (int i = 0; i < temp.length(); i++) {
-                            vRaceResultsArrayList.add(RaceResults.fromJson(temp.getJSONObject(i)));
+                            vRaceResultsArrayList.add(RaceResults.fromJson(temp.getJSONObject(i), i));
                         }
                         tempRaces.setResults(vRaceResultsArrayList);
                     }
@@ -175,21 +175,6 @@ public class Races implements Serializable {
         this.dateTime = dateTime;
     }
 
-    /**
-     *
-     * @return
-     */
-    public RoomRace toRoomRace(){
-
-        RoomRace temp = new RoomRace();
-        temp.name = this.raceName;
-        temp.dateTime = getmDate() + " " + getTime();
-        temp.circuitId = this.getCircuit().getCircuitId();
-        temp.notification = this.isNotificationScheduled ? 1 : 0;
-
-        return temp;
-    }
-
     public void setmDate(String mDate) {
         this.mDate = mDate;
     }
@@ -197,4 +182,22 @@ public class Races implements Serializable {
     public void setTime(String time) {
         this.time = time;
     }
+
+    /**
+     *
+     * @return
+     */
+    public RoomRace toRoomRace(){
+
+        RoomRace temp = new RoomRace();
+
+        temp.name = this.raceName;
+        temp.round = this.round;
+        temp.dateTime = getmDate() + " " + getTime();
+        temp.circuitId = this.getCircuit().getCircuitId();
+        temp.notification = this.isNotificationScheduled ? 1 : 0;
+
+        return temp;
+    }
+
 }

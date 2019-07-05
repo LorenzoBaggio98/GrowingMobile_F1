@@ -61,6 +61,8 @@
                         android:layout_gravity="bottom"
                         android:background="@color/colorPrimaryLight"
                         android:fitsSystemWindows="false"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_scrollFlags="scroll|enterAlways|snap"
                         app:tabIndicatorColor="@android:color/white"
                         app:tabSelectedTextColor="@android:color/white" />

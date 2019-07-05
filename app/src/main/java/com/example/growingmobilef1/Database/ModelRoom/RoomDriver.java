@@ -5,6 +5,10 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import com.example.growingmobilef1.Model.IListableModel;
+
+import java.io.Serializable;
+
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "driver",
@@ -15,7 +19,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
                 onDelete = CASCADE
         )
 )
-public class RoomDriver {
+public class RoomDriver implements IListableModel, Serializable {
 
     @PrimaryKey
     @NonNull
@@ -23,7 +27,7 @@ public class RoomDriver {
 
     public String name;
     public String surname;
-
+    public String url;
     public String nationality;
     public String dateOfBirth;
 

@@ -129,6 +129,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mEmailField.setText("dalcinleonardo@gmail.com");
+                mPasswordField.setText("adminadmin");
+
                 signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
             }
         });
@@ -139,12 +142,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-/*
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(LoginActivity.this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-        */
+
         mGoogleApiClient = GoogleSignIn.getClient(this, gso);
 
         // GOOGLE LOGIN

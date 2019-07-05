@@ -46,7 +46,7 @@
             tools:layout_conversion_absoluteWidth="149dp" />
 
         <TextView
-            android:id="@+id/txt_qual_result_q1_time"
+            android:id="@+id/txt_qual_result_q3_time"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
@@ -57,7 +57,7 @@
             android:textSize="12sp"
             tools:layout_conversion_absoluteHeight="16dp"
             tools:layout_conversion_absoluteWidth="75dp" />
-
+        
         <TextView
             android:id="@+id/txt_qual_result_q2_time"
             android:layout_width="0dp"
@@ -71,7 +71,7 @@
             tools:layout_conversion_absoluteWidth="75dp" />
 
         <TextView
-            android:id="@+id/txt_qual_result_q3_time"
+            android:id="@+id/txt_qual_result_q1_time"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
@@ -82,6 +82,7 @@
             android:textSize="12sp"
             tools:layout_conversion_absoluteHeight="16dp"
             tools:layout_conversion_absoluteWidth="75dp" />
+
     </LinearLayout>
 
 

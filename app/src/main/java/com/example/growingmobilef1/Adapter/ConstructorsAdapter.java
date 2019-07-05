@@ -8,10 +8,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.growingmobilef1.Database.ModelRoom.RoomConstructor;
-import com.example.growingmobilef1.Model.ConstructorStandings;
+import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.R;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 // must be paramitized to access to viewHolder and use custom layout widjet
@@ -34,17 +35,17 @@ public class ConstructorsAdapter extends RecyclerView.Adapter<ConstructorsAdapte
         }
     }
 
-    public ConstructorsAdapter(List<RoomConstructor> vValues) {
-        mValues = vValues;
+    public ConstructorsAdapter(ArrayList<? extends IListableModel> vValues) {
+        mValues = (ArrayList<RoomConstructor>) vValues;
     }
 
     public ConstructorsAdapter() {
         mValues = new ArrayList<>();
     }
 
-    public void updateData(List<RoomConstructor> viewModels) {
+    public void updateData(List<? extends IListableModel> viewModels) {
         mValues.clear();
-        mValues.addAll(viewModels);
+        mValues.addAll((Collection<? extends RoomConstructor>) viewModels);
         notifyDataSetChanged();
     }
 

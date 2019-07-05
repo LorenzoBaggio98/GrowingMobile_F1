@@ -1,5 +1,8 @@
 package com.example.growingmobilef1.Helper;
 
+import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
+import com.example.growingmobilef1.Model.Circuit;
+import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.Model.RaceResults;
 
 import org.json.JSONArray;
@@ -9,17 +12,21 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class RaceResultsDataHelper {
+public class RaceResultsDataHelper implements IGenericHelper{
 
-    public ArrayList<RaceResults> getRaceResults(JSONObject aJsonToParse){
+    public RaceResultsDataHelper(){
 
-        ArrayList<RaceResults> vRaceResultsArray = new ArrayList<>();
+    }
+
+    @Override
+    public ArrayList<IListableModel> getArrayList(JSONObject aJsonToParse) {
+
+        ArrayList<IListableModel> vRaceResultsArray = new ArrayList<>();
 
         if(aJsonToParse != null) {
             if (aJsonToParse.length() != 0) {
 
                 try {
-                    //TODO uguale, fare uno per tutti
                     JSONObject vMRData = aJsonToParse.getJSONObject("MRData");
                     JSONObject vRaceTable = vMRData.getJSONObject("RaceTable");
 
@@ -31,6 +38,9 @@ public class RaceResultsDataHelper {
                         JSONObject vRace = vRaces.getJSONObject(i);
                         JSONArray vResults = vRace.getJSONArray("Results");
 
+                        //
+                        Circuit temp = Circuit.fromJson(vRace.getJSONObject("Circuit"));
+
                         // Iterate the Results
                         for (int j = 0; j < vResults.length(); j++) {
 
@@ -38,7 +48,7 @@ public class RaceResultsDataHelper {
                             JSONObject vSingleResult = vResults.getJSONObject(j);
 
                             // Parsing of the json to the Object
-                            RaceResults vRaceResults = RaceResults.fromJson(vSingleResult);
+                            RoomRaceResult vRaceResults = RaceResults.fromJson(vSingleResult, j).toRoomRaceResults(temp.getCircuitId());
 
                             vRaceResultsArray.add(vRaceResults);
                         }

@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.growingmobilef1.Adapter.ViewPagerAdapter;
+import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.MainActivity;
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
@@ -44,7 +45,7 @@ public class RaceDetailActivity extends AppCompatActivity {
     private TabLayout mTabLayout;
     private ImageView mImageView;
     private Toolbar mToolbar;
-    private Races mRace;
+    private RoomRace mRace;
     private NotificationUtil mNotificationUtil;
     private Button mLogOutButton;
 
@@ -54,7 +55,7 @@ public class RaceDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_race_detail);
-        mRace = new Races();
+        mRace = new RoomRace();
 
         mViewPager = findViewById(R.id.viewPager);
         mTabLayout = findViewById(R.id.tabLayout);
@@ -64,33 +65,30 @@ public class RaceDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle startBundle = intent.getExtras();
         if (startBundle != null) {
-            mRace = (Races) startBundle.getSerializable(RaceDetailActivity.RACE_ITEM);
+            mRace = (RoomRace) startBundle.getSerializable(RaceDetailActivity.RACE_ITEM);
         }
 
         ViewGroup.LayoutParams layoutParams = mToolbar.getLayoutParams();
         layoutParams.height = (int)getApplicationContext().getResources().getDimension(R.dimen.TabLayout_height);
         mToolbar.setLayoutParams(layoutParams);
 
-        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
 
         // Set the tabBar with ViewPageAdapter and TabLayout
         mPageAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         mPageAdapter.addFragment("Race", RaceResultsFragment.newInstance(mRace));
         mPageAdapter.addFragment("Qualifying", QualifyingResultsFragment.newInstance(mRace));
-        mPageAdapter.addFragment("FP1", RaceResultsFragment.newInstance(mRace));
-        mPageAdapter.addFragment("FP2", RaceResultsFragment.newInstance(mRace));
-        mPageAdapter.addFragment("FP3", RaceResultsFragment.newInstance(mRace));
 
         setPagerAdapter();
 
         // Set the Action Bar back button and the title
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(mRace.getRaceName());
+        getSupportActionBar().setTitle(mRace.name);
 
         // Set the image circuit
         try {
-            String vCircuitId = mRace.getCircuit().getCircuitId();
+            String vCircuitId = mRace.circuitId;
 
             // get input stream
             InputStream ims = getApplicationContext().getAssets().open("circuits/" + vCircuitId + ".png");
@@ -112,7 +110,7 @@ public class RaceDetailActivity extends AppCompatActivity {
         Calendar vDate =  Calendar.getInstance();
         vDate.setTime(Calendar.getInstance().getTime());
 
-        if (mRace.getDateTime().after(vDate)) {
+        if (mRace.dateToCalendar().after(vDate)) {
             getMenuInflater().inflate(R.menu.race_detail_notification, menu);
             Drawable drawable = menu.getItem(0).getIcon();
             drawable.mutate();
@@ -139,7 +137,8 @@ public class RaceDetailActivity extends AppCompatActivity {
                 return true;
 
             case R.id.race_detail_notification:
-                mNotificationUtil = new NotificationUtil(mRace.getDateTime(), this, mRace);
+                // todo
+                //mNotificationUtil = new NotificationUtil(mRace.dateToCalendar(), this, mRace);
                 manageNotificationIconColor(item);
                 return true;
             default:

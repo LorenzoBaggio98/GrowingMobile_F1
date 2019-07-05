@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 
 public class RegisterActivity extends AppCompatActivity {
+    private static final String TAG = "REGISTER_TAG";
 
     EditText mEditEmail,mEditPassword;
     Button mRegisterButton,mLoginButton;
@@ -51,16 +52,13 @@ public class RegisterActivity extends AppCompatActivity {
                 String email = mEditEmail.getText().toString();
                 String password = mEditPassword.getText().toString();
 
-                if(TextUtils.isEmpty(email)){
-                    Toast.makeText(getApplicationContext(),"Please fill in the required fields",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(TextUtils.isEmpty(password)){
-                    Toast.makeText(getApplicationContext(),"Please fill in the required fields",Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(email) || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    mEditEmail.setError("enter a valid email address");
                 }
 
-                if(password.length()<6){
-                    Toast.makeText(getApplicationContext(),"Password must be at least 6 characters",Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(password) || password.length() < 6) {
+                    mEditEmail.setError("password less than 6");
+                    return;
                 }
 
                 mFirebaseAuth.createUserWithEmailAndPassword(email,password)
@@ -84,17 +82,17 @@ public class RegisterActivity extends AppCompatActivity {
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent vIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                /*Intent vIntent = new Intent(getApplicationContext(), LoginActivity.class);
                 vIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(vIntent);
+                startActivity(vIntent);*/
                 finish();
             }
         });
 
     }
 
-    private void sendVerificationEmail()
-    {
+    private void sendVerificationEmail() {
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         user.sendEmailVerification()
@@ -104,14 +102,14 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // email sent
                             // after email is sent, logout the user and finish this activity
-                            FirebaseAuth.getInstance().signOut();
-                            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                            //FirebaseAuth.getInstance().signOut();
+                            Toast.makeText(getApplicationContext(),"verification e-mail sent",Toast.LENGTH_LONG).show();
                             finish();
                         }
                         else
                         {
                             // email not sent, so display message and restart the activity
-                            Toast.makeText(getApplicationContext(),"E-mail not sent, retry",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),"E-mail not sent, retry",Toast.LENGTH_LONG).show();
                             //restart this activity
                             overridePendingTransition(0, 0);
                             finish();

@@ -62,9 +62,7 @@ public class ApiAsyncCallerFragment extends Fragment {
         if (mJsonObjectRequest != null) {
             Volley.newRequestQueue(getContext()).add(mJsonObjectRequest);
         }
-
     }
-
 
     public void stopCall() {
         if (mJsonObjectRequest != null) {
@@ -79,7 +77,6 @@ public class ApiAsyncCallerFragment extends Fragment {
         setRetainInstance(true);
     }
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -87,7 +84,6 @@ public class ApiAsyncCallerFragment extends Fragment {
         if (getParentFragment() instanceof IOnApiCalled) {
             mElementListener = (IOnApiCalled) getParentFragment();
         }
-
     }
 
     @Override
@@ -95,4 +91,5 @@ public class ApiAsyncCallerFragment extends Fragment {
         super.onDetach();
         mElementListener = null;
     }
+
 }

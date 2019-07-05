@@ -66,7 +66,9 @@ public class RaceResultsAdapter extends RecyclerView.Adapter<RaceResultsAdapter.
                     .findFirst()
                     .orElse(null);
 
-            viewHolder.mDriver.setText(temp.name + " " + temp.surname);
+            if(temp != null) {
+                viewHolder.mDriver.setText(temp.name + " " + temp.surname);
+            }
         }
 
         viewHolder.mTime.setText(data.time != null ? data.time : "");

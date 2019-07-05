@@ -116,7 +116,6 @@ public class FormulaRepository {
     /**
      * ASYNC TASK
      */
-
     /* Metodo alternativo
     static private void insertRace(RoomRace currentRace){
         new AsyncTask<RoomRace, Void, Void>(){

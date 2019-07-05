@@ -104,6 +104,7 @@ public class DriverStandings implements Serializable {
         temp.surname = currentDriver.getGivenName();
         temp.nationality = currentDriver.getNationality();
         temp.dateOfBirth = currentDriver.getDateOfBirth();
+        temp.url = currentDriver.getUrl().toString();
 
         temp.rankPosition = this.position;
         temp.rankPoints = this.points;

@@ -32,6 +32,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.example.growingmobilef1.Fragment_Activity.ApiAsyncCallerFragment;
 import com.example.growingmobilef1.Fragment_Activity.CalendarFragment;
 import com.example.growingmobilef1.Fragment_Activity.ConstructorsRankingFragment;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String PILOTS_RANKING_FRAGMENT = "Pilots";
     private static final String CONSTRUCTORS_RANKING_FRAGMENT = "Constructors";
     private static final String SAVED_TITLE = "title of the support action bar";
+    private static final String CRASH ="CRASH" ;
 
     //FirebaseAuth mFirebaseAuth;
 
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
             switch (item.getItemId()) {
                 case R.id.tab_bar_calendar:
                     launchFragment(CALENDAR_FRAGMENT, CalendarFragment.newInstance());
@@ -86,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        Crashlytics.log("questo log proviene da MAIN ACTIVITY");
 
         // firebase auth
     /*    mFirebaseAuth = FirebaseAuth.getInstance();

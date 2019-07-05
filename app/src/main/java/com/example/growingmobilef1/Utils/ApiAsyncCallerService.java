@@ -19,6 +19,7 @@ import android.util.Log;
 import com.example.growingmobilef1.Database.FormulaDatabase;
 import com.example.growingmobilef1.Database.FormulaRepository;
 import com.example.growingmobilef1.Database.InterfaceDao.RaceDao;
+import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
 import com.example.growingmobilef1.Database.ModelRoom.RoomQualifyingResult;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Database.ViewModel.RaceResultsViewModel;
@@ -58,15 +59,27 @@ public class ApiAsyncCallerService extends Service {
     }
 
     public void populateDatabaseOnCreate(){
-        ApiAsyncCaller vRacesAsyncCaller = new ApiAsyncCaller(new CalendarRaceDataHelper(), getApplication());
+        ApiAsyncCaller vRacesAsyncCaller = new ApiAsyncCaller(
+                ApiAsyncCallerService.this,
+                new CalendarRaceDataHelper(),
+                getApplication());
         vRacesAsyncCaller.execute("https://ergast.com/api/f1/current.json");
 
-        ApiAsyncCaller vConstructorAsyncCaller = new ApiAsyncCaller(new ConstructorsDataHelper(), getApplication());
+        ApiAsyncCaller vConstructorAsyncCaller = new ApiAsyncCaller(
+                ApiAsyncCallerService.this,
+                new ConstructorsDataHelper(),
+                getApplication());
         vConstructorAsyncCaller.execute("https://ergast.com/api/f1/current/constructorStandings.json");
 
-        ApiAsyncCaller vDriverAsyncCaller = new ApiAsyncCaller(new DriversRankingHelper(), getApplication());
+        ApiAsyncCaller vDriverAsyncCaller = new ApiAsyncCaller(
+                ApiAsyncCallerService.this,
+                new DriversRankingHelper(),
+                getApplication());
         vDriverAsyncCaller.execute("https://ergast.com/api/f1/current/driverStandings.json");
 
+    }
+
+    private void populateRaceDetails(){
         populateRaceResultsOnCreate();
         populateQualifyingResultsOnCreate();
     }
@@ -81,13 +94,15 @@ public class ApiAsyncCallerService extends Service {
             public void onChanged(@Nullable List<RoomRace> roomRaces) {
                 List<RoomRace> vRoomRaceList = mRoomRaceLiveData.getValue();
 
-                RaceResultsApiAsyncCaller vRaceResultsAsyncCaller =
+                if (vRoomRaceList != null) {
+                    RaceResultsApiAsyncCaller vRaceResultsAsyncCaller =
                             new RaceResultsApiAsyncCaller(
                                     ApiAsyncCallerService.this,
                                     new RaceResultsDataHelper(),
                                     getApplication(),
                                     vRoomRaceList);
-                vRaceResultsAsyncCaller.execute("http://ergast.com/api/f1/current/%s/results.json");
+                    vRaceResultsAsyncCaller.execute("http://ergast.com/api/f1/current/%s/results.json");
+                }
             }
         });
     }
@@ -101,12 +116,14 @@ public class ApiAsyncCallerService extends Service {
             public void onChanged(@Nullable List<RoomRace> roomQualifyingResults) {
                 List<RoomRace> vRoomRaceList = mRoomRaceLiveData.getValue();
 
-                RaceResultsApiAsyncCaller vRaceResultsAsyncCaller = new RaceResultsApiAsyncCaller(
-                        ApiAsyncCallerService.this,
-                        new QualifyingResultsDataHelper(),
-                        getApplication(),
-                        vRoomRaceList);
-                vRaceResultsAsyncCaller.execute("https://ergast.com/api/f1/current/%s/qualifying.json");
+                if (vRoomRaceList != null){
+                    RaceResultsApiAsyncCaller vRaceResultsAsyncCaller = new RaceResultsApiAsyncCaller(
+                            ApiAsyncCallerService.this,
+                            new QualifyingResultsDataHelper(),
+                            getApplication(),
+                            vRoomRaceList);
+                    vRaceResultsAsyncCaller.execute("https://ergast.com/api/f1/current/%s/qualifying.json");
+                }
             }
         });
     }
@@ -123,15 +140,14 @@ public class ApiAsyncCallerService extends Service {
 
     private static class ApiAsyncCaller extends AsyncTask<String, Void, String> {
 
+        private WeakReference<ApiAsyncCallerService> mApiService;
         private JSONObject vJsonToParse;
         private ArrayList<IListableModel> mHelperArrayList;
         private IGenericHelper mApiGenericHelper;
         private FormulaRepository mRepository;
 
-        //Debug
-        private int mCounter = 0;
-
-        public ApiAsyncCaller(IGenericHelper aApiGenericHelper, Application aApplication) {
+        public ApiAsyncCaller(ApiAsyncCallerService aApiService, IGenericHelper aApiGenericHelper, Application aApplication) {
+            mApiService = new WeakReference<>(aApiService);
             mApiGenericHelper = aApiGenericHelper;
             mRepository = new FormulaRepository(aApplication);
         }
@@ -151,6 +167,20 @@ public class ApiAsyncCallerService extends Service {
                 mRepository.insertItem(mHelperArrayList.get(i));
             }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (mApiGenericHelper.getClass().getName().equals(DriversRankingHelper.class.getName())) {
+                Log.d("AAAAAAAAA", "Helper == DriverRankingHelper");
+                if (mApiService.get() != null){
+                    mApiService.get().populateRaceDetails();
+                }
+            }
+
+
         }
     }
 
@@ -202,7 +232,6 @@ public class ApiAsyncCallerService extends Service {
                 mApiService.get().removeRoomRaceListObserver();
         }
     }
-
 
     public class ApiCallerBinder extends Binder {
         public ApiAsyncCallerService getAsyncService(){

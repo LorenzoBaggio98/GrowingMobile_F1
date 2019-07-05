@@ -32,7 +32,6 @@ public class ApiAsyncCallerFragment extends Fragment {
     String url;
     IGenericHelper mApiGenericHelper;
 
-
     public interface IOnApiCalled {
         void onApiCalled(ArrayList<IListableModel> aReturnList);
     }
@@ -42,18 +41,13 @@ public class ApiAsyncCallerFragment extends Fragment {
     public static ApiAsyncCallerFragment getInstance() {
         ApiAsyncCallerFragment vFragment = new ApiAsyncCallerFragment();
         return vFragment;
-
-
     }
 
-
     public void startCall(String aUrl, IGenericHelper aApiGenericHelper) {
-
 
         this.url = aUrl;
         this.mApiGenericHelper = aApiGenericHelper;
         mJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new com.android.volley.Response.Listener<JSONObject>() {
-
 
             @Override
             public void onResponse(JSONObject response) {
@@ -63,17 +57,12 @@ public class ApiAsyncCallerFragment extends Fragment {
 
                     mHelperArrayList = mApiGenericHelper.getArrayList(jsonObject);
 
-
                     mElementListener.onApiCalled(mHelperArrayList);
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
             }
-
 
         }, new Response.ErrorListener() {
             @Override
@@ -85,9 +74,7 @@ public class ApiAsyncCallerFragment extends Fragment {
         if (mJsonObjectRequest != null) {
             Volley.newRequestQueue(getContext()).add(mJsonObjectRequest);
         }
-
     }
-
 
     public void stopCall() {
         if (mJsonObjectRequest != null) {
@@ -102,17 +89,13 @@ public class ApiAsyncCallerFragment extends Fragment {
         setRetainInstance(true);
     }
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
         if (getParentFragment() instanceof IOnApiCalled) {
             mElementListener = (IOnApiCalled) getParentFragment();
-
-
         }
-
     }
 
     @Override
@@ -120,6 +103,5 @@ public class ApiAsyncCallerFragment extends Fragment {
         super.onDetach();
         mElementListener = null;
     }
-
 
 }

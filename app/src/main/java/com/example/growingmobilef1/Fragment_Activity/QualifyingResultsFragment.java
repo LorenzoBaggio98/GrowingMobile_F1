@@ -65,6 +65,7 @@ public class QualifyingResultsFragment extends Fragment implements ApiAsyncCalle
         super.onCreate(savedInstanceState);
 
         mAdapter = new QualifyingResultsAdapter(new ArrayList<RoomQualifyingResult>(), new ArrayList<RoomDriver>());
+
         qualifyingViewModel = ViewModelProviders.of(this).get(QualifyingResultsViewModel.class);
         driverViewModel = ViewModelProviders.of(this).get(DriverViewModel.class);
 
@@ -79,6 +80,7 @@ public class QualifyingResultsFragment extends Fragment implements ApiAsyncCalle
 
                 mQualResultsArrayList = (ArrayList<RoomQualifyingResult>) roomQualifyingResults;
                 mAdapter.updateData(roomQualifyingResults);
+                listBeforeViewing();
             }
         });
 

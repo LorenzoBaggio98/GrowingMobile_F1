@@ -51,7 +51,7 @@ public abstract class FormulaDatabase extends RoomDatabase {
     // SINGLETON
     private static volatile FormulaDatabase INSTANCE;
 
-    static FormulaDatabase getDatabase(final Context context){
+    public static FormulaDatabase getDatabase(final Context context){
 
         if(!ConnectionStatusHelper.statusConnection(context)){
             Toast.makeText(context,"Non c'è connessione Internet", Toast.LENGTH_SHORT).show();

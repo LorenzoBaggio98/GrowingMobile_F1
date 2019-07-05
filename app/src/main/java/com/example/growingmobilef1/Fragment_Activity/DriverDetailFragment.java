@@ -11,10 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
-import com.example.growingmobilef1.Model.Driver;
 import com.example.growingmobilef1.R;
 
 import java.io.IOException;

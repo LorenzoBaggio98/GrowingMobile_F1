@@ -6,13 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.growingmobilef1.Database.FormulaRepository;
-import com.example.growingmobilef1.Database.InterfaceDao.DriverDao;
 import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
-import com.example.growingmobilef1.Database.ViewModel.DriverViewModel;
 import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.R;
 
@@ -70,7 +66,9 @@ public class RaceResultsAdapter extends RecyclerView.Adapter<RaceResultsAdapter.
                     .findFirst()
                     .orElse(null);
 
-            viewHolder.mDriver.setText(temp.name + " " + temp.surname);
+            if(temp != null) {
+                viewHolder.mDriver.setText(temp.name + " " + temp.surname);
+            }
         }
 
         viewHolder.mTime.setText(data.time != null ? data.time : "");

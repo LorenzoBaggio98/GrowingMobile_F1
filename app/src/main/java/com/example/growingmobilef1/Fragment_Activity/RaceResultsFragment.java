@@ -157,7 +157,6 @@ public class RaceResultsFragment extends Fragment implements ApiAsyncCallerFragm
         return vView;
     }
 
-
     @Override
     public void onDetach() {
         super.onDetach();

@@ -66,7 +66,9 @@ public class QualifyingResultsAdapter extends RecyclerView.Adapter<QualifyingRes
                     .findFirst()
                     .orElse(null);
 
-            viewHolder.mDriver.setText(temp.name + " " + temp.surname);
+            if(temp != null) {
+                viewHolder.mDriver.setText(temp.name + " " + temp.surname);
+            }
         }
 
         if(!TextUtils.isEmpty(data.q1)){

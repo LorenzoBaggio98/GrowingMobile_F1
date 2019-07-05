@@ -24,8 +24,8 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 )
 public class RoomQualifyingResult implements IListableModel {
 
-    /*public RoomQualifyingResult(int id, int position, String raceId, String driverId, String q1, String q2, String q3){
-        this.id = id;
+    /*public RoomQualifyingResult(int driverId, int position, String raceId, String driverId, String q1, String q2, String q3){
+        this.driverId = driverId;
         this.position = position;
         this.raceId = raceId;
         this.driverId = driverId;

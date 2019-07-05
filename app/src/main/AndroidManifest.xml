@@ -12,19 +12,21 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/AppTheme.SplashScreen.Base"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         >
         <activity android:name=".Fragment_Activity.DriverDetailActivity"
-            ></activity>
-        <activity android:name=".Fragment_Activity.RaceDetailActivity" />
-        <activity android:name=".Fragment_Activity.LoginActivity"
+            android:theme="@style/AppTheme"/>
+        <activity android:name=".Fragment_Activity.RaceDetailActivity"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".Fragment_Activity.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity
+            android:name=".Fragment_Activity.RegisterActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Fragment_Activity.NewPasswordActivity" />
-        <activity android:name=".Fragment_Activity.RegisterActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

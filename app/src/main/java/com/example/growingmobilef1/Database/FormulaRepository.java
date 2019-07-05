@@ -33,7 +33,6 @@ public class FormulaRepository {
     private LiveData<List<RoomDriver>> allDrivers;
     private LiveData<List<RoomConstructor>> allConstructors;
 
-
     // Costruttore
     public FormulaRepository(Application application){
         FormulaDatabase db = FormulaDatabase.getDatabase(application);
@@ -66,6 +65,11 @@ public class FormulaRepository {
     public LiveData<List<RoomRaceResult>> getRaceResultsRequested(String raceId) {
 
         return raceResultsDao.getRaceResultsByRaceId(raceId);
+    }
+
+    public LiveData<List<RaceResultsDao.RoomPodium>> getRaceResultPodium(List<String> races) {
+
+        return raceResultsDao.getRacePodium(races);
     }
 
     public LiveData<List<RoomQualifyingResult>> getQualResultsRequested(String raceId) {
@@ -112,7 +116,6 @@ public class FormulaRepository {
     /**
      * ASYNC TASK
      */
-
     /* Metodo alternativo
     static private void insertRace(RoomRace currentRace){
         new AsyncTask<RoomRace, Void, Void>(){

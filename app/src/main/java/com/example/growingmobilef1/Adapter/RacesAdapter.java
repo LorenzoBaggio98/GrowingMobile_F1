@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.growingmobilef1.Database.InterfaceDao.RaceResultsDao;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.Model.RaceResults;
@@ -26,7 +27,7 @@ import java.util.Map;
 public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> {
 
     private List<RoomRace> mRacesArrayList;
-    private Map<String, List<RaceResults>> mRaceResultsMap;
+    private Map<String, List<RaceResultsDao.RoomPodium>> mRaceResultsMap;
 
     private Context mContext;
 
@@ -40,13 +41,13 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
 
     public RacesAdapter(Context aContext,
                         ArrayList<? extends IListableModel> aData,
-                        Map<String, List<RaceResults>> aRaceResultsMap,
+                        Map<String, List<RaceResultsDao.RoomPodium>> aPodium,
                         IOnRaceClicked aListener,
                         IOnNotificationIconClicked aNotificationListener) {
 
         mContext = aContext;
+        mRaceResultsMap = aPodium;
         mRacesArrayList = (ArrayList<RoomRace>) aData;
-        mRaceResultsMap = aRaceResultsMap;
         mItemListener = aListener;
         mNotificationListener = aNotificationListener;
     }
@@ -54,15 +55,17 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
     /**
      *
      * @param aData
-     * @param aRaceResultsMap
      */
-    public void updateData(List<? extends IListableModel> aData, Map<String, List<RaceResults>> aRaceResultsMap) {
-        mRacesArrayList.clear();
-        mRacesArrayList.addAll((Collection<? extends RoomRace>) aData);
+    public void updateData(List<? extends IListableModel> aData, Map<String, List<RaceResultsDao.RoomPodium>> aRacePodium) {
 
-        if(aRaceResultsMap != null) {
+        if(aData != null) {
+            mRacesArrayList.clear();
+            mRacesArrayList.addAll((Collection<? extends RoomRace>) aData);
+        }
+
+        if(aRacePodium != null){
             mRaceResultsMap.clear();
-            mRaceResultsMap.putAll(aRaceResultsMap);
+            mRaceResultsMap.putAll(aRacePodium);
         }
 
         notifyDataSetChanged();
@@ -76,7 +79,7 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
     }
 
     // Add a list of items -- change to type used
-    public void addAll(ArrayList<RoomRace> aData, Map<String, ArrayList<RaceResults>> aRaceResultsMap) {
+    public void addAll(ArrayList<RoomRace> aData, Map<String, ArrayList<RaceResultsDao.RoomPodium>> aRaceResultsMap) {
         mRacesArrayList.addAll(aData);
         mRaceResultsMap.putAll(aRaceResultsMap);
         notifyDataSetChanged();
@@ -121,17 +124,15 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder (@NonNull ViewHolder vHolder,int position){
 
-
         Calendar vCalendarDate = mRacesArrayList.get(position).dateToCalendar();
-        int vCalendarMonth = vCalendarDate.get(Calendar.MONTH);
 
         vHolder.mRaceLabel.setText("" + mRacesArrayList.get(position).name);
 
-        // Set the podium results (if the race has already occurred) todo
+        // Set the podium results (if the race has already occurred)
         String vPositionLabelString = "";
-        if (mRaceResultsMap.containsKey(mRacesArrayList.get(position).name)) {
+        if (mRaceResultsMap.containsKey(mRacesArrayList.get(position).circuitId)) {
             for (int i = 0; i < 3; i++) {
-                String vPosition = mRaceResultsMap.get(mRacesArrayList.get(position).name).get(i).getDriver().getCode();
+                String vPosition = mRaceResultsMap.get(mRacesArrayList.get(position).circuitId).get(i).dri_code;
                 if (i < 2)
                     vPositionLabelString += vPosition + " / ";
                 else
@@ -141,13 +142,9 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
         vHolder.mPodiumLabel.setText(vPositionLabelString);
 
         // Set date and time of the race
-        if (vCalendarMonth != 10 && vCalendarMonth != 11 && vCalendarMonth != 12){
-            vHolder.mDateLabel.setText(vCalendarDate.get(Calendar.DAY_OF_MONTH) + " " +
-                    vCalendarDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
-        } else {
-            vHolder.mDateLabel.setText(vCalendarDate.get(Calendar.DAY_OF_MONTH) + " " +
-                    vCalendarDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
-        }
+        vHolder.mDateLabel.setText(vCalendarDate.get(Calendar.DAY_OF_MONTH) + " " +
+                vCalendarDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
+
         vHolder.mTimeLabel.setText(vCalendarDate.get(Calendar.HOUR_OF_DAY) + ":" + vCalendarDate.get(Calendar.MINUTE));
 
         // Change notification icon if notification is scheduled

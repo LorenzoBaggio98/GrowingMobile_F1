@@ -56,15 +56,18 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
      *
      * @param aData
      */
-    public void updateData(List<? extends IListableModel> aData) {
-        mRacesArrayList.clear();
-        mRacesArrayList.addAll((Collection<? extends RoomRace>) aData);
-        notifyDataSetChanged();
-    }
+    public void updateData(List<? extends IListableModel> aData, Map<String, List<RaceResultsDao.RoomPodium>> aRacePodium) {
 
-    public void updatePodium(Map<String, List<RaceResultsDao.RoomPodium>> aRacePodium){
-        mRaceResultsMap.clear();
-        mRaceResultsMap.putAll(aRacePodium);
+        if(aData != null) {
+            mRacesArrayList.clear();
+            mRacesArrayList.addAll((Collection<? extends RoomRace>) aData);
+        }
+
+        if(aRacePodium != null){
+            mRaceResultsMap.clear();
+            mRaceResultsMap.putAll(aRacePodium);
+        }
+
         notifyDataSetChanged();
     }
 
@@ -127,9 +130,9 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
 
         // Set the podium results (if the race has already occurred)
         String vPositionLabelString = "";
-        if (mRaceResultsMap.containsKey(mRacesArrayList.get(position).name)) {
+        if (mRaceResultsMap.containsKey(mRacesArrayList.get(position).circuitId)) {
             for (int i = 0; i < 3; i++) {
-                String vPosition = mRaceResultsMap.get(mRacesArrayList.get(position).name).get(i).dri_code;
+                String vPosition = mRaceResultsMap.get(mRacesArrayList.get(position).circuitId).get(i).dri_code;
                 if (i < 2)
                     vPositionLabelString += vPosition + " / ";
                 else

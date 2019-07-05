@@ -3,6 +3,7 @@ package com.example.growingmobilef1.Fragment_Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import com.example.growingmobilef1.Utils.NotificationUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceClicked, RacesAdapter.IOnNotificationIconClicked, ApiAsyncCallerFragment.IOnApiCalled{
 
@@ -86,13 +88,17 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
 
                 mCalendarRaceItemArraylist = (ArrayList<RoomRace>) roomRaces;
 
+                ArrayList<String> racesId = new ArrayList<>();
+
                 // Prendo il podio dei risultati
                 for (RoomRace race: roomRaces) {
-                    //getPodium(race.circuitId);
+                    racesId.add(race.circuitId);
                 }
 
+                getPodium(racesId);
+
                 // Update Race list su Adapter
-                mAdapter.updateData(roomRaces);
+                mAdapter.updateData(roomRaces, null);
                 listBeforeViewing();
 
             }
@@ -100,15 +106,32 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
 
     }
 
-    public void getPodium(String raceId){
+    public void getPodium(ArrayList<String> race){
 
-        List<RaceResultsDao.RoomPodium> podium = raceResultsViewModel.getRaceResultPodium(raceId);
+        raceResultsViewModel.getRaceResultPodium(race).observeForever( new Observer<List<RaceResultsDao.RoomPodium>>() {
+            @Override
+            public void onChanged(List<RaceResultsDao.RoomPodium> roomPodiums) {
 
-        if(podium != null && !podium.isEmpty()){
+                if(roomPodiums != null && !roomPodiums.isEmpty()){
 
-            mRaceResultsMap.put(raceId, podium);
-            mAdapter.updatePodium(mRaceResultsMap);
-        }
+                    for(int i=0; i<roomPodiums.size(); i++){
+
+                        String currentRace = roomPodiums.get(i).res_race_id;
+
+                        List<RaceResultsDao.RoomPodium> temp = roomPodiums
+                                .stream()
+                                .filter(roomPodium -> roomPodium.res_race_id.equals(currentRace))
+                                .collect(Collectors.toList());
+
+                        mRaceResultsMap.put(roomPodiums.get(i).res_race_id, temp);
+                    }
+
+                    mAdapter.updateData(null, mRaceResultsMap);
+                }
+            }
+        });
+
+
 
     }
 

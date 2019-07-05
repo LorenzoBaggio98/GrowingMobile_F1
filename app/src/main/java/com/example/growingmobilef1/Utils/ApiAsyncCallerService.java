@@ -138,6 +138,9 @@ public class ApiAsyncCallerService extends Service {
         }
     }
 
+    /**
+     * ALLA FINE CHIAMO POPULATE RACE DETAILS
+     */
     private static class ApiAsyncCaller extends AsyncTask<String, Void, String> {
 
         private WeakReference<ApiAsyncCallerService> mApiService;
@@ -174,13 +177,10 @@ public class ApiAsyncCallerService extends Service {
             super.onPostExecute(s);
 
             if (mApiGenericHelper.getClass().getName().equals(DriversRankingHelper.class.getName())) {
-                Log.d("AAAAAAAAA", "Helper == DriverRankingHelper");
                 if (mApiService.get() != null){
                     mApiService.get().populateRaceDetails();
                 }
             }
-
-
         }
     }
 

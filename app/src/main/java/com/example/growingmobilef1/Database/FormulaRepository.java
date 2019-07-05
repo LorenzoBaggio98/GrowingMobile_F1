@@ -67,9 +67,9 @@ public class FormulaRepository {
         return raceResultsDao.getRaceResultsByRaceId(raceId);
     }
 
-    public List<RaceResultsDao.RoomPodium> getRaceResultPodium(String raceId) {
+    public LiveData<List<RaceResultsDao.RoomPodium>> getRaceResultPodium(List<String> races) {
 
-        return raceResultsDao.getRacePodium(raceId);
+        return raceResultsDao.getRacePodium(races);
     }
 
     public LiveData<List<RoomQualifyingResult>> getQualResultsRequested(String raceId) {

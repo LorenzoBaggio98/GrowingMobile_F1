@@ -3,6 +3,7 @@ package com.example.growingmobilef1.Fragment_Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,11 +12,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.growingmobilef1.Adapter.QualifyingResultsAdapter;
+import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
 import com.example.growingmobilef1.Database.ModelRoom.RoomQualifyingResult;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
+import com.example.growingmobilef1.Database.ViewModel.DriverViewModel;
 import com.example.growingmobilef1.Database.ViewModel.QualifyingResultsViewModel;
 import com.example.growingmobilef1.Helper.ConnectionStatusHelper;
 import com.example.growingmobilef1.Helper.QualifyingResultsDataHelper;
@@ -24,7 +28,9 @@ import com.example.growingmobilef1.R;
 import com.example.growingmobilef1.Utils.LayoutAnimations;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class QualifyingResultsFragment extends Fragment implements ApiAsyncCallerFragment.IOnApiCalled {
 
@@ -40,8 +46,12 @@ public class QualifyingResultsFragment extends Fragment implements ApiAsyncCalle
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefresh;
 
+    private TextView dateQualifying;
+
     // Database
     private QualifyingResultsViewModel qualifyingViewModel;
+    private DriverViewModel driverViewModel;
+
     private ApiAsyncCallerFragment mApiCallerFragment;
 
     public static QualifyingResultsFragment newInstance(RoomRace aRace){
@@ -59,8 +69,10 @@ public class QualifyingResultsFragment extends Fragment implements ApiAsyncCalle
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAdapter = new QualifyingResultsAdapter(new ArrayList<RoomQualifyingResult>());
+        mAdapter = new QualifyingResultsAdapter(new ArrayList<RoomQualifyingResult>(), new ArrayList<RoomDriver>());
+
         qualifyingViewModel = ViewModelProviders.of(this).get(QualifyingResultsViewModel.class);
+        driverViewModel = ViewModelProviders.of(this).get(DriverViewModel.class);
 
         Bundle vStartBundle = getArguments();
         if(vStartBundle != null){
@@ -73,6 +85,15 @@ public class QualifyingResultsFragment extends Fragment implements ApiAsyncCalle
 
                 mQualResultsArrayList = (ArrayList<RoomQualifyingResult>) roomQualifyingResults;
                 mAdapter.updateData(roomQualifyingResults);
+                listBeforeViewing();
+            }
+        });
+
+        // Prendo tutti i driver
+        driverViewModel.getAllDriver().observe(this, new Observer<List<RoomDriver>>() {
+            @Override
+            public void onChanged(@Nullable List<RoomDriver> roomDrivers) {
+                mAdapter.addAllDriver(roomDrivers);
             }
         });
     }
@@ -84,6 +105,19 @@ public class QualifyingResultsFragment extends Fragment implements ApiAsyncCalle
 
         mRecyclerView = vView.findViewById(R.id.list_race_results);
         mSwipeRefresh = vView.findViewById(R.id.race_results_frag_swipe);
+
+        dateQualifying = vView.findViewById(R.id.race_results_date);
+        setDateQualifying();
+
+        //Set Q labels
+        TextView q1 = vView.findViewById(R.id.lblq1);
+        q1.setText("Q1");
+
+        TextView q2 = vView.findViewById(R.id.lblq2);
+        q2.setText("Q2");
+
+        TextView q3 = vView.findViewById(R.id.lblq3);
+        q3.setText("Q3");
 
         mLayoutAnimation = new LayoutAnimations();
 
@@ -137,6 +171,12 @@ public class QualifyingResultsFragment extends Fragment implements ApiAsyncCalle
     public void startCall(){
         QualifyingResultsDataHelper vDataHelper = new QualifyingResultsDataHelper();
         mApiCallerFragment.startCall("https://ergast.com/api/f1/current/"+mRace.round+"/qualifying.json", vDataHelper);
+    }
+
+    public void setDateQualifying(){
+
+        String qualifyingDate = mRace.qualifyingDate();
+        dateQualifying.setText(qualifyingDate);
     }
 
     @Override

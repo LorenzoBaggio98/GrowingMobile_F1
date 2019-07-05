@@ -12,6 +12,8 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.view.View;
+import android.widget.Toast;
 
 import com.example.growingmobilef1.Database.InterfaceDao.ConstructorDao;
 import com.example.growingmobilef1.Database.InterfaceDao.DriverDao;
@@ -24,6 +26,7 @@ import com.example.growingmobilef1.Database.ModelRoom.RoomQualifyingResult;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
 import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
+import com.example.growingmobilef1.Helper.ConnectionStatusHelper;
 import com.example.growingmobilef1.Utils.ApiAsyncCallerService;
 
 @Database(
@@ -49,6 +52,10 @@ public abstract class FormulaDatabase extends RoomDatabase {
     private static volatile FormulaDatabase INSTANCE;
 
     public static FormulaDatabase getDatabase(final Context context){
+
+        if(!ConnectionStatusHelper.statusConnection(context)){
+            Toast.makeText(context,"Non c'è connessione Internet", Toast.LENGTH_SHORT).show();
+        }
 
         if(INSTANCE == null){
             synchronized (FormulaDatabase.class){

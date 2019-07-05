@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 @Entity(tableName = "race")
@@ -64,5 +65,16 @@ public class RoomRace implements IListableModel, Serializable {
         calendar.setTime(tempDate);
 
         return calendar;
+    }
+
+    public String qualifyingDate(){
+
+        String temp;
+        Calendar today = dateToCalendar();
+        today.add(Calendar.DATE, -1);
+        temp = today.get(Calendar.DAY_OF_MONTH) + " " +
+                today.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+
+        return temp;
     }
 }

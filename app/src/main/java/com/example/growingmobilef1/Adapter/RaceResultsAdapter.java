@@ -6,8 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.growingmobilef1.Database.FormulaRepository;
+import com.example.growingmobilef1.Database.InterfaceDao.DriverDao;
+import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
+import com.example.growingmobilef1.Database.ViewModel.DriverViewModel;
 import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.R;
 
@@ -19,9 +24,11 @@ public class RaceResultsAdapter extends RecyclerView.Adapter<RaceResultsAdapter.
 
     private String firstPositionTime;
     private List<RoomRaceResult> mData;
+    private List<RoomDriver> mDriverData;
 
-    public RaceResultsAdapter(ArrayList<? extends IListableModel> aData){
+    public RaceResultsAdapter(ArrayList<? extends IListableModel> aData, ArrayList<? extends IListableModel> aDriverData){
         mData = (ArrayList<RoomRaceResult>) aData;
+        mDriverData = (ArrayList<RoomDriver>) aDriverData;
     }
 
     public void updateData(List<? extends IListableModel> aData) {
@@ -37,9 +44,8 @@ public class RaceResultsAdapter extends RecyclerView.Adapter<RaceResultsAdapter.
     }
 
     // Add a list of items -- change to type used
-    public void addAll(ArrayList<RoomRaceResult> list) {
-        mData.addAll(list);
-        notifyDataSetChanged();
+    public void addAllDriver(List<? extends IListableModel> list) {
+        mDriverData.addAll((Collection<? extends RoomDriver>) list);
     }
 
     @NonNull
@@ -56,9 +62,18 @@ public class RaceResultsAdapter extends RecyclerView.Adapter<RaceResultsAdapter.
         RoomRaceResult data = mData.get(i);
 
         viewHolder.mPosition.setText(""+data.position);
-        viewHolder.mDriver.setText(data.driverId);
-        viewHolder.mTime.setText(data.time != null ? data.time : "");
 
+        if(mDriverData != null){
+            RoomDriver temp = mDriverData
+                    .stream()
+                    .filter(driver -> driver.driverId.equals(data.driverId))
+                    .findFirst()
+                    .orElse(null);
+
+            viewHolder.mDriver.setText(temp.name + " " + temp.surname);
+        }
+
+        viewHolder.mTime.setText(data.time != null ? data.time : "");
         if(data.position != 1){
             viewHolder.mTimeSep.setText(data != null ? data.time : "");
         }else{

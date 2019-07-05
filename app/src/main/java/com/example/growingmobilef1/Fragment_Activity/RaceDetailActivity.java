@@ -72,7 +72,7 @@ public class RaceDetailActivity extends AppCompatActivity {
         layoutParams.height = (int)getApplicationContext().getResources().getDimension(R.dimen.TabLayout_height);
         mToolbar.setLayoutParams(layoutParams);
 
-        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
 
         // Set the tabBar with ViewPageAdapter and TabLayout
         mPageAdapter = new ViewPagerAdapter(getSupportFragmentManager());

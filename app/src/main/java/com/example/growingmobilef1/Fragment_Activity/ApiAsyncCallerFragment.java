@@ -1,45 +1,98 @@
+
 package com.example.growingmobilef1.Fragment_Activity;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.IGenericHelper;
 import com.example.growingmobilef1.Model.IListableModel;
 
+import org.json.JSONException;
 import org.json.JSONObject;
-import java.io.Serializable;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.List;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class ApiAsyncCallerFragment extends Fragment {
+
+    private ArrayList<IListableModel> mHelperArrayList;
+    private JsonObjectRequest mJsonObjectRequest;
+    String url;
+    IGenericHelper mApiGenericHelper;
+
 
     public interface IOnApiCalled {
         void onApiCalled(ArrayList<IListableModel> aReturnList);
     }
 
-    private IOnApiCalled mElementListener;
-    private ApiAsyncCaller mElementCaller;
+    IOnApiCalled mElementListener;
 
-    public static ApiAsyncCallerFragment getInstance(){
+    public static ApiAsyncCallerFragment getInstance() {
         ApiAsyncCallerFragment vFragment = new ApiAsyncCallerFragment();
         return vFragment;
+
+
     }
 
-    public void startCall(String aUrl, IGenericHelper aApiGenericHelper){
-        if (mElementCaller == null){
-            mElementCaller = new ApiAsyncCaller(mElementListener, aApiGenericHelper);
-            mElementCaller.execute(aUrl);
+
+    public void startCall(String aUrl, IGenericHelper aApiGenericHelper) {
+
+
+        this.url = aUrl;
+        this.mApiGenericHelper = aApiGenericHelper;
+        mJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new com.android.volley.Response.Listener<JSONObject>() {
+
+
+            @Override
+            public void onResponse(JSONObject response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(String.valueOf(response));
+
+                    mHelperArrayList = mApiGenericHelper.getArrayList(jsonObject);
+
+
+                    mElementListener.onApiCalled(mHelperArrayList);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        if (mJsonObjectRequest != null) {
+            Volley.newRequestQueue(getContext()).add(mJsonObjectRequest);
         }
+
     }
 
-    public void stopCall(){
-        if (mElementCaller != null){
-            mElementCaller.cancel(true);
-            mElementCaller = null;
+
+    public void stopCall() {
+        if (mJsonObjectRequest != null) {
+            mJsonObjectRequest.cancel();
+            mJsonObjectRequest = null;
         }
     }
 
@@ -53,12 +106,13 @@ public class ApiAsyncCallerFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (getParentFragment() instanceof IOnApiCalled){
+
+        if (getParentFragment() instanceof IOnApiCalled) {
             mElementListener = (IOnApiCalled) getParentFragment();
-            if (mElementCaller != null){
-                mElementCaller.setListener(mElementListener);
-            }
+
+
         }
+
     }
 
     @Override
@@ -67,48 +121,5 @@ public class ApiAsyncCallerFragment extends Fragment {
         mElementListener = null;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 
-    /**
-     *
-     */
-    private static class ApiAsyncCaller extends AsyncTask<String, Void, String> {
-
-        private JSONObject vJsonToParse;
-        private ArrayList<IListableModel> mHelperArrayList;
-        private IGenericHelper mApiGenericHelper;
-
-        private WeakReference<IOnApiCalled> mListener;
-
-        public ApiAsyncCaller(IOnApiCalled aCaller, IGenericHelper aApiGenericHelper) {
-            mListener = new WeakReference<>(aCaller);
-            mApiGenericHelper = aApiGenericHelper;
-        }
-
-        public void setListener(IOnApiCalled aCaller){
-            mListener = new WeakReference<>(aCaller);
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
-
-            // get json from api
-            vJsonToParse = vApiRequestHelper.getContentFromUrl(params[0]);
-
-            // parse json to list
-            mHelperArrayList =  mApiGenericHelper.getArrayList(vJsonToParse);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            if (mListener.get() != null){
-                mListener.get().onApiCalled(mHelperArrayList);
-            }
-        }
-    }
 }

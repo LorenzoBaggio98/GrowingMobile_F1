@@ -112,7 +112,7 @@ public class FormulaRepository {
      * ASYNC TASK
      */
     /* Metodo alternativo
-    static private void insertItem(RoomRace currentRace){
+    static private void insertRace(RoomRace currentRace){
         new AsyncTask<RoomRace, Void, Void>(){
 
             @Override

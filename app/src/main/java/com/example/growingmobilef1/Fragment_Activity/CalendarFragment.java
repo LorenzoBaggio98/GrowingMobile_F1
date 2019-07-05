@@ -69,7 +69,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         //
         mAdapter = new RacesAdapter(getContext(),
                 new ArrayList<RoomRace>(),
-                new HashMap<String, List<RaceResults>>(),
+                new HashMap<>(),
                 this,
                 this
         );
@@ -115,7 +115,6 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(container.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-
         mRecyclerView.setAdapter(mAdapter);
 
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -217,22 +216,6 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
         for(int i=0; i< mCalendarRaceItemArraylist.size(); i++){
             racesViewModel.insertRace(mCalendarRaceItemArraylist.get(i));
         }
-    }
-
-    void insertRaceResultsToDb(){
-
-        for(Map.Entry<String, List<RaceResults>> entry : mRaceResultsMap.entrySet()) {
-
-            // Circuit id
-            String keyCircuitId = entry.getKey();
-            List<RaceResults> valueResults = entry.getValue();
-
-            for(RaceResults results: valueResults){
-                //raceResultsViewModel.insertResults(results.toRoomRaceResults(keyCircuitId));
-            }
-
-        }
-
     }
 
     //

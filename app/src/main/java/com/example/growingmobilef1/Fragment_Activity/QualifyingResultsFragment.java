@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.growingmobilef1.Adapter.QualifyingResultsAdapter;
@@ -27,7 +28,9 @@ import com.example.growingmobilef1.R;
 import com.example.growingmobilef1.Utils.LayoutAnimations;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class QualifyingResultsFragment extends Fragment implements ApiAsyncCallerFragment.IOnApiCalled {
 
@@ -42,6 +45,8 @@ public class QualifyingResultsFragment extends Fragment implements ApiAsyncCalle
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefresh;
+
+    private TextView dateQualifying;
 
     // Database
     private QualifyingResultsViewModel qualifyingViewModel;
@@ -101,6 +106,19 @@ public class QualifyingResultsFragment extends Fragment implements ApiAsyncCalle
         mRecyclerView = vView.findViewById(R.id.list_race_results);
         mSwipeRefresh = vView.findViewById(R.id.race_results_frag_swipe);
 
+        dateQualifying = vView.findViewById(R.id.race_results_date);
+        setDateQualifying();
+
+        //Set Q labels
+        TextView q1 = vView.findViewById(R.id.lblq1);
+        q1.setText("Q1");
+
+        TextView q2 = vView.findViewById(R.id.lblq2);
+        q2.setText("Q2");
+
+        TextView q3 = vView.findViewById(R.id.lblq3);
+        q3.setText("Q3");
+
         mLayoutAnimation = new LayoutAnimations();
 
         mApiCallerFragment = (ApiAsyncCallerFragment) getFragmentManager().findFragmentByTag(QUAL_API_CALLER);
@@ -153,6 +171,12 @@ public class QualifyingResultsFragment extends Fragment implements ApiAsyncCalle
     public void startCall(){
         QualifyingResultsDataHelper vDataHelper = new QualifyingResultsDataHelper();
         mApiCallerFragment.startCall("https://ergast.com/api/f1/current/"+mRace.round+"/qualifying.json", vDataHelper);
+    }
+
+    public void setDateQualifying(){
+
+        String qualifyingDate = mRace.qualifyingDate();
+        dateQualifying.setText(qualifyingDate);
     }
 
     @Override

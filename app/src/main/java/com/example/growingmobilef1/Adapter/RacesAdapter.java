@@ -123,7 +123,6 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
 
 
         Calendar vCalendarDate = mRacesArrayList.get(position).dateToCalendar();
-        int vCalendarMonth = vCalendarDate.get(Calendar.MONTH);
 
         vHolder.mRaceLabel.setText("" + mRacesArrayList.get(position).name);
 
@@ -141,13 +140,9 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
         vHolder.mPodiumLabel.setText(vPositionLabelString);
 
         // Set date and time of the race
-        if (vCalendarMonth != 10 && vCalendarMonth != 11 && vCalendarMonth != 12){
-            vHolder.mDateLabel.setText(vCalendarDate.get(Calendar.DAY_OF_MONTH) + " " +
-                    vCalendarDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
-        } else {
-            vHolder.mDateLabel.setText(vCalendarDate.get(Calendar.DAY_OF_MONTH) + " " +
-                    vCalendarDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
-        }
+        vHolder.mDateLabel.setText(vCalendarDate.get(Calendar.DAY_OF_MONTH) + " " +
+                vCalendarDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
+
         vHolder.mTimeLabel.setText(vCalendarDate.get(Calendar.HOUR_OF_DAY) + ":" + vCalendarDate.get(Calendar.MINUTE));
 
         // Change notification icon if notification is scheduled

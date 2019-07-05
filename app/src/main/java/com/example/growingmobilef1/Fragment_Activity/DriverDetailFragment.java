@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
 import com.example.growingmobilef1.Model.Driver;
 import com.example.growingmobilef1.R;
 
@@ -41,22 +42,22 @@ public class DriverDetailFragment extends Fragment {
 
         Bundle vBundle = getArguments();
         if (vBundle != null) {
-            Driver driver = (Driver) vBundle.getSerializable(VAL_ID);
-            txtName.setText(driver.getGivenName());
-            txtSurname.setText(driver.getFamilyName());
-            txtDateOfBirth.setText(driver.getDateOfBirth());
-            txtNationality.setText(driver.getNationality());
+            RoomDriver driver = (RoomDriver) vBundle.getSerializable(VAL_ID);
+            txtName.setText(driver.name);
+            txtSurname.setText(driver.surname);
+            txtDateOfBirth.setText(driver.dateOfBirth);
+            txtNationality.setText(driver.nationality);
 
-            txtOtherInformation.setText("" + driver.getUrl());
+            txtOtherInformation.setText("" + driver.url);
             txtOtherInformation.setLinksClickable(true);
-            setImageDriver(driver.getDriverId());
+            setImageDriver(driver.driverId);
         }
 
 
         return vView;
     }
 
-    public static DriverDetailFragment newinstance(Driver driver) {
+    public static DriverDetailFragment newinstance(RoomDriver driver) {
         DriverDetailFragment vFragment = new DriverDetailFragment();
         Bundle vBundle = new Bundle();
         vBundle.putSerializable(VAL_ID, driver);

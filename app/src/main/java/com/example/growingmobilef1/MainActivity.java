@@ -38,6 +38,7 @@ import com.example.growingmobilef1.Fragment_Activity.ConstructorsRankingFragment
 import com.example.growingmobilef1.Fragment_Activity.DriversRankingFragment;
 import com.example.growingmobilef1.Fragment_Activity.LoginActivity;
 import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
+import com.example.growingmobilef1.Helper.ConnectionStatusHelper;
 import com.example.growingmobilef1.Utils.ApiAsyncCallerService;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         // firebase auth
     /*    mFirebaseAuth = FirebaseAuth.getInstance();

@@ -1,6 +1,8 @@
 package com.example.growingmobilef1.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,12 +15,14 @@ import android.widget.TextView;
 import com.example.growingmobilef1.Database.ModelRoom.RoomConstructor;
 import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
 import com.example.growingmobilef1.Database.ViewModel.DriverViewModel;
+import com.example.growingmobilef1.Fragment_Activity.DriverDetailActivity;
 import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.R;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyViewHolder> {
 
@@ -84,11 +88,18 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyViewHold
         if(mConstructorData != null){
             RoomConstructor temp = mConstructorData
                     .stream()
-                    .filter(constructor -> constructor.constructorId.equals(stand.constructorId))
+                    .filter(new Predicate<RoomConstructor>() {
+                        @Override
+                        public boolean test(RoomConstructor constructor) {
+                            return constructor.constructorId.equals(stand.constructorId);
+                        }
+                    })
                     .findFirst()
                     .orElse(null);
 
-            vHolder.mTeamLabel.setText(temp.name);
+            if(temp != null){
+                vHolder.mTeamLabel.setText(temp.name);
+            }
         }
 
         vHolder.mPointsLabel.setText(stand.rankPoints + " Pts");
@@ -102,14 +113,14 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyViewHold
             public void onClick(View v) {
 
                 //TODO commentato perchè sarà da usare RoomDriver
-                /*Driver vdriver = stand;
+                RoomDriver vdriver = stand;
 
                 Intent vIntent = new Intent(context, DriverDetailActivity.class);
                 vIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 Bundle vBundle = new Bundle();
                 vBundle.putSerializable("SAVE_ID", vdriver);
                 vIntent.putExtras(vBundle);
-                context.startActivity(vIntent);*/
+                context.startActivity(vIntent);
             }
         });
 

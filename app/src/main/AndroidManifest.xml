@@ -15,7 +15,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Fragment_Activity.DriverDetailActivity"></activity>
+        <activity android:name=".Fragment_Activity.DriverDetailActivity"
+            ></activity>
         <activity android:name=".Fragment_Activity.RaceDetailActivity" />
         <activity android:name=".Fragment_Activity.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar" />

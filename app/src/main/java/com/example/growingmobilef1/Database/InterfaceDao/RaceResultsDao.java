@@ -25,4 +25,7 @@ public interface RaceResultsDao {
 
     @Query("SELECT * FROM race_results WHERE raceId = :raceId")
     LiveData<List<RoomRaceResult>> getRaceResultsByRaceId(String raceId);
+
+    @Query("SELECT * FROM race_results WHERE raceId = :raceId LIMIT 3")
+    LiveData<List<RoomRaceResult>> getRacePodium(String raceId);
 }

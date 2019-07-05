@@ -20,6 +20,7 @@ public class DriverDetailActivity extends AppCompatActivity {
 
     private static final String DETAILDRIVER = "DETAIL DRIVER";
     private static final String TIME ="Time" ;
+   // private static final String PROVA ="WWW" ;
     private DriverDetailFragment mDriverDetailFragment;
     private static final String FRAGMENT_DETAGLIO="FRAGMENT_DETAGLIO";
     private RoomDriver mDriver;
@@ -56,7 +57,8 @@ public class DriverDetailActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
-
+            //    Crashlytics.setString(PROVA," prova crashylitics");
+//Crashlytics.getInstance().crash();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

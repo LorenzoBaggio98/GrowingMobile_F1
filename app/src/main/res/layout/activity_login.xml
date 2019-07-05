@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:orientation="vertical" android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:gravity="center|bottom"
-android:padding="20dp"
-android:background="#ff5a51">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:padding="20dp"
+    android:background="#ff5a51"
+    >
 
 
-<android.support.design.widget.TextInputLayout
-    android:layout_height="wrap_content"
-    android:theme="@style/EditTextTheme"
-    android:layout_width="match_parent">
+    <ImageView
+        android:id="@+id/imgView_logo"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        app:srcCompat="@drawable/ic_formula1_logo_black" />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_height="wrap_content"
+        android:theme="@style/EditTextTheme"
+        android:layout_width="match_parent">
 
     <EditText
         android:id="@+id/editText_email"
@@ -22,7 +30,8 @@ android:background="#ff5a51">
         android:textColorHint="@color/white"
         android:inputType="textEmailAddress"
         android:textColor="@color/white"
-        android:textSize="18sp" />
+        android:ems="10"
+        />
 
 </android.support.design.widget.TextInputLayout>
 
@@ -42,12 +51,13 @@ android:background="#ff5a51">
             android:hint="Password"
             android:inputType="textPassword"
             android:textColor="@color/white"
-            android:textSize="18sp"
-            android:theme="@style/EditTextTheme" />
+            android:theme="@style/EditTextTheme"
+            />
 
     </android.support.design.widget.TextInputLayout>
 
 <LinearLayout
+    android:id="@+id/topLayout"
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:orientation="horizontal"
@@ -62,7 +72,8 @@ android:background="#ff5a51">
         android:textAllCaps="true"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
-        android:background="#912d2d"/>
+        android:background="#912d2d"
+        />
 
     <Button
         android:text="Register"
@@ -73,57 +84,59 @@ android:background="#ff5a51">
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:textColor="@color/white"
-        android:background="#912d2d"/>
-
-    <!--
-    <TextView android:id="@+id/btn_register"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:text="No account yet? Create one"
-        android:gravity="center"
-        android:textSize="16dip"/>-->
+        android:background="#912d2d"
+        />
 </LinearLayout>
 
-<Button
-    android:text="I forgot password"
-    android:layout_width="200dp"
-    android:layout_height="wrap_content"
-    android:textAllCaps="false"
-    android:id="@+id/btn_pw_forgotten"
-    android:background="@null"
-    android:textColor="@color/white"
-    android:layout_marginBottom="8dp"
-    />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="161dp"
+        android:orientation="vertical"
+        android:id="@+id/bottomLayout"
+        android:gravity="center|bottom">
 
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="--------------OR---------------"
-    android:gravity="center"
-    android:textColor="#d8d8d8"/>
+        <Button
+            android:id="@+id/btn_pw_forgotten"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="8dp"
+            android:background="@null"
+            android:text="I forgot password"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            />
 
+        <TextView
+            android:id="@+id/textOr"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:gravity="center"
+            android:text="--------------OR---------------"
+            android:textColor="#d8d8d8"
+            />
 
+        <Button
+            android:id="@+id/btn_signin_google"
+            android:layout_width="250dp"
+            android:layout_height="38dp"
+            android:layout_marginTop="10dp"
+            android:background="@null"
+            android:drawableLeft="@drawable/ic_google"
+            android:text="Login with google"
+            android:textColor="@color/white"
+            />
 
-<Button
-    android:id="@+id/btn_signin_google"
-    android:layout_width="250dp"
-    android:layout_height="38dp"
-    android:layout_marginTop="10dp"
-    android:background="@null"
-    android:drawableLeft="@drawable/ic_google"
-    android:text="Login with google"
-    android:textColor="@color/white" />
-
-<Button
-    android:id="@+id/btn_signin_facebook"
-    android:layout_width="250dp"
-    android:layout_height="38dp"
-    android:layout_marginTop="15dp"
-    android:background="@null"
-    android:drawableLeft="@drawable/com_facebook_button_icon"
-    android:text="Login with facebook"
-    android:textColor="@color/white" />
+        <Button
+            android:id="@+id/btn_signin_facebook"
+            android:layout_width="250dp"
+            android:layout_height="38dp"
+            android:layout_marginTop="15dp"
+            android:background="@null"
+            android:drawableLeft="@drawable/com_facebook_button_icon"
+            android:text="Login with facebook"
+            android:textColor="@color/white"
+             />
+    </LinearLayout>
 
 
 </LinearLayout>

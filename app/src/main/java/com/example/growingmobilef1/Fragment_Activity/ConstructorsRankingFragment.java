@@ -100,6 +100,7 @@ public class ConstructorsRankingFragment extends Fragment {
                 if (vConstructors != null) {
                     mPgsBar.setVisibility(vView.GONE);
                     ((ConstructorsAdapter)mAdapter).updateData(vConstructors);
+                    mLayoutAnimation.runLayoutAnimation(mRecyclerView);
                 } else {
                     mPgsBar.setVisibility(vView.VISIBLE);
                 }
@@ -154,10 +155,6 @@ public class ConstructorsRankingFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String result) {
-
-            ((ConstructorsAdapter)mAdapter).updateData(mRoomConstructorsList);
-
-            mLayoutAnimation.runLayoutAnimation(mRecyclerView);
 
             if(vJsonToParse == null) {
                 Toast.makeText(getActivity(), "Can't fetch ranking, check internet connection", Toast.LENGTH_LONG);

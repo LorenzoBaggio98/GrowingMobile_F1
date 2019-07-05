@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         BottomNavigationView navView = findViewById(R.id.main_act_nav_view);
-        //mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        //mToolbar = (Toolbar) findViewById(R.driverId.toolbar);
 
         //setSupportActionBar(mToolbar);
 

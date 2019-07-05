@@ -76,7 +76,7 @@ android:background="#ff5a51">
         android:background="#912d2d"/>
 
     <!--
-    <TextView android:id="@+id/btn_register"
+    <TextView android:driverId="@+driverId/btn_register"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"

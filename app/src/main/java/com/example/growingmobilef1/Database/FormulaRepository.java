@@ -33,7 +33,6 @@ public class FormulaRepository {
     private LiveData<List<RoomDriver>> allDrivers;
     private LiveData<List<RoomConstructor>> allConstructors;
 
-
     // Costruttore
     public FormulaRepository(Application application){
         FormulaDatabase db = FormulaDatabase.getDatabase(application);
@@ -66,6 +65,11 @@ public class FormulaRepository {
     public LiveData<List<RoomRaceResult>> getRaceResultsRequested(String raceId) {
 
         return raceResultsDao.getRaceResultsByRaceId(raceId);
+    }
+
+    public List<RaceResultsDao.RoomPodium> getRaceResultPodium(String raceId) {
+
+        return raceResultsDao.getRacePodium(raceId);
     }
 
     public LiveData<List<RoomQualifyingResult>> getQualResultsRequested(String raceId) {

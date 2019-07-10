@@ -98,9 +98,7 @@ public class AlertReceiver extends BroadcastReceiver {
         }
 
         notificationManager.notify(0, notification);
-
-
-
+        mRaceItem.notification = 0;
     }
 
 }

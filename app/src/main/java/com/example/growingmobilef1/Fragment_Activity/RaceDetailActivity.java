@@ -112,7 +112,7 @@ public class RaceDetailActivity extends AppCompatActivity {
     }
 
     // Load the notification icon only if the race hasn't happened yet
-    @Override
+   /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Calendar vDate =  Calendar.getInstance();
         vDate.setTime(Calendar.getInstance().getTime());
@@ -125,7 +125,7 @@ public class RaceDetailActivity extends AppCompatActivity {
         }
 
         return super.onCreateOptionsMenu(menu);
-    }
+    }*/
 
     /**
      * Back to Main Activity
@@ -134,8 +134,8 @@ public class RaceDetailActivity extends AppCompatActivity {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
+       /* switch (item.getItemId()) {
+            case android.R.id.home: */
 
                 Intent intent = new Intent(RaceDetailActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -143,14 +143,14 @@ public class RaceDetailActivity extends AppCompatActivity {
                 finish();
                 return true;
 
-            case R.id.race_detail_notification:
+        /*    case R.id.race_detail_notification:
                 // todo
                 //mNotificationUtil = new NotificationUtil(mRace.dateToCalendar(), this, mRace);
                 manageNotificationIconColor(item);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
+        }*/
     }
 
     // TODO: Manage the notificaiton icon colors - need to save the scheduled notifications somewhere

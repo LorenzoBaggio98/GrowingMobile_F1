@@ -78,10 +78,8 @@ public class NotificationUtil {
             Log.d("DATE_MILLIS", "Time in milliseconds: " + mDate.getTimeInMillis());
             String vToastText = mDate.get(Calendar.DAY_OF_MONTH) + " / " + mDate.get(Calendar.MONTH) + " at " + mDate.get(Calendar.HOUR_OF_DAY) + ":" + mDate.get(Calendar.MINUTE);
             Toast.makeText(mContext, "Notification scheduled for " + vToastText, Toast.LENGTH_LONG).show();
-
         } else {
             vAlarmManager.cancel(vPendingIntent);
-            mRace.notification = 0;
             Toast.makeText(mContext, "Notification cancelled", Toast.LENGTH_LONG).show();
         }
     }

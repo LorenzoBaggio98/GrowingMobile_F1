@@ -134,6 +134,27 @@ public class DriversRankingFragment extends Fragment  implements ApiAsyncCallerF
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        firstCall();
+    }
+
+    private void firstCall(){
+        if (ConnectionStatusHelper.statusConnection(getContext())){
+            if (mApiCallerFragment == null){
+                launchApiCallerFragment();
+            }
+            startCall();
+
+        }else{
+            Toast.makeText(getContext(),"Non c'è connessione Internet", Toast.LENGTH_SHORT).show();
+            mProgressBar.setVisibility(View.GONE);
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
 

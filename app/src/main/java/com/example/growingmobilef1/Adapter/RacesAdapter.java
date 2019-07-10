@@ -26,6 +26,7 @@ import java.util.Map;
 
 public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> {
 
+    private int offsetOccurred = 0;
     private List<RoomRace> mRacesArrayList;
     private Map<String, List<RaceResultsDao.RoomPodium>> mRaceResultsMap;
 
@@ -97,6 +98,7 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
         if (raceMilliSecondDate > vCalendar.getTimeInMillis()) {
             return RACE_NOT_OCCURRED;
         } else {
+            offsetOccurred = position;
             return RACE_OCCURED;
         }
     }
@@ -157,6 +159,10 @@ public class RacesAdapter extends RecyclerView.Adapter<RacesAdapter.ViewHolder> 
     @Override
     public int getItemCount () {
         return mRacesArrayList.size();
+    }
+
+    public int getOffsetOccurred(){
+        return offsetOccurred;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

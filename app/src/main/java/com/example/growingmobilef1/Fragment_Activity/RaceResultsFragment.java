@@ -158,6 +158,26 @@ public class RaceResultsFragment extends Fragment implements ApiAsyncCallerFragm
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        firstCall();
+    }
+
+    private void firstCall(){
+        if (ConnectionStatusHelper.statusConnection(getContext())){
+            if (mApiCallerFragment == null){
+                launchApiCallerFragment();
+            }
+            startCall();
+
+        }else{
+            Toast.makeText(getContext(),"Non c'è connessione Internet", Toast.LENGTH_SHORT).show();
+            mSwipeRefresh.setRefreshing(false);
+        }
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
 

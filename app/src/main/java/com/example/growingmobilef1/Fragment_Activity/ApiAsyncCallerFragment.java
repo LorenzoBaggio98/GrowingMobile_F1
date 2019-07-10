@@ -60,7 +60,10 @@ public class ApiAsyncCallerFragment extends Fragment {
         });
 
         if (mJsonObjectRequest != null) {
-            Volley.newRequestQueue(getContext()).add(mJsonObjectRequest);
+
+            if(getContext() != null) {
+                Volley.newRequestQueue(getContext()).add(mJsonObjectRequest);
+            }
         }
     }
 

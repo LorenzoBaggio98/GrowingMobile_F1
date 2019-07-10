@@ -23,8 +23,6 @@ public class DriverDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_detail);
 
-
-
         Bundle vBundle=getIntent().getExtras();
         if (vBundle !=null){
            mDriver = (RoomDriver) vBundle.getSerializable("SAVE_ID");
@@ -42,9 +40,8 @@ public class DriverDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(mDriver.name);
 
-
-
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

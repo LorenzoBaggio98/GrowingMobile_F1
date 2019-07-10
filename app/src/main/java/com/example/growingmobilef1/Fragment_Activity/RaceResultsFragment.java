@@ -23,14 +23,8 @@ import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
 import com.example.growingmobilef1.Database.ViewModel.DriverViewModel;
 import com.example.growingmobilef1.Database.ViewModel.RaceResultsViewModel;
 import com.example.growingmobilef1.Helper.ConnectionStatusHelper;
-import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
-import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.RaceResultsDataHelper;
 import com.example.growingmobilef1.Model.IListableModel;
-import com.example.growingmobilef1.Model.ConstructorStandings;
-import com.example.growingmobilef1.Model.IListableModel;
-import com.example.growingmobilef1.Model.RaceResults;
-import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
 import com.example.growingmobilef1.Utils.LayoutAnimations;
 
@@ -155,6 +149,26 @@ public class RaceResultsFragment extends Fragment implements ApiAsyncCallerFragm
         });
 
         return vView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        firstCall();
+    }
+
+    private void firstCall(){
+        if (ConnectionStatusHelper.statusConnection(getContext())){
+            if (mApiCallerFragment == null){
+                launchApiCallerFragment();
+            }
+            startCall();
+
+        }else{
+            Toast.makeText(getContext(),"Non c'è connessione Internet", Toast.LENGTH_SHORT).show();
+            mSwipeRefresh.setRefreshing(false);
+        }
     }
 
     @Override

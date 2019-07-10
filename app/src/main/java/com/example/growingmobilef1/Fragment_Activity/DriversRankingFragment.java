@@ -1,9 +1,7 @@
 package com.example.growingmobilef1.Fragment_Activity;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,20 +17,14 @@ import android.widget.Toast;
 import com.example.growingmobilef1.Adapter.DriverAdapter;
 import com.example.growingmobilef1.Database.ModelRoom.RoomConstructor;
 import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
-import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Database.ViewModel.ConstructorViewModel;
 import com.example.growingmobilef1.Database.ViewModel.DriverViewModel;
-import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.ConnectionStatusHelper;
-import com.example.growingmobilef1.Helper.ConstructorsDataHelper;
 import com.example.growingmobilef1.Helper.DriversRankingHelper;
-import com.example.growingmobilef1.Model.DriverStandings;
 import com.example.growingmobilef1.Model.IListableModel;
 import com.example.growingmobilef1.R;
 import com.example.growingmobilef1.Utils.LayoutAnimations;
-import org.json.JSONObject;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,6 +123,27 @@ public class DriversRankingFragment extends Fragment  implements ApiAsyncCallerF
         });
 
         return vView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        firstCall();
+    }
+
+    private void firstCall(){
+        if (ConnectionStatusHelper.statusConnection(getContext())){
+            if (mApiCallerFragment == null){
+                launchApiCallerFragment();
+            }
+            startCall();
+
+        }else{
+            Toast.makeText(getContext(),"Non c'è connessione Internet", Toast.LENGTH_SHORT).show();
+            mProgressBar.setVisibility(View.GONE);
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     @Override

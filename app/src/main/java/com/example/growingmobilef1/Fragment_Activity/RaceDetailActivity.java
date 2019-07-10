@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.example.growingmobilef1.Adapter.ViewPagerAdapter;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Database.ViewModel.RacesViewModel;
@@ -44,6 +45,7 @@ public class RaceDetailActivity extends AppCompatActivity {
     public static final String REMOVE_NOTIFICATION = "The activity was opened from a notification, remove that from the db";
 
     private static final String ERROR_TAG = "ERROR_TAG";
+
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private ImageView mImageView;
@@ -141,6 +143,8 @@ public class RaceDetailActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
+
+
                 return true;
 
         /*    case R.id.race_detail_notification:

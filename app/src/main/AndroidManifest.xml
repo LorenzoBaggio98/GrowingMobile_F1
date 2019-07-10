@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.SplashScreen.Base"
         android:usesCleartextTraffic="true"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning"
+        >
         <activity android:name=".Fragment_Activity.DriverDetailActivity"
             android:theme="@style/AppTheme"/>
         <activity android:name=".Fragment_Activity.RaceDetailActivity"
@@ -54,7 +55,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".Utils.ApiAsyncCallerService"/>
+        <service android:name=".Utils.ApiAsyncCallerService1"/>
     </application>
 
 </manifest>

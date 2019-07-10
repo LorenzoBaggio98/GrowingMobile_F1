@@ -37,7 +37,6 @@ public class DriverDetailFragment extends Fragment {
         txtOtherInformation = vView.findViewById(R.id.txtOtherInfomation);
         imgImageDriver=vView.findViewById(R.id.imageViewDrivers);
 
-
         Bundle vBundle = getArguments();
         if (vBundle != null) {
             RoomDriver driver = (RoomDriver) vBundle.getSerializable(VAL_ID);

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -101,12 +102,14 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
                 // Update Race list su Adapter
                 mAdapter.updateData(roomRaces, null);
                 listBeforeViewing();
-
             }
         });
-
     }
 
+    /**
+     * Recupero il Podio per le gare passate
+     * @param race Lista di Race_id di tutte le gare, passata per controllare i risultati di ogni gara
+     */
     public void getPodium(ArrayList<String> race){
 
         raceResultsViewModel.getRaceResultPodium(race).observeForever( new Observer<List<RaceResultsDao.RoomPodium>>() {
@@ -173,7 +176,29 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
                 }
             }
         });
+
         return vView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        firstCall();
+    }
+
+    private void firstCall(){
+        if (ConnectionStatusHelper.statusConnection(getContext())){
+            if (mApiCallerFragment == null){
+                launchApiCallerFragment();
+            }
+            startCall();
+
+        }else{
+            Toast.makeText(getContext(),"Non c'è connessione Internet", Toast.LENGTH_SHORT).show();
+            mPgsBar.setVisibility(View.GONE);
+            mSwipeRefresh.setRefreshing(false);
+        }
     }
 
     @Override
@@ -266,9 +291,22 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
 
     //
     public void listBeforeViewing(){
+
         mPgsBar.setVisibility(View.GONE);
         mLayoutAnimations.runLayoutAnimation(mRecyclerView);
         mSwipeRefresh.setRefreshing(false);
+    }
+
+    public void scrollTo(){
+
+        RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(getContext()) {
+            @Override protected int getVerticalSnapPreference() {
+                return LinearSmoothScroller.SNAP_TO_START;
+            }
+        };
+
+        smoothScroller.setTargetPosition(mAdapter.getOffsetOccurred());
+        mLayoutManager.startSmoothScroll(smoothScroller);
     }
 
     // Eseguire la chiamata per ricevere i dati da Ergast

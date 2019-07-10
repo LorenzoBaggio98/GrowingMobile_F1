@@ -123,6 +123,26 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
         return vView;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        firstCall();
+    }
+
+    private void firstCall(){
+        if (ConnectionStatusHelper.statusConnection(getContext())){
+            if (mApiCallerFragment == null){
+                launchApiCallerFragment();
+            }
+            startCall();
+
+        }else{
+            Toast.makeText(getContext(),"Non c'è connessione Internet", Toast.LENGTH_SHORT).show();
+            mPgsBar.setVisibility(View.GONE);
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
     private void launchApiCallerFragment(){
         FragmentTransaction vFT = getChildFragmentManager().beginTransaction();
         mApiCallerFragment = ApiAsyncCallerFragment.getInstance();

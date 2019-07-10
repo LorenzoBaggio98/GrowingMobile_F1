@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 
 import com.example.growingmobilef1.Database.FormulaRepository;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
@@ -23,6 +24,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.util.Date;
 
 public class AlertReceiver extends BroadcastReceiver {
 
@@ -69,21 +71,22 @@ public class AlertReceiver extends BroadcastReceiver {
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(vNotificationIntent);
 
-        PendingIntent vPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent vPendingIntent = stackBuilder.getPendingIntent(mRaceItem.round, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Notification.Builder builder = new Notification.Builder(context);
-
-        Notification notification = builder.setContentTitle("GrowingMobile F1")
-                .setContentText(mRaceItem.name + " starting in 10 minutes!")
-                .setTicker("New Growing Mobile F1 Alert!")
+        NotificationCompat.Builder vNotificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("GrowingMobile F1")
+                .setContentText(mRaceItem.name + " starting in 10 minutes!")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                // Set the intent that will fire when the user taps the notification
                 .setContentIntent(vPendingIntent)
-                .build();
+                .setGroup("GrowingMobileFormula1")
+                .setGroupSummary(true)
+                .setAutoCancel(true);
 
-        notification.flags = Notification.FLAG_AUTO_CANCEL;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder.setChannelId(CHANNEL_ID);
+            //builder.setChannelId(CHANNEL_ID);
         }
 
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -97,7 +100,11 @@ public class AlertReceiver extends BroadcastReceiver {
             notificationManager.createNotificationChannel(channel);
         }
 
-        notificationManager.notify(0, notification);
+        // Create a random not repeatable number to display multiple notifications
+        int vRandomNotRepeatable = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
+        notificationManager.notify(vRandomNotRepeatable, vNotificationBuilder.build());
+
+        // set the notification in the database to 0
         mRaceItem.notification = 0;
     }
 

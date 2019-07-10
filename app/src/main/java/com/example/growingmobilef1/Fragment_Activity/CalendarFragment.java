@@ -79,6 +79,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
                 this
         );
 
+
         // ViewModel creato da Provider
         racesViewModel = ViewModelProviders.of(this).get(RacesViewModel.class);
         raceResultsViewModel = ViewModelProviders.of(this).get(RaceResultsViewModel.class);

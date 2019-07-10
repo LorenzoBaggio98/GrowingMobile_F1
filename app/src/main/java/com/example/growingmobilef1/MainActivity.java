@@ -12,9 +12,14 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.crashlytics.android.Crashlytics;
 import com.example.growingmobilef1.Fragment_Activity.CalendarFragment;
 import com.example.growingmobilef1.Fragment_Activity.ConstructorsRankingFragment;
 import com.example.growingmobilef1.Fragment_Activity.DriversRankingFragment;
+import com.google.android.gms.auth.api.Auth;
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -55,6 +60,13 @@ public class MainActivity extends SplashActivity {
         BottomNavigationView navView = findViewById(R.id.main_act_nav_view);
         //mToolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(mToolbar);
+
+       if( FirebaseAuth.getInstance().getCurrentUser() != null)
+       {
+           Log.d("TAG",FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString());
+          // Crashlytics.setUserIdentifier();
+       }
+
 
         if (savedInstanceState == null){
             launchFragment(CALENDAR_FRAGMENT, CalendarFragment.newInstance());

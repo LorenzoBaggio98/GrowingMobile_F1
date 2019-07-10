@@ -23,14 +23,8 @@ import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
 import com.example.growingmobilef1.Database.ViewModel.DriverViewModel;
 import com.example.growingmobilef1.Database.ViewModel.RaceResultsViewModel;
 import com.example.growingmobilef1.Helper.ConnectionStatusHelper;
-import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
-import com.example.growingmobilef1.Helper.ApiRequestHelper;
 import com.example.growingmobilef1.Helper.RaceResultsDataHelper;
 import com.example.growingmobilef1.Model.IListableModel;
-import com.example.growingmobilef1.Model.ConstructorStandings;
-import com.example.growingmobilef1.Model.IListableModel;
-import com.example.growingmobilef1.Model.RaceResults;
-import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.R;
 import com.example.growingmobilef1.Utils.LayoutAnimations;
 

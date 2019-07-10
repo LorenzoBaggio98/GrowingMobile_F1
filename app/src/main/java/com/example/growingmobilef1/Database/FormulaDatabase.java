@@ -9,10 +9,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
-import android.view.View;
 import android.widget.Toast;
 
 import com.example.growingmobilef1.Database.InterfaceDao.ConstructorDao;
@@ -25,9 +23,8 @@ import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
 import com.example.growingmobilef1.Database.ModelRoom.RoomQualifyingResult;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRaceResult;
-import com.example.growingmobilef1.Helper.CalendarRaceDataHelper;
 import com.example.growingmobilef1.Helper.ConnectionStatusHelper;
-import com.example.growingmobilef1.Utils.ApiAsyncCallerService;
+import com.example.growingmobilef1.Utils.ApiAsyncCallerService1;
 
 @Database(
         entities = {
@@ -76,8 +73,8 @@ public abstract class FormulaDatabase extends RoomDatabase {
                                     ServiceConnection mConnection = new ServiceConnection() {
                                         @Override
                                         public void onServiceConnected(ComponentName name, IBinder service) {
-                                           final ApiAsyncCallerService mAsyncCallerService =
-                                                   ((ApiAsyncCallerService.ApiCallerBinder)service).getAsyncService();
+                                           final ApiAsyncCallerService1 mAsyncCallerService =
+                                                   ((ApiAsyncCallerService1.ApiCallerBinder)service).getAsyncService();
 
                                            mAsyncCallerService.populateDatabaseOnCreate();
                                         }
@@ -88,7 +85,7 @@ public abstract class FormulaDatabase extends RoomDatabase {
                                         }
                                     };
 
-                                    Intent vIntent = new Intent(context, ApiAsyncCallerService.class);
+                                    Intent vIntent = new Intent(context, ApiAsyncCallerService1.class);
                                     vIntent.setPackage(context.getPackageName());
                                     context.bindService(vIntent, mConnection, Context.BIND_AUTO_CREATE);
                                 }

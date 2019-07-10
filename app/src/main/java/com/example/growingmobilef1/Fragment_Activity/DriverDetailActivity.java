@@ -5,15 +5,22 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
 import com.example.growingmobilef1.Model.Driver;
 import com.example.growingmobilef1.R;
 
+import java.util.Calendar;
+
 public class DriverDetailActivity extends AppCompatActivity {
 
+    private static final String DETAILDRIVER = "DETAIL DRIVER";
+    private static final String TIME ="Time" ;
+   // private static final String PROVA ="WWW" ;
     private DriverDetailFragment mDriverDetailFragment;
     private static final String FRAGMENT_DETAGLIO="FRAGMENT_DETAGLIO";
     private RoomDriver mDriver;
@@ -47,8 +54,8 @@ public class DriverDetailActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
-
-
+            //    Crashlytics.setString(PROVA," prova crashylitics");
+//Crashlytics.getInstance().crash();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

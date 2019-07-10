@@ -2,7 +2,10 @@ package com.example.growingmobilef1.Fragment_Activity;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.arch.persistence.room.Room;
+import android.arch.persistence.room.RoomDatabase;
 import android.os.Bundle;
+import android.os.UserHandle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -14,7 +17,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.bugfender.sdk.Bugfender;
 import com.example.growingmobilef1.Adapter.DriverAdapter;
+import com.example.growingmobilef1.Database.FormulaDatabase;
 import com.example.growingmobilef1.Database.ModelRoom.RoomConstructor;
 import com.example.growingmobilef1.Database.ModelRoom.RoomDriver;
 import com.example.growingmobilef1.Database.ViewModel.ConstructorViewModel;
@@ -27,6 +33,8 @@ import com.example.growingmobilef1.Utils.LayoutAnimations;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class DriversRankingFragment extends Fragment  implements ApiAsyncCallerFragment.IOnApiCalled{
 
@@ -55,6 +63,7 @@ public class DriversRankingFragment extends Fragment  implements ApiAsyncCallerF
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         vDriversAdapter = new DriverAdapter(new ArrayList<RoomDriver>(), getContext(), new ArrayList<RoomConstructor>());
 
@@ -87,6 +96,8 @@ public class DriversRankingFragment extends Fragment  implements ApiAsyncCallerF
         if (mApiCallerFragment == null){
             launchApiCallerFragment();
         }
+        Bugfender.d("Test", "Hello world!");
+        Bugfender.sendIssueReturningUrl("Title", "Detail");
 
         mRecyclerViewList = vView.findViewById(R.id.recyclerViewPiloti);
         mProgressBar = vView.findViewById(R.id.frag_calendar_progress_bar);

@@ -5,13 +5,16 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
+import android.arch.lifecycle.LiveData;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.example.growingmobilef1.Database.FormulaRepository;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
+import com.example.growingmobilef1.Database.ViewModel.RacesViewModel;
 import com.example.growingmobilef1.Fragment_Activity.RaceDetailActivity;
 import com.example.growingmobilef1.Model.Races;
 import com.example.growingmobilef1.Utils.NotificationUtil;
@@ -58,6 +61,7 @@ public class AlertReceiver extends BroadcastReceiver {
             // Pass the Race detail object to the activity opened on notification click
             Bundle vRaceFragmentBundle = new Bundle();
             vRaceFragmentBundle.putSerializable(RaceDetailActivity.RACE_ITEM, mRaceItem);
+            vRaceFragmentBundle.putInt(RaceDetailActivity.REMOVE_NOTIFICATION, 0);
             vNotificationIntent.putExtras(vRaceFragmentBundle);
         }
 
@@ -95,5 +99,8 @@ public class AlertReceiver extends BroadcastReceiver {
 
         notificationManager.notify(0, notification);
 
+
+
     }
+
 }

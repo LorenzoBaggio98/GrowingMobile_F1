@@ -91,7 +91,14 @@ public class FormulaRepository {
         return allConstructors;
     }
 
+    public void updateNotificationRoomRace(RoomRace aRoomRace, int aNotificationValue) {
+        UpdateNotificationRaceAsyncTask vUpdateNotification = new UpdateNotificationRaceAsyncTask(raceDao, aNotificationValue);
+        vUpdateNotification.execute(aRoomRace);
+    }
+
     // ASYNC
+    // Insert
+
     public<T> void insertItem(T item){
 
         if(item instanceof RoomRace) {
@@ -116,16 +123,9 @@ public class FormulaRepository {
             new InsertAllRacesResultsAsyncTask(raceResultsDao).execute(aItemsList);
 
         if (aItemsList.get(0).getClass().getTypeName().equals(RoomQualifyingResult.class.getTypeName()))
-            new InsertQualifyingResultsAsyncTask(qualifyingResultDao).execute(aItemsList);
+            new InsertAllQualifyingResultsAsyncTask(qualifyingResultDao).execute(aItemsList);
     }
 
-    public void deleteAll() {
-        new DeleteConstructorAsyncTask(constructorDao).execute();
-    }
-
-    /**
-     * ASYNC TASK
-     */
     private static class InsertRaceAsyncTask extends AsyncTask<RoomRace, Void, Void>{
 
         private RaceDao asyncTaskDao;
@@ -138,36 +138,6 @@ public class FormulaRepository {
         protected Void doInBackground(RoomRace... ts) {
 
             asyncTaskDao.insert(ts[0]);
-            return null;
-        }
-    }
-
-    private static class InsertAllRacesResultsAsyncTask extends AsyncTask<List, Void, Void> {
-
-        private RaceResultsDao asyncTaskDao;
-
-        public InsertAllRacesResultsAsyncTask(RaceResultsDao dao) {
-            asyncTaskDao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(List... lists) {
-            asyncTaskDao.insertAllRacesResult(lists[0]);
-            return null;
-        }
-    }
-
-    private static class InsertQualifyingResultsAsyncTask extends AsyncTask<List, Void, Void>{
-
-        private QualifyingResultDao asyncTaskDao;
-
-        public InsertQualifyingResultsAsyncTask(QualifyingResultDao dao) {
-            asyncTaskDao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(List... lists) {
-            asyncTaskDao.insertAllQualifyingResults(lists[0]);
             return null;
         }
     }
@@ -232,6 +202,60 @@ public class FormulaRepository {
             asyncTaskDao.insert(ts[0]);
             return null;
         }
+    }
+
+    private static class InsertAllRacesResultsAsyncTask extends AsyncTask<List, Void, Void> {
+
+        private RaceResultsDao asyncTaskDao;
+
+        public InsertAllRacesResultsAsyncTask(RaceResultsDao dao) {
+            asyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(List... lists) {
+            asyncTaskDao.insertAllRacesResult(lists[0]);
+            return null;
+        }
+    }
+
+    private static class InsertAllQualifyingResultsAsyncTask extends AsyncTask<List, Void, Void>{
+
+        private QualifyingResultDao asyncTaskDao;
+
+        public InsertAllQualifyingResultsAsyncTask(QualifyingResultDao dao) {
+            asyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(List... lists) {
+            asyncTaskDao.insertAllQualifyingResults(lists[0]);
+            return null;
+        }
+    }
+
+    // Update
+    private static class UpdateNotificationRaceAsyncTask extends AsyncTask<RoomRace, Void, Void>{
+
+        private RaceDao asyncTaskDao;
+        private int mNotificationValue;
+
+        public UpdateNotificationRaceAsyncTask(RaceDao dao, int aNotificationValue) {
+            asyncTaskDao = dao;
+            mNotificationValue = aNotificationValue;
+        }
+
+        @Override
+        protected Void doInBackground(RoomRace... ts) {
+
+            asyncTaskDao.updateRaceNotification(ts[0].circuitId, mNotificationValue);
+            return null;
+        }
+    }
+
+    // Delete
+    public void deleteAll() {
+        new DeleteConstructorAsyncTask(constructorDao).execute();
     }
 
     private static class DeleteConstructorAsyncTask extends AsyncTask<RoomConstructor, Void, Void>{

@@ -39,6 +39,7 @@ import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class ApiAsyncCallerService extends Service {
@@ -64,19 +65,22 @@ public class ApiAsyncCallerService extends Service {
                 ApiAsyncCallerService.this,
                 new CalendarRaceDataHelper(),
                 getApplication());
-        vRacesAsyncCaller.execute("https://ergast.com/api/f1/current.json");
+       // vRacesAsyncCaller.execute("https://ergast.com/api/f1/current.json");
+        vRacesAsyncCaller.executeOnExecutor(vRacesAsyncCaller.THREAD_POOL_EXECUTOR,"https://ergast.com/api/f1/current.json");
 
         ApiAsyncCaller vConstructorAsyncCaller = new ApiAsyncCaller(
                 ApiAsyncCallerService.this,
                 new ConstructorsDataHelper(),
                 getApplication());
-        vConstructorAsyncCaller.execute("https://ergast.com/api/f1/current/constructorStandings.json");
+       // vConstructorAsyncCaller.execute("https://ergast.com/api/f1/current/constructorStandings.json");
+        vConstructorAsyncCaller.executeOnExecutor(vConstructorAsyncCaller.THREAD_POOL_EXECUTOR, "https://ergast.com/api/f1/current/constructorStandings.json");
 
         ApiAsyncCaller vDriverAsyncCaller = new ApiAsyncCaller(
                 ApiAsyncCallerService.this,
                 new DriversRankingHelper(),
                 getApplication());
-        vDriverAsyncCaller.execute("https://ergast.com/api/f1/current/driverStandings.json");
+       // vDriverAsyncCaller.execute("https://ergast.com/api/f1/current/driverStandings.json");
+        vDriverAsyncCaller.executeOnExecutor(vDriverAsyncCaller.THREAD_POOL_EXECUTOR,"https://ergast.com/api/f1/current/driverStandings.json");
 
     }
 
@@ -96,13 +100,18 @@ public class ApiAsyncCallerService extends Service {
                 List<RoomRace> vRoomRaceList = mRoomRaceLiveData.getValue();
 
                 if (vRoomRaceList != null) {
-                    RaceResultsApiAsyncCaller vRaceResultsAsyncCaller =
-                            new RaceResultsApiAsyncCaller(
-                                    ApiAsyncCallerService.this,
-                                    new RaceResultsDataHelper(),
-                                    getApplication(),
-                                    vRoomRaceList);
-                    vRaceResultsAsyncCaller.execute("http://ergast.com/api/f1/current/%s/results.json");
+
+                    for (RoomRace vRoomRace: vRoomRaceList) {
+                        RaceResultsApiAsyncCaller vRaceResultsAsyncCaller =
+                                new RaceResultsApiAsyncCaller(
+                                        ApiAsyncCallerService.this,
+                                        new RaceResultsDataHelper(),
+                                        getApplication(),
+                                        vRoomRaceList);
+
+                        String downloadUrl = String.format("http://ergast.com/api/f1/current/%s/results.json", vRoomRace.round);
+                        vRaceResultsAsyncCaller.executeOnExecutor(vRaceResultsAsyncCaller.THREAD_POOL_EXECUTOR, downloadUrl);
+                    }
                 }
             }
         });
@@ -118,12 +127,17 @@ public class ApiAsyncCallerService extends Service {
                 List<RoomRace> vRoomRaceList = mRoomRaceLiveData.getValue();
 
                 if (vRoomRaceList != null){
-                    RaceResultsApiAsyncCaller vRaceResultsAsyncCaller = new RaceResultsApiAsyncCaller(
-                            ApiAsyncCallerService.this,
-                            new QualifyingResultsDataHelper(),
-                            getApplication(),
-                            vRoomRaceList);
-                    vRaceResultsAsyncCaller.execute("https://ergast.com/api/f1/current/%s/qualifying.json");
+
+                    for (RoomRace vRoomRace: vRoomRaceList) {
+                        RaceResultsApiAsyncCaller vRaceResultsAsyncCaller = new RaceResultsApiAsyncCaller(
+                                ApiAsyncCallerService.this,
+                                new QualifyingResultsDataHelper(),
+                                getApplication(),
+                                vRoomRaceList);
+
+                        String downloadUrl = String.format("https://ergast.com/api/f1/current/%s/qualifying.json", vRoomRace.round);
+                        vRaceResultsAsyncCaller.executeOnExecutor(vRaceResultsAsyncCaller.THREAD_POOL_EXECUTOR, downloadUrl);
+                    }
                 }
             }
         });
@@ -158,6 +172,9 @@ public class ApiAsyncCallerService extends Service {
 
         @Override
         protected String doInBackground(String... params) {
+
+            Log.d("ASYNC_THREAD", "Helper START: " + mApiGenericHelper.getClass().getName() +
+                    ", Time: " + Calendar.getInstance().getTime());
             ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
             mHelperArrayList = new ArrayList<>();
 
@@ -170,6 +187,9 @@ public class ApiAsyncCallerService extends Service {
             for(int i=0; i< mHelperArrayList.size(); i++){
                 mRepository.insertItem(mHelperArrayList.get(i));
             }
+
+            Log.d("ASYNC_THREAD", "Helper END: " + mApiGenericHelper.getClass().getName() +
+                    ", Time: " + Calendar.getInstance().getTime());
             return null;
         }
 
@@ -192,7 +212,6 @@ public class ApiAsyncCallerService extends Service {
         private ArrayList<IListableModel> mHelperArrayList;
         private IGenericHelper mApiGenericHelper;
         private FormulaRepository mRepository;
-        private List<RoomRace> mRaceResultsList;
 
         public RaceResultsApiAsyncCaller(ApiAsyncCallerService aApiService,
                                          IGenericHelper aApiGenericHelper,
@@ -202,27 +221,27 @@ public class ApiAsyncCallerService extends Service {
             mApiService = new WeakReference<>(aApiService);
             mApiGenericHelper = aApiGenericHelper;
             mRepository = new FormulaRepository(aApplication);
-            mRaceResultsList = aRaceResultsList;
         }
 
         @Override
         protected Void doInBackground(String... params) {
+            Log.d("ASYNC_THREAD", "Helper START: " + mApiGenericHelper.getClass().getName() +
+                    ", Time: " + Calendar.getInstance().getTime());
+
             ApiRequestHelper vApiRequestHelper = new ApiRequestHelper();
+            mHelperArrayList = new ArrayList<>();
 
-            for (RoomRace vRoomRace: mRaceResultsList) {
-                mHelperArrayList = new ArrayList<>();
+            // get json from api
+            vJsonToParse = vApiRequestHelper.getContentFromUrl(params[0]);
 
-                // get json from api
-                String downloadUrl = String.format(params[0], vRoomRace.round);
-                vJsonToParse = vApiRequestHelper.getContentFromUrl(downloadUrl);
+            // parse json to list
+            mHelperArrayList = mApiGenericHelper.getArrayList(vJsonToParse);
+            if (!mHelperArrayList.isEmpty())
+                mRepository.insertItems(mHelperArrayList);
 
-                // parse json to list
-                mHelperArrayList = mApiGenericHelper.getArrayList(vJsonToParse);
+            Log.d("ASYNC_THREAD", "Helper END: " + mApiGenericHelper.getClass().getName() +
+                    ", Time: " + Calendar.getInstance().getTime());
 
-                if (!mHelperArrayList.isEmpty())
-                    mRepository.insertItems(mHelperArrayList);
-
-            }
             return null;
         }
 

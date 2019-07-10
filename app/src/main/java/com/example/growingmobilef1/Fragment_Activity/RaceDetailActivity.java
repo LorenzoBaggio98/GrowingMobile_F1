@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.growingmobilef1.Adapter.ViewPagerAdapter;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
+import com.example.growingmobilef1.Database.ViewModel.RacesViewModel;
 import com.example.growingmobilef1.MainActivity;
 import com.example.growingmobilef1.Model.RaceResults;
 import com.example.growingmobilef1.Model.Races;
@@ -40,6 +41,8 @@ import java.util.Date;
 public class RaceDetailActivity extends AppCompatActivity {
 
     public static final String RACE_ITEM = "Tag to pass the calendar race item to the fragment";
+    public static final String REMOVE_NOTIFICATION = "The activity was opened from a notification, remove that from the db";
+
     private static final String ERROR_TAG = "ERROR_TAG";
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
@@ -50,6 +53,7 @@ public class RaceDetailActivity extends AppCompatActivity {
     private Button mLogOutButton;
 
     ViewPagerAdapter mPageAdapter;
+    private int mNotificationStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,9 @@ public class RaceDetailActivity extends AppCompatActivity {
         Bundle startBundle = intent.getExtras();
         if (startBundle != null) {
             mRace = (RoomRace) startBundle.getSerializable(RaceDetailActivity.RACE_ITEM);
+            mNotificationStatus = startBundle.getInt(REMOVE_NOTIFICATION);
+
+            updateNotificationStatus(mNotificationStatus);
         }
 
         ViewGroup.LayoutParams layoutParams = mToolbar.getLayoutParams();
@@ -150,10 +157,15 @@ public class RaceDetailActivity extends AppCompatActivity {
     private void manageNotificationIconColor(MenuItem item){
         Drawable drawable = item.getIcon();
         drawable.mutate();
-        //if ()
+        if (mRace.notification == 1)
             drawable.setColorFilter(getResources().getColor(R.color.colorPrimaryLight), PorterDuff.Mode.SRC_ATOP);
-       // else
-       //     drawable.setColorFilter(getResources().getColor(R.color.colorSecondaryLight), PorterDuff.Mode.SRC_ATOP);
+        else
+            drawable.setColorFilter(getResources().getColor(R.color.colorSecondaryLight), PorterDuff.Mode.SRC_ATOP);
+    }
+
+    private void updateNotificationStatus(int aNotificationStatus){
+        RacesViewModel vRacesViewModel = new RacesViewModel(getApplication());
+        vRacesViewModel.updateRaceNotification(mRace, aNotificationStatus);
     }
 
     private void setPagerAdapter(){

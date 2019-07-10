@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.growingmobilef1.Adapter.RacesAdapter;
+import com.example.growingmobilef1.Database.FormulaRepository;
 import com.example.growingmobilef1.Database.InterfaceDao.RaceResultsDao;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Database.ViewModel.RaceResultsViewModel;
@@ -130,9 +131,6 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
                 }
             }
         });
-
-
-
     }
 
     @Override
@@ -240,12 +238,20 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
      */
     @Override
     public void onNotificationScheduled(int aPosition) {
+        // Send notification to the system
         mNotificationUtil = new NotificationUtil(
                 mCalendarRaceItemArraylist.get(aPosition).dateToCalendar(),
                 getContext(),
                 mCalendarRaceItemArraylist.get(aPosition)
         );
         mNotificationUtil.sendNotification();
+
+        // Update the notificationSet status in the db
+        int vNotificationStatus = 0;
+        if (mCalendarRaceItemArraylist.get(aPosition).notification == 0){
+            vNotificationStatus = 1;
+        }
+        racesViewModel.updateRaceNotification(mCalendarRaceItemArraylist.get(aPosition), vNotificationStatus);
     }
 
     /**

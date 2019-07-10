@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.growingmobilef1.AlertReceiver;
+import com.example.growingmobilef1.Database.FormulaRepository;
 import com.example.growingmobilef1.Database.ModelRoom.RoomRace;
 import com.example.growingmobilef1.Model.Races;
 
@@ -58,7 +59,7 @@ public class NotificationUtil {
         }
         vNotificationIntent.putExtras(vBundle);
 
-        PendingIntent vBroadcast = PendingIntent.getBroadcast(mContext,
+        PendingIntent vPendingIntent = PendingIntent.getBroadcast(mContext,
                 mRace.round,
                 vNotificationIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
@@ -70,20 +71,18 @@ public class NotificationUtil {
 
             Calendar vCalendar = Calendar.getInstance();
             vCalendar.set(Calendar.MINUTE, vCalendar.get(Calendar.MINUTE) + 1);
-            vAlarmManager.setExact(AlarmManager.RTC_WAKEUP, vCalendar.getTimeInMillis(), vBroadcast);
+            vAlarmManager.setExact(AlarmManager.RTC_WAKEUP, vCalendar.getTimeInMillis(), vPendingIntent);
            /* mDate = mRace.getCalendarDate();
             mDate.set(Calendar.MINUTE, mDate.get(Calendar.MINUTE) - 10);
             vAlarmManager.setExact(AlarmManager.RTC_WAKEUP, mDate.getTimeInMillis(), vBroadcast);*/
             Log.d("DATE_MILLIS", "Time in milliseconds: " + mDate.getTimeInMillis());
-            mRace.notification = 1;
             String vToastText = mDate.get(Calendar.DAY_OF_MONTH) + " / " + mDate.get(Calendar.MONTH) + " at " + mDate.get(Calendar.HOUR_OF_DAY) + ":" + mDate.get(Calendar.MINUTE);
             Toast.makeText(mContext, "Notification scheduled for " + vToastText, Toast.LENGTH_LONG).show();
 
         } else {
-            vAlarmManager.cancel(vBroadcast);
+            vAlarmManager.cancel(vPendingIntent);
             mRace.notification = 0;
             Toast.makeText(mContext, "Notification cancelled", Toast.LENGTH_LONG).show();
         }
     }
-
 }

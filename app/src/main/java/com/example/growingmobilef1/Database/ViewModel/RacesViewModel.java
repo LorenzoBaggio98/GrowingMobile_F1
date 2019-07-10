@@ -38,4 +38,8 @@ public class RacesViewModel extends AndroidViewModel {
       //  repository.insertItems(aRoomRaceList);
     }
 
+    public void updateRaceNotification(RoomRace aRoomRace, int aNotificationStatus) {
+        repository.updateNotificationRoomRace(aRoomRace, aNotificationStatus);
+    }
+
 }

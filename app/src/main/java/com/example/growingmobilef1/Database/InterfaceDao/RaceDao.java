@@ -21,4 +21,7 @@ public interface RaceDao{
 
     @Query("SELECT * FROM race")
     LiveData<List<RoomRace>> getAllRaces();
+
+    @Query("UPDATE race SET notification = :aNotification WHERE circuitId = :aCircuitId")
+    int updateRaceNotification(String aCircuitId, int aNotification);
 }

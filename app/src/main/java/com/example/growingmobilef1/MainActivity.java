@@ -13,12 +13,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-//import com.crashlytics.android.Crashlytics;
 import com.example.growingmobilef1.Fragment_Activity.CalendarFragment;
 import com.example.growingmobilef1.Fragment_Activity.ConstructorsRankingFragment;
 import com.example.growingmobilef1.Fragment_Activity.DriversRankingFragment;
-import com.google.android.gms.auth.api.Auth;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

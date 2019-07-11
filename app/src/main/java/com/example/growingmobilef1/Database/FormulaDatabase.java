@@ -68,7 +68,6 @@ public abstract class FormulaDatabase extends RoomDatabase {
                                 public void onCreate(@NonNull SupportSQLiteDatabase db) {
                                     super.onCreate(db);
 
-                                    // TODO: Manca l'unbind del service
                                     // Async call service
                                     ServiceConnection mConnection = new ServiceConnection() {
                                         @Override

@@ -185,7 +185,7 @@ public class CalendarFragment extends Fragment implements RacesAdapter.IOnRaceCl
     public void onStart() {
         super.onStart();
 
-        firstCall();
+        //firstCall();
     }
 
     private void firstCall(){

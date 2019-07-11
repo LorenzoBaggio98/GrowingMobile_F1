@@ -129,7 +129,7 @@ public class DriversRankingFragment extends Fragment  implements ApiAsyncCallerF
     public void onStart() {
         super.onStart();
 
-        firstCall();
+        //firstCall();
     }
 
     private void firstCall(){

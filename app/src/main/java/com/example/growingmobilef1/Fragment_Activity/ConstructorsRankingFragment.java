@@ -126,7 +126,7 @@ public class ConstructorsRankingFragment extends Fragment implements ApiAsyncCal
     @Override
     public void onStart() {
         super.onStart();
-        firstCall();
+        //firstCall();
     }
 
     private void firstCall(){
